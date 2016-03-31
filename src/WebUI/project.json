@@ -39,7 +39,9 @@
   "frameworks": {
     "dnx451": {
       "dependencies": {
-        "Ninject": "3.2.2"
+        "Moq": "4.2.1510.2205",
+        "Ninject": "3.2.2",
+        "React.AspNet": "2.2.1"
       }
     },
     "dnxcore50": { }

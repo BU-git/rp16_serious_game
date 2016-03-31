@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "description": "BLL Class Library",
   "authors": [ "Andrew" ],
@@ -7,7 +7,11 @@
   "licenseUrl": "",
 
   "frameworks": {
-    "net451": { },
+    "net451": {
+      "dependencies": {
+        "Moq": "4.2.1510.2205"
+      }
+    },
     "dotnet5.4": {
       "dependencies": {
         "Microsoft.CSharp": "4.0.1-beta-23516",
