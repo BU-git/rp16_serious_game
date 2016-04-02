@@ -36,8 +36,9 @@
   },
 
   "frameworks": {
-    "dnx451": { },
-    "dnxcore50": { }
+    "dnx451": { }
+
+    
   },
 
   "exclude": [

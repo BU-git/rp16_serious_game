@@ -7,9 +7,9 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
-using RP16_SeriousGame.Models;
 using RP16_SeriousGame.Services;
 using RP16_SeriousGame.ViewModels.Manage;
+using Domain.Entities;
 
 namespace RP16_SeriousGame.Controllers
 {

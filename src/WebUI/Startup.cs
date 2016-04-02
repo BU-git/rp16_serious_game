@@ -9,8 +9,10 @@ using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using RP16_SeriousGame.Models;
 using RP16_SeriousGame.Services;
+using Domain.Entities;
+using DAL;
+using Microsoft.AspNet.Identity;
 
 namespace RP16_SeriousGame
 {
@@ -53,10 +55,13 @@ namespace RP16_SeriousGame
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            //Add Seed Method
+            services.AddTransient<DataInitializer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DataInitializer dataInitializer)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -98,6 +103,11 @@ namespace RP16_SeriousGame
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //Seed DataBase
+            await dataInitializer.InitializeDataAsync();
+
+
         }
 
         // Entry point for the application.
