@@ -1,4 +1,4 @@
-﻿namespace WebUI.Infrastructure.Concrete
+﻿namespace Domain
 {
     /// <summary>
     ///     Email credentials to use with EmailSender

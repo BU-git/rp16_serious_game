@@ -131,7 +131,7 @@ $('#addFieldButton').click(function () {
     );
 });
 
-$('submitButton').click(function () {
-    var data = document.getElementById('inputField');
+$('#submitButton').click(function () {
+    var data = document.getElementById('#inputField');
 })
 

@@ -1,15 +1,16 @@
 ﻿#region
-
 using System.Configuration;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using BLL.Abstract;
+using Domain;
 
 #endregion
 
-namespace WebUI.Infrastructure.Concrete
+namespace BLL.Concrete
 {
-    public class EmailSender
+    public class EmailSender : IMailSender
     {
         public async Task<bool> SendMail(string subject, string body, string emailTo)
         {
@@ -43,12 +44,9 @@ namespace WebUI.Infrastructure.Concrete
             return true;
         }
 
-        private EmailCredential GetCredentialsHardcoded()
+        private EmailCredential GetCredentialsFromJson()
         {
-            EmailCredential credential = new EmailCredential
-            {
-                //TODO: set credential properties
-            };
+            EmailCredential credential = new EmailCredential();
 
             return credential;
         }
@@ -57,12 +55,7 @@ namespace WebUI.Infrastructure.Concrete
         {
             EmailCredential credential = new EmailCredential
             {
-                Host = ConfigurationManager.AppSettings["email.credentials.host"],
-                Password = ConfigurationManager.AppSettings["email.credentials.pass"],
-                Port = int.Parse(ConfigurationManager.AppSettings["email.credentials.port"]),
-                UseSsl = bool.Parse(ConfigurationManager.AppSettings["email.credentials.ssl"]),
-                Username = ConfigurationManager.AppSettings["email.credentials.user"],
-                Email = ConfigurationManager.AppSettings["email.credentials.email"]
+                
             };
 
             return credential;

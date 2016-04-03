@@ -42,8 +42,7 @@
         "Ninject": "3.2.2",
         "React.AspNet": "2.2.1"
       }
-    },
-    "dnxcore50": { }
+    }
   },
 
   "exclude": [

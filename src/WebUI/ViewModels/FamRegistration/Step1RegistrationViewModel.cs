@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace RP16_SeriousGame.ViewModels.FamRegistration
+namespace WebUI.ViewModels.FamRegistration
 {
     public class Step1RegistrationViewModel
     {
-        public List<MainUserData> UserData { get; set; }
+        public List<MainUserData> UserData { get; set; } = new List<MainUserData>();
     }
 }
