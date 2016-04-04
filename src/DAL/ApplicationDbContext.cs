@@ -38,6 +38,21 @@ namespace DAL
                 .WithMany(c => c.Customer)
                 .HasForeignKey(x => x.Id);
 
+            builder.Entity<ApplicationUser>().Ignore(x => x.AccessFailedCount);
+            builder.Entity<ApplicationUser>().Ignore(x => x.EmailConfirmed);
+            builder.Entity<ApplicationUser>().Ignore(x => x.AccessFailedCount);
+            builder.Entity<ApplicationUser>().Ignore(x => x.PhoneNumberConfirmed);
+            builder.Entity<ApplicationUser>().Ignore(x => x.LockoutEnabled);
+            builder.Entity<ApplicationUser>().Ignore(x => x.LockoutEnd);
+            builder.Entity<ApplicationUser>().Ignore(x => x.TwoFactorEnabled);
+            builder.Entity<ApplicationUser>().Ignore(x => x.NormalizedEmail);
+            builder.Entity<ApplicationUser>().Ignore(x => x.NormalizedUserName);
+            builder.Entity<ApplicationUser>().Ignore(x => x.SecurityStamp);
+
+
+
+
+
         }
 
 

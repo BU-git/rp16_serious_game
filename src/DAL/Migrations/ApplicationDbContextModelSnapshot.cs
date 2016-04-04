@@ -21,8 +21,6 @@ namespace DAL.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AccessFailedCount");
-
                     b.Property<int>("BSN");
 
                     b.Property<DateTime>("BirthDate");
@@ -39,25 +37,13 @@ namespace DAL.Migrations
                     b.Property<string>("Email")
                         .HasAnnotation("MaxLength", 256);
 
-                    b.Property<bool>("EmailConfirmed");
-
                     b.Property<int>("Gender");
 
                     b.Property<string>("LastName");
 
-                    b.Property<bool>("LockoutEnabled");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd");
-
                     b.Property<string>("MidleName");
 
                     b.Property<string>("Name");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasAnnotation("MaxLength", 256);
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasAnnotation("MaxLength", 256);
 
                     b.Property<string>("Passport");
 
@@ -67,15 +53,9 @@ namespace DAL.Migrations
 
                     b.Property<string>("PhoneNumber");
 
-                    b.Property<bool>("PhoneNumberConfirmed");
-
                     b.Property<string>("Region");
 
-                    b.Property<string>("SecurityStamp");
-
                     b.Property<string>("Street");
-
-                    b.Property<bool>("TwoFactorEnabled");
 
                     b.Property<string>("UserName")
                         .HasAnnotation("MaxLength", 256);
@@ -83,12 +63,6 @@ namespace DAL.Migrations
                     b.Property<string>("ZipCode");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasAnnotation("Relational:Name", "EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .HasAnnotation("Relational:Name", "UserNameIndex");
 
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
@@ -124,7 +98,7 @@ namespace DAL.Migrations
 
                     b.Property<string>("SchoolGrade");
 
-                    b.Property<int>("isActive");
+                    b.Property<bool>("isActive");
 
                     b.HasKey("Id");
                 });

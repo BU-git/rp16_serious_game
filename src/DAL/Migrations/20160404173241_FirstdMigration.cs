@@ -5,7 +5,7 @@ using Microsoft.Data.Entity.Metadata;
 
 namespace DAL.Migrations
 {
-    public partial class FirstMigrations : Migration
+    public partial class FirstdMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,6 @@ namespace DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    AccessFailedCount = table.Column<int>(nullable: false),
                     BSN = table.Column<int>(nullable: false),
                     BirthDate = table.Column<DateTime>(nullable: false),
                     BuildingNumber = table.Column<string>(nullable: true),
@@ -22,24 +21,16 @@ namespace DAL.Migrations
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Country = table.Column<string>(nullable: true),
                     Email = table.Column<string>(nullable: true),
-                    EmailConfirmed = table.Column<bool>(nullable: false),
                     Gender = table.Column<int>(nullable: false),
                     LastName = table.Column<string>(nullable: true),
-                    LockoutEnabled = table.Column<bool>(nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     MidleName = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
-                    NormalizedEmail = table.Column<string>(nullable: true),
-                    NormalizedUserName = table.Column<string>(nullable: true),
                     Passport = table.Column<string>(nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
                     Phone = table.Column<string>(nullable: true),
                     PhoneNumber = table.Column<string>(nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     Region = table.Column<string>(nullable: true),
-                    SecurityStamp = table.Column<string>(nullable: true),
                     Street = table.Column<string>(nullable: true),
-                    TwoFactorEnabled = table.Column<bool>(nullable: false),
                     UserName = table.Column<string>(nullable: true),
                     ZipCode = table.Column<string>(nullable: true)
                 },
@@ -87,7 +78,7 @@ namespace DAL.Migrations
                     RegisteredBy = table.Column<int>(nullable: false),
                     Resident = table.Column<int>(nullable: false),
                     SchoolGrade = table.Column<string>(nullable: true),
-                    isActive = table.Column<int>(nullable: false)
+                    isActive = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -204,14 +195,6 @@ namespace DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-            migrationBuilder.CreateIndex(
-                name: "EmailIndex",
-                table: "AspNetUsers",
-                column: "NormalizedEmail");
-            migrationBuilder.CreateIndex(
-                name: "UserNameIndex",
-                table: "AspNetUsers",
-                column: "NormalizedUserName");
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",

@@ -67,7 +67,7 @@ namespace DAL
             var user1 = await userManager.FindByEmailAsync("Admin@admin.com");
             if (user1 == null)
             {
-                ApplicationUser admin = new ApplicationUser() { UserName = "Admin@admin.com", Name = "Admin1", Email = "Admin@admin.com", Gender = Gender.male };
+                ApplicationUser admin = new ApplicationUser() { UserName = "Admin@admin.com", Name = "Admin1", Email = "Admin@admin.com", Gender = Gender.MALE };
                 await userManager.CreateAsync(admin, "User2016!");
                 await userManager.AddToRoleAsync(admin, "Admin");
   

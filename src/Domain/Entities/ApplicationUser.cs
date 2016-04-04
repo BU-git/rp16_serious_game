@@ -37,6 +37,6 @@ namespace Domain.Entities
 
     public enum Gender
     {
-       male, female,other,none,unknown
+       MALE,FEMALE,OTHER,NONE,UNKNOWN
     }
 }
