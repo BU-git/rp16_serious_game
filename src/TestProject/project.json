@@ -1,17 +1,12 @@
 {
   "version": "1.0.0-*",
-  "description": "BLL Class Library",
+  "description": "TestProject Class Library",
   "authors": [ "Andrew" ],
   "tags": [ "" ],
   "projectUrl": "",
   "licenseUrl": "",
-
   "frameworks": {
-    "net451": {
-      "dependencies": {
-        "Moq": "4.2.1510.2205"
-      }
-    },
+    "net451": { },
     "dotnet5.4": {
       "dependencies": {
         "Microsoft.CSharp": "4.0.1-beta-23516",
@@ -21,5 +16,8 @@
         "System.Threading": "4.0.11-beta-23516"
       }
     }
+  },
+  "dependencies": {
+    "NUnit": "3.2.0"
   }
 }
