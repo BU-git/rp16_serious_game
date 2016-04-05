@@ -3,30 +3,34 @@
 "use strict";
 
 var gulp = require("gulp"),
-    rimraf = require("rimraf"),
-    concat = require("gulp-concat"),
-    cssmin = require("gulp-cssmin"),
-    uglify = require("gulp-uglify");
+  rimraf = require("rimraf"),
+  concat = require("gulp-concat"),
+  cssmin = require("gulp-cssmin"),
+  webpack = require('webpack-stream'),
+  uglify = require("gulp-uglify");
+
 
 var paths = {
-    webroot: "./wwwroot/"
+  webroot: "./wwwroot/"
 };
 
-paths.js = paths.webroot + "js/**/*.js";
+paths.js = "./Assets/js/**/*.js";
+paths.css = "./Assets/css/**/*.css";
+paths.libs = "./Libraries/**/*";
+paths.images = "./Assets/images/**/*";
 paths.minJs = paths.webroot + "js/**/*.min.js";
-paths.css = paths.webroot + "css/**/*.css";
 paths.minCss = paths.webroot + "css/**/*.min.css";
 paths.concatJsDest = paths.webroot + "js/site.min.js";
 paths.concatCssDest = paths.webroot + "css/site.min.css";
 paths.libsDest = paths.webroot + "lib";
 paths.imagesDest = paths.webroot + "images";
 
-gulp.task("clean:js", function (cb) {
-    rimraf(paths.concatJsDest, cb);
+gulp.task("clean:js", function(cb) {
+  rimraf(paths.concatJsDest, cb);
 });
 
-gulp.task("clean:css", function (cb) {
-    rimraf(paths.concatCssDest, cb);
+gulp.task("clean:css", function(cb) {
+  rimraf(paths.concatCssDest, cb);
 });
 
 gulp.task("clean:libs", function (cb) {
