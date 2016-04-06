@@ -1,19 +1,27 @@
 {
   "version": "1.0.0-*",
   "description": "DAL Class Library",
-  "authors": [ "Andrew" ],
-  "tags": [ "" ],
+  "authors": ["Andrew"],
+  "tags": [""],
   "projectUrl": "",
   "licenseUrl": "",
-  "frameworks": {
-    "net451": {
-      "dependencies": {
+  "frameworks":
+  {
+    "net451":
+    {
+      "dependencies": 
+      {
         "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",
         "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final"
-      }
+      },
     },
     "dnx451": {
-      "dependencies": {
+      "Moq": "4.2.1510.2205"
+    },
+    "dotnet5.4":
+    {
+      "dependencies":
+      {
         "Microsoft.CSharp": "4.0.1-beta-23516",
         "System.Collections": "4.0.11-beta-23516",
         "System.Linq": "4.0.1-beta-23516",
@@ -24,8 +32,6 @@
       }
     }
   },
-
-
   "dependencies": {
     "Domain": "1.0.0-*",
     "EntityFramework.Commands": "7.0.0-rc1-final"
@@ -33,6 +39,8 @@
 
   "commands": {
     "web": "Microsoft.AspNet.Server.Kestrel",
-    "ef": "EntityFramework.Commands"
+    "ef": "EntityFramework.Commands",
+    "dependencies": {
+      "EntityFramework.Core": "7.0.0-rc1-final"
+    }
   }
-}

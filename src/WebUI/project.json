@@ -27,7 +27,8 @@
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
-    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final"
+    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final",
+    "NUnit": "3.2.0"
   },
 
   "commands": {
@@ -36,9 +37,14 @@
   },
 
   "frameworks": {
-    "dnx451": { }
-
-    
+    "dnx451": {
+      "dependencies": {
+        "Moq": "4.2.1510.2205",
+        "Ninject": "3.2.2",
+        "React.AspNet": "2.2.1"
+      }
+    },
+    "dnxcore50": { }
   },
 
   "exclude": [
