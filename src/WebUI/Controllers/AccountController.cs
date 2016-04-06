@@ -9,9 +9,9 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Logging;
-using RP16_SeriousGame.Models;
 using RP16_SeriousGame.Services;
 using RP16_SeriousGame.ViewModels.Account;
+using Domain.Entities;
 
 namespace RP16_SeriousGame.Controllers
 {
@@ -104,8 +104,9 @@ namespace RP16_SeriousGame.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email};
                 var result = await _userManager.CreateAsync(user, model.Password);
+                await _userManager.AddToRoleAsync(user, "Participant");
                 if (result.Succeeded)
                 {
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
