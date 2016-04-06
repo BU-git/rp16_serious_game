@@ -67,7 +67,7 @@ namespace RP16_SeriousGame
             //kernel.Bind<ITranslationProvider>().To<JSONTranslationProvider>().WithConstructorArgument("fileName", @"C:\Users\Lenovo\Documents\Visual Studio 2015\Projects\Bionic - Serious Game\rp16_serious_game\src\WebUI\wwwroot\RSG-25.json");
 
             services.AddTransient<TranslationManager>();
-            services.AddTransient<ITranslationProvider, JSONTranslationProvider> ( x => new JSONTranslationProvider(@"C:\Users\Lenovo\Documents\Visual Studio 2015\Projects\Bionic - Serious Game\rp16_serious_game\src\WebUI\wwwroot\RSG-25.json"));
+            services.AddTransient<ITranslationProvider, JSONTranslationProvider> ( x => new JSONTranslationProvider(Configuration["Data:Resources:Path"]));
 
             var sp = services.BuildServiceProvider();
             var service = sp.GetService<ITranslationProvider>();

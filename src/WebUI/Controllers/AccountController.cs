@@ -38,7 +38,6 @@ namespace RP16_SeriousGame.Controllers
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
-            
 
         }
 
