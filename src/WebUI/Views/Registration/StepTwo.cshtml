@@ -1,0 +1,72 @@
+﻿@using System.Threading.Tasks
+@model IEnumerable<WebUI.ViewModels.Registration.UserViewModel>
+@{
+    ViewBag.Title = "Registration | Step Two";
+}
+
+<div>
+    <div>
+        <h3>Profile creation</h3>
+        Please enter full data about you and your family
+        <form asp-controller="Registration" asp-action="StepTwo">
+            <div>
+                <div id="loadingSpinner">loading..</div>
+
+                @foreach (var user in Model)
+                {
+                    <div id="">
+                        @{ await Html.RenderPartialAsync("_StepTwoForm", user); }
+                    </div>
+                }
+
+                <div id="fieldsAppender"></div>
+
+                <div id="buttons">
+                    <div style="float: left">
+                        <button type="reset">Reset</button>
+                    </div>
+                    <div>
+                        <input type="submit" value="Submit" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $('form').submit(function(form) {
+            form.preventDefault();
+
+            /* Validate form */
+
+            $('#waitingPost').show();
+
+            var regVm = [];
+            var data = $('form').serializeArray();
+            var obj = {};
+            $.each(data, function(i, input) {
+                if (input.name == "d" && input.value == "1") {
+                    regVm.push(obj);
+                    obj = {};
+                } else {
+                    obj[input.name] = input.value;
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: '/Registration/StepTwo',
+                data: JSON.stringify(regVm),
+                contentType: "application/json",
+                success: function(data) {
+                    alert("OK");
+                }
+            }).fail(function() {
+                $('#waitingPost').hide();
+                alert("Connection failed..");
+            });
+        });
+    </script>
+}    

@@ -1,0 +1,48 @@
+﻿@model WebUI.ViewModels.Registration.UserViewModel
+
+<div class="userForm">
+    <h3>Personal data for user</h3>
+    <div>
+        <label asp-for="Gender"></label>
+        <select asp-for="Gender">
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+            <option value="UNKNOWN">Unknown</option>
+            <option value="OTHER">Other</option>
+            <option value="NONE">None</option>
+        </select>
+    </div>
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name"/>*
+    </div>
+    <div>
+        <label asp-for="LastName"></label>
+        <input asp-for="LastName"/>*
+    </div>
+    <div>
+        <label>Birth date</label>
+        <input asp-for="Day"/>
+        <input asp-for="Month"/>
+        <input asp-for="Year"/>
+    </div>
+    <div>
+        <label>Address</label>
+        <input asp-for="ZipCode" placeholder="Zip code"/>
+        <input asp-for="Country"/>
+        <input asp-for="Region"/>
+        <input asp-for="City"/>
+        <input asp-for="Street"/>
+        <input asp-for="BuildingNumber"/>
+    </div>
+    <div>
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone"/>
+    </div>
+    <div>
+        <label asp-for="Email"></label>
+        <input asp-for="Email"/>
+    </div>
+
+    <input type="hidden" name="d" value="1"/>
+</div>

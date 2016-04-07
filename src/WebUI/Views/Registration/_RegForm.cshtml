@@ -1,6 +1,6 @@
 ﻿@model WebUI.ViewModels.FamRegistration.MainUserData
 
-<div className="inputFieldWidget" class="inputField">
+<div class="inputField">
     <div>
         <input asp-for="FName" placeholder="First name" />
     </div>
@@ -12,9 +12,11 @@
     </div>
     <div>
         <select asp-for="Gender">
-            <option value="M">Male</option>
-            <option value="F">Female</option>
-            <option value="N">Not defined</option>
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+            <option value="UNKNOWN">Unknown</option>
+            <option value="OTHER">Other</option>
+            <option value="NONE">None</option>
         </select>
         <select asp-for="Status">
             <option value="Husband">Husband</option>

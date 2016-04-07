@@ -12,7 +12,7 @@ namespace BLL.Concrete
 {
     public class EmailSender : IMailSender
     {
-        public async Task<bool> SendMail(string subject, string body, string emailTo)
+        public async Task<bool> SendMailAsync(string subject, string body, string emailTo)
         {
             EmailCredential credential = GetCredentialsFromConfig();
 
