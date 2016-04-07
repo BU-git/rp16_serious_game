@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RP16_SeriousGame.Models;
 using RP16_SeriousGame.Services;
+using WebUI.Infrastructure.Abstract;
+using WebUI.Infrastructure.Concrete;
 
 namespace RP16_SeriousGame
 {
@@ -53,6 +55,8 @@ namespace RP16_SeriousGame
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<BLL.Abstract.IMailSender, BLL.Concrete.EmailSender>();
+            services.AddTransient<IMailManager, EmailManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -6,6 +6,7 @@ using BLL.Abstract;
 using Microsoft.AspNet.Mvc;
 using Newtonsoft.Json;
 using NUnit.Framework.Constraints;
+using WebUI.Infrastructure.Abstract;
 using WebUI.ViewModels.FamRegistration;
 using WebUI.ViewModels.Registration;
 
@@ -15,12 +16,12 @@ namespace WebUI.Controllers
 {
     public class RegistrationController : Controller
     {
-        //private readonly IMailSender _mailSender;
+        private readonly IMailManager _mailManager;
 
-        //public RegistrationController(IMailSender mailSender)
-        //{
-        //    _mailSender = mailSender;
-        //}
+        public RegistrationController(IMailManager mailManager)
+        {
+            _mailManager = mailManager;
+        }
 
         // GET: /<controller>/
         public IActionResult StepOne()
@@ -47,23 +48,24 @@ namespace WebUI.Controllers
             {
                 if (!string.IsNullOrEmpty(user.Email))
                 {
-                    //await _mailSender.SendMailAsync("", "", user.Email);
                     //TODO: Send message to the user with confirmation
                 }
             }
+
+            await _mailManager.SendRegistrationMailAsync(Guid.NewGuid(), "egor.chankoff@gmail.com");
 
             return PartialView("_Success", regVm);
         }
 
         public async Task<IActionResult> StepTwo(Guid? id)
         {
-            //Get users from DB
+            //TODO: Get users from DB
             if (!id.HasValue)
             {
                 //return null;
             }
 
-            List<UserViewModel> data = new List<UserViewModel>
+            List<UserViewModel> data = new List<UserViewModel> //mock
             {
                 new UserViewModel { Name = "Jon", LastName = "Doe", IsHead = true, Email = "jondoe@mail.com" },
                 new UserViewModel { Name = "Alice", LastName = "Jones", IsHead = false, Email = "alice@mail.com" }
