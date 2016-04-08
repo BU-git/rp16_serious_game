@@ -9,49 +9,40 @@ namespace WebUI.Services
 {
     class TranslationManager
     {
-        private static volatile TranslationManager manager;
-        private static object syncRoot = new Object();
-
         
-        public static TranslationManager Instance
-        {
-            get
-            {
-                if (manager == null)
-                {
-                    lock (syncRoot)
-                    {
-                        if (manager == null)
-                            manager = new TranslationManager();
-                    }
-                }
-
-                return manager;
-            }
-        }
-
         private TranslationManager()
         {
-           
         }
+
+        public static TranslationManager Instance { get { return Nested.instance; } }
+
+        private class Nested
+        {
+            static Nested()
+            {
+            }
+
+            internal static readonly TranslationManager instance = new TranslationManager();
+        }
+
 
         public ITranslationProvider TranslationProvider { get; set; }
        
 
-        public IEnumerable<CultureInfo> Languages
+        public IEnumerable<string> Languages
         {
             get
             {
-                return TranslationProvider != null ? TranslationProvider.Languages : Enumerable.Empty<CultureInfo>();
+                return TranslationProvider?.Languages ?? Enumerable.Empty<string>();
             }
         }
 
-        private CultureInfo currentLanguage;
-        public CultureInfo CurrentLanguage
+        private string currentLanguage;
+        public string CurrentLanguage
         {
             get
             {
-                return currentLanguage ?? (currentLanguage = new CultureInfo("en"));
+                return currentLanguage ?? (currentLanguage = "en");
             }
             set
             {
@@ -63,15 +54,9 @@ namespace WebUI.Services
             }
         }
 
-        public object Translate(string key)
+        public string Translate(string key)
         {
-            if (TranslationProvider != null)
-            {
-                object translation = TranslationProvider.Translate(key);
-                if (translation != null)
-                    return translation;
-            }
-            return string.Format("!{0}!", key);
+            return TranslationProvider?.Translate(key) ?? string.Format("!{0}!", key);
         }
 
     }

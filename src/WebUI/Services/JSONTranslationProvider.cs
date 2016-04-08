@@ -11,16 +11,12 @@ namespace WebUI.Services
 {
     class JSONTranslationProvider : ITranslationProvider
     {
-        private IEnumerable<CultureInfo> languages;
-        public IEnumerable<CultureInfo> Languages
-        {
-            get { return languages; }
-        }
+        public IEnumerable<string> Languages { get; private set; }
 
         private IDictionary<Tuple<string, string>,string>  translations;
-        public object Translate(string key)
+        public string Translate(string key)
         {
-            return translations[Tuple.Create(key, TranslationManager.Instance.CurrentLanguage.Name)] ?? translations[Tuple.Create(key, "en")];
+            return translations[Tuple.Create(key, TranslationManager.Instance.CurrentLanguage)] ?? translations[Tuple.Create(key, "en")];
         }
 
         public JSONTranslationProvider(string fileName)
@@ -49,12 +45,8 @@ namespace WebUI.Services
                     }
                 }
 
-
-                languages = translations.Keys.Select(t => new CultureInfo(t.Item2)).Distinct();
-
-            }
-
-           
+                Languages = translations.Keys.Select(t => t.Item2).Distinct();
+            }          
         }
     }
 }

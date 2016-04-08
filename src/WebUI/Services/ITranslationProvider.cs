@@ -5,7 +5,7 @@ namespace WebUI.Services
 {
     interface ITranslationProvider
     {
-        IEnumerable<CultureInfo> Languages { get; }
-        object Translate(string key);
+        IEnumerable<string> Languages { get; }
+        string Translate(string key);
     }
 }
