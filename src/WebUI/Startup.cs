@@ -15,7 +15,7 @@ using DAL;
 using Microsoft.AspNet.Identity;
 using WebUI.Services;
 using System.Configuration;
-using Ninject;
+
 
 namespace RP16_SeriousGame
 {
@@ -62,10 +62,7 @@ namespace RP16_SeriousGame
 
             //Add Seed Method
             services.AddTransient<DataInitializer>();
-
-            //IKernel kernel = new StandardKernel();
-            //kernel.Bind<ITranslationProvider>().To<JSONTranslationProvider>().WithConstructorArgument("fileName", @"C:\Users\Lenovo\Documents\Visual Studio 2015\Projects\Bionic - Serious Game\rp16_serious_game\src\WebUI\wwwroot\RSG-25.json");
-
+    
             services.AddTransient<TranslationManager>();
             services.AddTransient<ITranslationProvider, JSONTranslationProvider> ( x => new JSONTranslationProvider(Configuration["Data:Resources:Path"]));
 
