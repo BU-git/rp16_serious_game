@@ -17,15 +17,9 @@ namespace WebUI.ViewModels.Registration
         public int Day { get; set; }
 
         public string Email { get; set; }
-        public bool IsHead { get; set; }
-
-        public string ZipCode { get; set; }
-        public string Street { get; set; }
-        public string Country { get; set; }
-        public string Region { get; set; }
-        public string City { get; set; }
-        public string BuildingNumber { get; set; }
         public string Phone { get; set; }
+
+        public int Index { get; set; }
     }
 
     public enum Gender

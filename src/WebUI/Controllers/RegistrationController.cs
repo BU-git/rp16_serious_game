@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using BLL.Abstract;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Newtonsoft.Json;
 using NUnit.Framework.Constraints;
+using RP16_SeriousGame.Models;
 using WebUI.Infrastructure.Abstract;
-using WebUI.ViewModels.FamRegistration;
 using WebUI.ViewModels.Registration;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,70 +18,68 @@ namespace WebUI.Controllers
     public class RegistrationController : Controller
     {
         private readonly IMailManager _mailManager;
+        private readonly ICryptoServices _cryptoServices;
 
-        public RegistrationController(IMailManager mailManager)
+        public RegistrationController(IMailManager mailManager, ICryptoServices crypto)
         {
             _mailManager = mailManager;
+            _cryptoServices = crypto;
         }
 
-        // GET: /<controller>/
         public IActionResult StepOne()
         {
-            return View();
+            return View(new MainFamilyData());
         }
 
-        public PartialViewResult RegistrationForm()
-        {
-            return PartialView("_RegForm", new MainUserData());
-        }
-        
         [HttpPost]
-        public async Task<PartialViewResult> StepOne([FromBody]List<MainUserData> regVm)
+        public async Task<IActionResult> StepOne([FromForm]MainFamilyData regVm)
         {
             if (!ModelState.IsValid)
             {
-                //TODO: let this return the whole page with data filled in..
-                return null;
+                return View(regVm);
             }
 
+            string randomPass = _cryptoServices.GenerateRandomPassword();
 
-            foreach (MainUserData user in regVm)
-            {
-                if (!string.IsNullOrEmpty(user.Email))
-                {
-                    //TODO: Send message to the user with confirmation
-                }
-            }
+            //TODO: add user to DAL
 
-            await _mailManager.SendRegistrationMailAsync(Guid.NewGuid(), "egor.chankoff@gmail.com");
+            await _mailManager.SendRegistrationMailAsync(randomPass, regVm.HeadEmail);
 
-            return PartialView("_Success", regVm);
+            //TODO: add success message
+
+            return View(new MainFamilyData());
         }
 
-        public async Task<IActionResult> StepTwo(Guid? id)
+        public async Task<IActionResult> StepTwo()
         {
-            //TODO: Get users from DB
-            if (!id.HasValue)
-            {
-                //return null;
-            }
+            //TODO: get main data 'bout family 
 
-            List<UserViewModel> data = new List<UserViewModel> //mock
+            var familyInfo = new FamilyViewModel
             {
-                new UserViewModel { Name = "Jon", LastName = "Doe", IsHead = true, Email = "jondoe@mail.com" },
-                new UserViewModel { Name = "Alice", LastName = "Jones", IsHead = false, Email = "alice@mail.com" }
+                Users = new List<UserViewModel>
+                {
+                    new UserViewModel
+                    {
+                        //The user from DB
+                    }
+                }
             };
-            
-            return View(data);
+
+            return View(familyInfo);
         }
 
         [HttpPost]
-        public async Task<IActionResult> StepTwo([FromBody]List<UserViewModel> regVm) //The fuckin binding doesn't work well in the mvc 6
+        public async Task<IActionResult> StepTwo([FromForm]FamilyViewModel regVm)
         {
-            //TODO: Put data into DB
+            //TODO: Put data into DB async
 
-            //GOTO step 3
             return View(regVm);
-        } 
+        }
+
+        [HttpPost]
+        public PartialViewResult RegistrationForm(int index)
+        {
+            return PartialView("_StepTwoForm", new UserViewModel { Index = index });
+        }
     }
 }

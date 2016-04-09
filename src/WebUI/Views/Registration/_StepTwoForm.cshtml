@@ -4,7 +4,7 @@
     <h3>Personal data for user</h3>
     <div>
         <label asp-for="Gender"></label>
-        <select asp-for="Gender">
+        <select asp-for="Gender" name="Users[@Model.Index].Gender" id="Users[@Model.Index].Gender">
             <option value="MALE">Male</option>
             <option value="FEMALE">Female</option>
             <option value="UNKNOWN">Unknown</option>
@@ -14,35 +14,24 @@
     </div>
     <div>
         <label asp-for="Name"></label>
-        <input asp-for="Name"/>*
+        <input asp-for="Name" name="Users[@Model.Index].Name" id="Users[@Model.Index].Name"/>*
     </div>
     <div>
         <label asp-for="LastName"></label>
-        <input asp-for="LastName"/>*
+        <input asp-for="LastName" name="Users[@Model.Index].LastName" id="Users[@Model.Index].LastName"/>*
     </div>
     <div>
         <label>Birth date</label>
-        <input asp-for="Day"/>
-        <input asp-for="Month"/>
-        <input asp-for="Year"/>
-    </div>
-    <div>
-        <label>Address</label>
-        <input asp-for="ZipCode" placeholder="Zip code"/>
-        <input asp-for="Country"/>
-        <input asp-for="Region"/>
-        <input asp-for="City"/>
-        <input asp-for="Street"/>
-        <input asp-for="BuildingNumber"/>
+        <input asp-for="Day" name="Users[@Model.Index].Day" id="Users[@Model.Index].Day"/>
+        <input asp-for="Month" name="Users[@Model.Index].Month" id="Users[@Model.Index].Month"/>
+        <input asp-for="Year" name="Users[@Model.Index].Year" id="Users[@Model.Index].Year"/>
     </div>
     <div>
         <label asp-for="Phone"></label>
-        <input asp-for="Phone"/>
+        <input asp-for="Phone" name="Users[@Model.Index].Phone" id="Users[@Model.Index].Phone"/>
     </div>
     <div>
         <label asp-for="Email"></label>
-        <input asp-for="Email"/>
+        <input asp-for="Email" name="Users[@Model.Index].Email" id="Users[@Model.Index].Email"/>
     </div>
-
-    <input type="hidden" name="d" value="1"/>
 </div>

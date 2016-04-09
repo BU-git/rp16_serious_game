@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace WebUI.Infrastructure.Abstract
 {
-    public interface IMailManager
+    public interface ICryptoServices
     {
-        Task<bool> SendRegistrationMailAsync(string password, string address);
+        string GenerateRandomPassword();
     }
 }

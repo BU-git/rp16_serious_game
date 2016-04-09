@@ -1,14 +1,13 @@
-﻿@model WebUI.ViewModels.FamRegistration.MainUserData
+﻿@using System.Threading.Tasks
+@using WebUI.ViewModels.Registration
+@model WebUI.ViewModels.Registration.UserViewModel
 
 <div class="inputField">
     <div>
-        <input asp-for="FName" placeholder="First name" />
+        <input asp-for="Name" placeholder="First name" />
     </div>
     <div>
-        <input asp-for="SName" placeholder="Second name" />
-    </div>
-    <div>
-        <input asp-for="Age" placeholder="Age"/>
+        <input asp-for="LastName" placeholder="Second name" />
     </div>
     <div>
         <select asp-for="Gender">

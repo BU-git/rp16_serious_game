@@ -57,6 +57,7 @@ namespace RP16_SeriousGame
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddTransient<BLL.Abstract.IMailSender, BLL.Concrete.EmailSender>();
             services.AddTransient<IMailManager, EmailManager>();
+            services.AddTransient<ICryptoServices, CryptoServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

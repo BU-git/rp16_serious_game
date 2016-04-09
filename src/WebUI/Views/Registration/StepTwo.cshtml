@@ -1,5 +1,7 @@
 ﻿@using System.Threading.Tasks
-@model IEnumerable<WebUI.ViewModels.Registration.UserViewModel>
+@using System.Web.ModelBinding
+@using WebUI.ViewModels.Registration
+@model WebUI.ViewModels.Registration.FamilyViewModel
 @{
     ViewBag.Title = "Registration | Step Two";
 }
@@ -10,20 +12,54 @@
         Please enter full data about you and your family
         <form asp-controller="Registration" asp-action="StepTwo">
             <div>
-                <div id="loadingSpinner">loading..</div>
-
-                @foreach (var user in Model)
-                {
-                    <div id="">
-                        @{ await Html.RenderPartialAsync("_StepTwoForm", user); }
+                <div>
+                    <h3>Info about @Model.FamilyName family</h3>
+                    <div>
+                        <label asp-for="FamilyName"></label>
+                        <label>@Model.FamilyName</label>
                     </div>
+                    <div>
+                        <label asp-for="ZipCode"></label>
+                        <input asp-for="ZipCode" />
+                    </div>
+                    <div>
+                        <label asp-for="Country"></label>
+                        <input asp-for="Country" />
+                    </div>
+                    <div>
+                        <label asp-for="Region"></label>
+                        <input asp-for="Region" />
+                    </div>
+                    <div>
+                        <label asp-for="City"></label>
+                        <input asp-for="City" />
+                    </div>
+                    <div>
+                        <label asp-for="Street"></label>
+                        <input asp-for="Street" />
+                    </div>
+                    <div>
+                        <label asp-for="BuildingNumber"></label>
+                        <input asp-for="BuildingNumber" />
+                    </div>
+                </div>
+                <hr />
+
+                <div>
+                    <button type="button" class="addUser">+Add</button>
+                </div>
+
+                @foreach (var user in Model.Users)
+                {
+                    await Html.RenderPartialAsync("_StepTwoForm", new UserViewModel { Index = 0 });
                 }
 
+                <div id="loadingSpinner">loading..</div>
                 <div id="fieldsAppender"></div>
 
-                <div id="buttons">
-                    <div style="float: left">
-                        <button type="reset">Reset</button>
+                <div>
+                    <div>
+                        <input type="reset" value="Reset" />
                     </div>
                     <div>
                         <input type="submit" value="Submit" />
@@ -36,37 +72,30 @@
 
 @section Scripts{
     <script>
-        $('form').submit(function(form) {
-            form.preventDefault();
+        this.FormIndexer = 1;
+        $('#loadingSpinner').hide();
+        $('#waitingPost').hide();
 
+        $('.addUser').click(function() {
+            $('#loadingSpinner').show();
+
+            $.ajax({
+                url: "/Registration/RegistrationForm",
+                method: "POST",
+                data: "index=" + FormIndexer,
+                success: function(data) {
+                    $('#fieldsAppender').append(data);
+                    $('#loadingSpinner').hide();
+                    FormIndexer++;
+                }
+            });
+        });
+
+
+        $('form').submit(function(form) {
             /* Validate form */
 
             $('#waitingPost').show();
-
-            var regVm = [];
-            var data = $('form').serializeArray();
-            var obj = {};
-            $.each(data, function(i, input) {
-                if (input.name == "d" && input.value == "1") {
-                    regVm.push(obj);
-                    obj = {};
-                } else {
-                    obj[input.name] = input.value;
-                }
-            });
-
-            $.ajax({
-                type: "POST",
-                url: '/Registration/StepTwo',
-                data: JSON.stringify(regVm),
-                contentType: "application/json",
-                success: function(data) {
-                    alert("OK");
-                }
-            }).fail(function() {
-                $('#waitingPost').hide();
-                alert("Connection failed..");
-            });
         });
     </script>
 }    

@@ -1,39 +1,48 @@
-﻿@{
+﻿@model WebUI.ViewModels.Registration.MainFamilyData
+@{
     ViewBag.Title = "Registration | Step One";
 }
 
 <div id="content">
     <div id="regForm">
-        <div id="addField">
-            <h3>New family member</h3>
-            <div>
-                <button class="addFieldButton">+ Add</button>
-            </div>
+        <h3>New family</h3>
 
+        <form asp-controller="Registration" asp-action="StepOne">
             <h3>Family members</h3>
 
-            <form>
-                <div id="loadingSpinner">loading..</div>
+            <div>
+                <label asp-for="FamilyName"></label>
+                <input asp-for="FamilyName"/>
+            </div>
+            <div>
+                <label asp-for="HeadEmail"></label>
+                <input asp-for="HeadEmail"/>
+            </div>
+            <div>
+                <label asp-for="FamilyType"></label>
+                <select asp-for="FamilyType">
+                    <option value="MARRIED">Married</option>
+                    <option value="UNMARRIED">Unmarried</option>
+                    <option value="DIVORCED">Divorced</option>
+                </select>
+            </div>
 
-                <div id="fieldsAppender"></div>
-
-                <div id="buttons">
-                    <div style="float: left">
-                        <button type="reset">Reset</button>
-                    </div>
-                    <div>
-                        <input type="submit" value="Submit" />
-                    </div>
+            <div id="buttons">
+                <div>
+                    <input type="reset" value="Reset"/>
                 </div>
-            </form>
+                <div>
+                    <input type="submit" value="Submit" />
+                </div>
+            </div>
+        </form>
 
-            <div id="waitingPost">Posting..</div>
-        </div>
+        <div id="waitingPost">Posting..</div>
     </div>
 </div>
 
 @section Scripts{
-    <script>
+    @*<script>
         $('#loadingSpinner').hide();
         $('#waitingPost').hide();
 
@@ -89,5 +98,5 @@
                     alert("Connection failed..");
                 });
         });
-    </script>
+    </script>*@
 }

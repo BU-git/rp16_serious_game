@@ -41,6 +41,9 @@
       "dependencies": {
         "Ninject": "3.2.2",
         "React.AspNet": "2.2.1"
+      },
+      "frameworkAssemblies": {
+        "System.Web": "4.0.0.0"
       }
     }
   },
