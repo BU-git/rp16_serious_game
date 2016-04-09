@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.Data.Entity.Metadata;
 using Microsoft.Data.Entity.Migrations;
 
-namespace RP16_SeriousGame.Migrations
+namespace WebUI.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {
