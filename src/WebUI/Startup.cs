@@ -1,4 +1,5 @@
 ﻿using System;
+using DAL;
 using Domain.Entities;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
