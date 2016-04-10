@@ -9,8 +9,10 @@ namespace Domain.Entities
     {
         public int UserGroupId { get; set; }
         public string GroupName { get; set; }
-        public string Type { get; set; }
+        public UserGroupType Type { get; set; }
 
         public List<ApplicationUser_UserGourp> ApplicationUser_UserGourps { get; set; }
     }
+
+    public enum UserGroupType { MARRIED, UNMARRIED, DIVORCED}
 }

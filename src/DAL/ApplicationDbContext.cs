@@ -49,10 +49,7 @@ namespace DAL
             builder.Entity<ApplicationUser>().Ignore(x => x.NormalizedUserName);
             builder.Entity<ApplicationUser>().Ignore(x => x.SecurityStamp);
 
-
-
-
-
+            
         }
 
 

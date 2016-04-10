@@ -153,7 +153,7 @@ namespace DAL
                     uug3.UserGroup = UserGroup;
 
                     UserGroup.GroupName = "Test Family";
-                    UserGroup.Type = "Married";
+                    UserGroup.Type = UserGroupType.MARRIED;
 
                     context.Add(UserGroup);
                     context.Add(uug1);

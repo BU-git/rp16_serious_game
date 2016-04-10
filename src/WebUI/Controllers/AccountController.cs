@@ -4,9 +4,9 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
-using WebUI.Models;
 using WebUI.Services;
 using WebUI.ViewModels.Account;
+using Domain.Entities;
 
 namespace WebUI.Controllers
 {
@@ -18,6 +18,7 @@ namespace WebUI.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
