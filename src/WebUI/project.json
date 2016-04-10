@@ -28,7 +28,7 @@
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final",
-    "NUnit": "3.0.1"
+    "NUnit": "3.2.0"
   },
 
   "commands": {
@@ -39,6 +39,7 @@
   "frameworks": {
     "dnx451": {
       "dependencies": {
+        "Moq": "4.2.1510.2205",
         "Ninject": "3.2.2",
         "React.AspNet": "2.2.1"
       },
@@ -57,6 +58,7 @@
     "**.vspscc"
   ],
   "scripts": {
-    "prepublish": [ "npm install", "bower install", "gulp clean", "gulp min" ]
+    "prebuild": [ "npm install", "npm prune", "gulp copy", "gulp min", "bower install" ],
+    "prepublish": [ "npm install", "npm prune", "gulp copy", "gulp min", "bower install" ]
   }
 }

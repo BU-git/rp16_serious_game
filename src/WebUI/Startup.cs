@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
+﻿using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
@@ -11,10 +7,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RP16_SeriousGame.Models;
 using RP16_SeriousGame.Services;
+using RP16_SeriousGame.Models;
+using RP16_SeriousGame.Services;
 using WebUI.Infrastructure.Abstract;
 using WebUI.Infrastructure.Concrete;
+using WebUI.Models;
+using WebUI.Services;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNet.Builder;
 
-namespace RP16_SeriousGame
+namespace WebUI
 {
     public class Startup
     {

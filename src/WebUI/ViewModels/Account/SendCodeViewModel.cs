@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNet.Mvc.Rendering;
 
-namespace RP16_SeriousGame.ViewModels.Account
+namespace WebUI.ViewModels.Account
 {
     public class SendCodeViewModel
     {

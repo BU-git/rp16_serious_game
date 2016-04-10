@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNet.Mvc.Rendering;
 
-namespace RP16_SeriousGame.ViewModels.Manage
+namespace WebUI.ViewModels.Manage
 {
     public class ConfigureTwoFactorViewModel
     {

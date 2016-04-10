@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
+﻿using Microsoft.AspNet.Mvc;
 
-namespace RP16_SeriousGame.Controllers
+namespace WebUI.Controllers
 {
     public class HomeController : Controller
     {
