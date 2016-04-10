@@ -110,7 +110,7 @@ namespace DAL.Migrations
 
                     b.Property<string>("GroupName");
 
-                    b.Property<string>("Type");
+                    b.Property<int>("Type");
 
                     b.HasKey("UserGroupId");
                 });
