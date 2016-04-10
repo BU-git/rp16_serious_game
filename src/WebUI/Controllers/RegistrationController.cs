@@ -7,7 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Newtonsoft.Json;
 using NUnit.Framework.Constraints;
-using RP16_SeriousGame.Models;
+using WebUI.Models;
 using WebUI.Infrastructure.Abstract;
 using WebUI.ViewModels.Registration;
 

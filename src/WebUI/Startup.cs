@@ -1,23 +1,16 @@
-﻿using Microsoft.AspNet.Builder;
+﻿using BLL.Abstract;
+using BLL.Concrete;
+using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using RP16_SeriousGame.Models;
-using RP16_SeriousGame.Services;
-using RP16_SeriousGame.Models;
-using RP16_SeriousGame.Services;
 using WebUI.Infrastructure.Abstract;
 using WebUI.Infrastructure.Concrete;
 using WebUI.Models;
 using WebUI.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Builder;
 
 namespace WebUI
 {
@@ -28,7 +21,7 @@ namespace WebUI
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true);
 
             if (env.IsDevelopment())
             {
@@ -60,7 +53,7 @@ namespace WebUI
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
-            services.AddTransient<BLL.Abstract.IMailSender, BLL.Concrete.EmailSender>();
+            services.AddTransient<IMailSender, EmailSender>();
             services.AddTransient<IMailManager, EmailManager>();
             services.AddTransient<ICryptoServices, CryptoServices>();
         }
@@ -104,9 +97,7 @@ namespace WebUI
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
         }
 
