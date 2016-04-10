@@ -52,6 +52,9 @@ namespace RP16_SeriousGame
 
             services.AddMvc();
 
+            //Add DAL
+            services.AddScoped<IDAL, DAL>();
+
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
