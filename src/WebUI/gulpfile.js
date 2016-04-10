@@ -1,5 +1,4 @@
-/// <binding Clean='clean' />
-﻿/// <binding BeforeBuild='default' Clean='clean' />
+/// <binding />
 "use strict";
 
 var gulp = require("gulp"),
@@ -11,7 +10,7 @@ var gulp = require("gulp"),
 
 
 var paths = {
-  webroot: "./wwwroot/"
+    webroot: "./wwwroot/"
 };
 
 paths.js = "./Assets/js/**/*.js";
@@ -25,12 +24,12 @@ paths.concatCssDest = paths.webroot + "css/site.min.css";
 paths.libsDest = paths.webroot + "lib";
 paths.imagesDest = paths.webroot + "images";
 
-gulp.task("clean:js", function(cb) {
-  rimraf(paths.concatJsDest, cb);
+gulp.task("clean:js", function (cb) {
+    rimraf(paths.concatJsDest, cb);
 });
 
-gulp.task("clean:css", function(cb) {
-  rimraf(paths.concatCssDest, cb);
+gulp.task("clean:css", function (cb) {
+    rimraf(paths.concatCssDest, cb);
 });
 
 gulp.task("clean:libs", function (cb) {
