@@ -8,8 +8,8 @@ using DAL;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160404173241_FirstdMigration")]
-    partial class FirstdMigration
+    [Migration("20160409112350_FirstMigration")]
+    partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -111,7 +111,7 @@ namespace DAL.Migrations
 
                     b.Property<string>("GroupName");
 
-                    b.Property<string>("Type");
+                    b.Property<int>("Type");
 
                     b.HasKey("UserGroupId");
                 });

@@ -13,6 +13,9 @@ using RP16_SeriousGame.Services;
 using Domain.Entities;
 using DAL;
 using Microsoft.AspNet.Identity;
+using WebUI.Services;
+using System.Configuration;
+
 
 namespace RP16_SeriousGame
 {
@@ -24,6 +27,7 @@ namespace RP16_SeriousGame
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+            
 
             if (env.IsDevelopment())
             {
@@ -58,11 +62,21 @@ namespace RP16_SeriousGame
 
             //Add Seed Method
             services.AddTransient<DataInitializer>();
+    
+            services.AddTransient<TranslationManager>();
+            services.AddTransient<ITranslationProvider, JSONTranslationProvider> ( x => new JSONTranslationProvider(Configuration["Data:Resources:Path"]));
+
+            var sp = services.BuildServiceProvider();
+            var service = sp.GetService<ITranslationProvider>();
+            TranslationManager.Instance.TranslationProvider = service;
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DataInitializer dataInitializer)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DataInitializer dataInitializer, IServiceProvider serviceProvider)
         {
+            
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
@@ -106,7 +120,7 @@ namespace RP16_SeriousGame
 
             //Seed DataBase
             await dataInitializer.InitializeDataAsync();
-
+            
 
         }
 

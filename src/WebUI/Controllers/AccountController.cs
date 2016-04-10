@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using RP16_SeriousGame.Services;
 using RP16_SeriousGame.ViewModels.Account;
 using Domain.Entities;
+using WebUI.Services;
 
 namespace RP16_SeriousGame.Controllers
 {
@@ -23,6 +24,7 @@ namespace RP16_SeriousGame.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
