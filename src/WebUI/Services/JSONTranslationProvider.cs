@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace WebUI.Services
@@ -21,8 +22,8 @@ namespace WebUI.Services
 
         public JSONTranslationProvider(string fileName)
         {
-            
-            using (StreamReader strm = new StreamReader(fileName))
+
+            using (var strm = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
             {
                 JObject obj = JObject.Parse(strm.ReadToEnd());
                 
