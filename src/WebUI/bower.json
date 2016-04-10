@@ -2,15 +2,8 @@
   "name": "ASP.NET",
   "private": true,
   "dependencies": {
-<<<<<<< HEAD
-    "bootstrap": "3.3.5",
-    "jquery": "2.1.4",
-    "jquery-validation": "1.14.0",
-    "jquery-validation-unobtrusive": "3.2.4"
-=======
     "jquery-validation-unobtrusive": "^3.2.6",
     "jquery": "^2.2.3",
     "jquery-validation": "^1.15.0"
->>>>>>> ad5dab3... Init login functionality + gulp tweaks
   }
 }

@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-﻿/// <binding Clean='clean' />
-=======
+/// <binding Clean='clean' />
 ﻿/// <binding BeforeBuild='default' Clean='clean' />
->>>>>>> ad5dab3... Init login functionality + gulp tweaks
 "use strict";
 
 var gulp = require("gulp"),
@@ -21,34 +18,6 @@ paths.css = paths.webroot + "css/**/*.css";
 paths.minCss = paths.webroot + "css/**/*.min.css";
 paths.concatJsDest = paths.webroot + "js/site.min.js";
 paths.concatCssDest = paths.webroot + "css/site.min.css";
-<<<<<<< HEAD
-
-gulp.task("clean:js", function (cb) {
-    rimraf(paths.concatJsDest, cb);
-});
-
-gulp.task("clean:css", function (cb) {
-    rimraf(paths.concatCssDest, cb);
-});
-
-gulp.task("clean", ["clean:js", "clean:css"]);
-
-gulp.task("min:js", function () {
-    return gulp.src([paths.js, "!" + paths.minJs], { base: "." })
-        .pipe(concat(paths.concatJsDest))
-        .pipe(uglify())
-        .pipe(gulp.dest("."));
-});
-
-gulp.task("min:css", function () {
-    return gulp.src([paths.css, "!" + paths.minCss])
-        .pipe(concat(paths.concatCssDest))
-        .pipe(cssmin())
-        .pipe(gulp.dest("."));
-});
-
-gulp.task("min", ["min:js", "min:css"]);
-=======
 paths.libsDest = paths.webroot + "lib";
 paths.imagesDest = paths.webroot + "images";
 
@@ -99,4 +68,3 @@ gulp.task("clean", ["clean:js", "clean:css", "clean:libs", "clean:all"]);
 gulp.task("min", ["min:js", "min:css"]);
 gulp.task("copy", ["copy:libraries", "copy:images"]);
 gulp.task("default", ["clean", "min", "copy"]);
->>>>>>> ad5dab3... Init login functionality + gulp tweaks

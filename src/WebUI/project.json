@@ -1,10 +1,11 @@
 {
-  "userSecretsId": "aspnet5-RP16_SeriousGame-a454bce2-c9ba-4c64-99f2-190b0db1e328",
-  "version": "1.0.0-*",
+  "commands": {
+    "web": "Microsoft.AspNet.Server.Kestrel",
+    "ef": "EntityFramework.Commands"
+  },
   "compilationOptions": {
     "emitEntryPoint": true
   },
-
   "dependencies": {
     "BLL": "1.0.0-*",
     "DAL": "1.0.0-*",
@@ -30,12 +31,10 @@
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final",
     "NUnit": "3.2.0"
   },
-
-  "commands": {
-    "web": "Microsoft.AspNet.Server.Kestrel",
-    "ef": "EntityFramework.Commands"
-  },
-
+  "exclude": [
+    "wwwroot",
+    "node_modules"
+  ],
   "frameworks": {
     "dnx451": {
       "dependencies": {
@@ -46,17 +45,14 @@
     },
     "dnxcore50": { }
   },
-
-  "exclude": [
-    "wwwroot",
-    "node_modules"
-  ],
   "publishExclude": [
     "**.user",
     "**.vspscc"
   ],
   "scripts": {
-    "postbuild": [ "npm install", "gulp clean", "gulp copy", "gulp min", "bower install" ],
+    "prebuild": [ "npm install", "gulp copy", "gulp min", "bower install" ],
     "prepublish": [ "npm install", "gulp copy", "gulp min", "bower install" ]
-  }
+  },
+  "userSecretsId": "aspnet5-RP16_SeriousGame-a454bce2-c9ba-4c64-99f2-190b0db1e328",
+  "version": "1.0.0-*"
 }
