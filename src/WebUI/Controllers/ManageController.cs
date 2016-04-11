@@ -1,13 +1,18 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
+using RP16_SeriousGame.Services;
+using RP16_SeriousGame.ViewModels.Manage;
 using WebUI.Models;
 using WebUI.Services;
 using WebUI.ViewModels.Manage;
+using RP16_SeriousGame.Services;
+using RP16_SeriousGame.ViewModels.Manage;
+using Domain.Entities;
 
 namespace WebUI.Controllers
 {

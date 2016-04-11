@@ -1,4 +1,4 @@
-﻿using BLL.Abstract;
+using BLL.Abstract;
 using BLL.Concrete;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
@@ -11,6 +11,9 @@ using WebUI.Infrastructure.Abstract;
 using WebUI.Infrastructure.Concrete;
 using WebUI.Models;
 using WebUI.Services;
+using Domain.Entities;
+using DAL;
+using Microsoft.AspNet.Identity;
 
 namespace WebUI
 {
@@ -50,16 +53,22 @@ namespace WebUI
 
             services.AddMvc();
 
+            //Add DAL
+            services.AddScoped<IDAL, DAL>();
+
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
             services.AddTransient<IMailSender, EmailSender>();
             services.AddTransient<IMailManager, EmailManager>();
             services.AddTransient<ICryptoServices, CryptoServices>();
+
+            //Add Seed Method
+            services.AddTransient<DataInitializer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DataInitializer dataInitializer)
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
@@ -99,6 +108,11 @@ namespace WebUI
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //Seed DataBase
+            await dataInitializer.InitializeDataAsync();
+
+
         }
 
         // Entry point for the application.
