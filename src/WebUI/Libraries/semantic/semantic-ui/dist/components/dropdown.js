@@ -1547,9 +1547,9 @@ $.fn.dropdown = function(parameters) {
             }
             return remoteValues;
           },
-          choiceText: function($choice, preserveHTML) {
-            preserveHTML = (preserveHTML !== undefined)
-              ? preserveHTML
+          choiceText: function($choice, preserveHtml) {
+            preserveHtml = (preserveHtml !== undefined)
+              ? preserveHtml
               : settings.preserveHTML
             ;
             if($choice) {
@@ -1561,7 +1561,7 @@ $.fn.dropdown = function(parameters) {
               }
               return ($choice.data(metadata.text) !== undefined)
                 ? $choice.data(metadata.text)
-                : (preserveHTML)
+                : (preserveHtml)
                   ? $.trim($choice.html())
                   : $.trim($choice.text())
               ;

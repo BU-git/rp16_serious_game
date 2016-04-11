@@ -1,6 +1,5 @@
-﻿using System;
-using DAL;
-using Domain.Entities;
+using BLL.Abstract;
+using BLL.Concrete;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -8,7 +7,13 @@ using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using WebUI.Infrastructure.Abstract;
+using WebUI.Infrastructure.Concrete;
 using WebUI.Services;
+using Domain.Entities;
+using DAL;
+using Microsoft.AspNet.Identity;
+using Interfaces;
 
 namespace WebUI
 {
@@ -19,8 +24,7 @@ namespace WebUI
             // Set up configuration sources.
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-            
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true);
 
             if (env.IsDevelopment())
             {
@@ -49,33 +53,29 @@ namespace WebUI
 
             services.AddMvc();
 
+            //Add DAL
+            services.AddScoped<IDal, DAL.Dal>();
+
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<IMailSender, EmailSender>();
+            services.AddTransient<IMailManager, EmailManager>();
+            services.AddTransient<ICryptoServices, CryptoServices>();
 
             //Add Seed Method
             services.AddTransient<DataInitializer>();
-    
-            services.AddTransient<TranslationManager>();
-            services.AddTransient<ITranslationProvider, JSONTranslationProvider> ( x => new JSONTranslationProvider(Configuration["Data:Resources:Path"]));
-
-            var sp = services.BuildServiceProvider();
-            var service = sp.GetService<ITranslationProvider>();
-            TranslationManager.Instance.TranslationProvider = service;
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DataInitializer dataInitializer, IServiceProvider serviceProvider)
+        public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DataInitializer dataInitializer)
         {
-            
-
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
+                //app.UseBrowserLink(); WTF: The method is not defined at the interface???
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
@@ -106,14 +106,12 @@ namespace WebUI
 
             app.UseMvc(routes =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
 
-            //Seed DataBase
-            await dataInitializer.InitializeDataAsync();
-            
+            //Seed DataBase TODO
+            //await dataInitializer.InitializeDataAsync();
+
 
         }
 

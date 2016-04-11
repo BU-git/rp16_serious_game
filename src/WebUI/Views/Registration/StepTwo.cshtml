@@ -1,0 +1,162 @@
+﻿@using System.Threading.Tasks
+@using System.Web.ModelBinding
+@using WebUI.ViewModels.Registration
+@model WebUI.ViewModels.Registration.FamilyViewModel
+@{
+    ViewBag.Title = "Registration | Step Two";
+}
+
+<div class="ui text container">
+    <div class="ui steps top attached center aligned">
+        <div class="step">
+            <div class="content">
+                <div class="title">Step 1</div>
+                <div class="description">Create new family</div>
+            </div>
+        </div>
+        <div class="active step">
+            <div class="content">
+                <div class="title">Step 2</div>
+                <div class="description">Enter information about family members</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">Step 3</div>
+                <div class="description">Choose an avatar</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui attached segment" id="content">
+        <div class="ui page dimmer" id="page-dimmer">
+            <div class="ui text loader">Loading</div>
+        </div>
+        <div class="ui form" id="regForm">
+            <h2 class="ui center aligned header">General information</h2>
+            <form asp-controller="Registration" asp-action="StepTwo" class="ui form segment">
+                <div>
+                    <div>
+                        <div class="field">
+                            <label asp-for="FamilyName"></label>
+                            <label>@Model.FamilyName</label>
+                        </div>
+                        <div class="field">
+                            <label asp-for="ZipCode"></label>
+                            <div class="ui corner labeled input">
+                                <input asp-for="ZipCode" />
+                                <div class="ui corner label">
+                                    <i class="asterisk icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label asp-for="Country"></label>
+                            <div class="ui corner labeled input">
+                                <input asp-for="Country" />
+                                <div class="ui corner label">
+                                    <i class="asterisk icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label asp-for="Region"></label>
+                            <div class="ui corner labeled input">
+                                <input asp-for="Region" />
+                                <div class="ui corner label">
+                                    <i class="asterisk icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label asp-for="City"></label>
+                            <div class="ui corner labeled input">
+                                <input asp-for="City" />
+                                <div class="ui corner label">
+                                    <i class="asterisk icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label asp-for="Street"></label>
+                            <div class="ui corner labeled input">
+                                <input asp-for="Street" />
+                                <div class="ui corner label">
+                                    <i class="asterisk icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label asp-for="BuildingNumber"></label>
+                            <div class="ui corner labeled input">
+                                <input asp-for="BuildingNumber" />
+                                <div class="ui corner label">
+                                    <i class="asterisk icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="ui hidden divider"></div>
+
+                    <h2 class="ui header center aligned">Personal data for user</h2>
+                    @foreach (var user in Model.Users)
+                    {
+                        await Html.RenderPartialAsync("_StepTwoForm", new UserViewModel { Index = 0 });
+                    }
+
+                    <div class="ui hidden divider"></div>
+                    <div class="ui hidden divider"></div>
+                    <div id="loadingSpinner">loading..</div>
+                    <div id="fieldsAppender"></div>
+
+                    <div class="row">
+                        <div class="ui three column grid">
+                            <div class="row">
+                                <div class="column">
+                                    <input type="reset" value="Reset" class="ui button fluid" />
+                                </div>
+                                <div class="column">
+                                    <button type="button" class="addUser ui button green fluid">Add new member</button>
+                                </div>
+                                <div class="column">
+                                    <input type="submit" value="Submit" class="ui button blue fluid" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        this.FormIndexer = 1;
+        $('#loadingSpinner').hide();
+        $('#waitingPost').hide();
+
+        $('.addUser').click(function () {
+            $('#loadingSpinner').show();
+
+            $.ajax({
+                url: "/Registration/RegistrationForm",
+                method: "POST",
+                data: "index=" + FormIndexer,
+                success: function (data) {
+                    $('#fieldsAppender').append(data);
+                    $('#loadingSpinner').hide();
+                    FormIndexer++;
+                }
+            });
+        });
+
+
+        $('form').submit(function (form) {
+            /* Validate form */
+            $('#page-dimmer').addClass('active');
+            $('#waitingPost').show();
+        });
+    </script>
+}    

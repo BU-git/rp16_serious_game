@@ -3806,10 +3806,10 @@ $.fn.dimmer = function(parameters) {
             var
               color      = $dimmer.css('background-color'),
               colorArray = color.split(','),
-              isRGBA     = (colorArray && colorArray.length == 4)
+              isRgba     = (colorArray && colorArray.length == 4)
             ;
             opacity    = settings.opacity === 0 ? 0 : settings.opacity || opacity;
-            if(isRGBA) {
+            if(isRgba) {
               colorArray[3] = opacity + ')';
               color         = colorArray.join(',');
             }
@@ -5663,9 +5663,9 @@ $.fn.dropdown = function(parameters) {
             }
             return remoteValues;
           },
-          choiceText: function($choice, preserveHTML) {
-            preserveHTML = (preserveHTML !== undefined)
-              ? preserveHTML
+          choiceText: function($choice, preserveHtml) {
+            preserveHtml = (preserveHtml !== undefined)
+              ? preserveHtml
               : settings.preserveHTML
             ;
             if($choice) {
@@ -5677,7 +5677,7 @@ $.fn.dropdown = function(parameters) {
               }
               return ($choice.data(metadata.text) !== undefined)
                 ? $choice.data(metadata.text)
-                : (preserveHTML)
+                : (preserveHtml)
                   ? $.trim($choice.html())
                   : $.trim($choice.text())
               ;
@@ -8458,9 +8458,9 @@ $.fn.modal = function(parameters) {
             var
               $target   = $(event.target),
               isInModal = ($target.closest(selector.modal).length > 0),
-              isInDOM   = $.contains(document.documentElement, event.target)
+              isInDom   = $.contains(document.documentElement, event.target)
             ;
-            if(!isInModal && isInDOM) {
+            if(!isInModal && isInDom) {
               module.debug('Dimmer clicked, hiding all modals');
               if( module.is.active() ) {
                 module.remove.clickaway();
@@ -10180,14 +10180,14 @@ $.fn.popup = function(parameters) {
               var
                 is2D     = ($node.css('transform') === 'none'),
                 isStatic = ($node.css('position') === 'static'),
-                isHTML   = $node.is('html')
+                isHtml   = $node.is('html')
               ;
-              while(parentNode && !isHTML && isStatic && is2D) {
+              while(parentNode && !isHtml && isStatic && is2D) {
                 parentNode = parentNode.parentNode;
                 $node    = $(parentNode);
                 is2D     = ($node.css('transform') === 'none');
                 isStatic = ($node.css('position') === 'static');
-                isHTML   = $node.is('html');
+                isHtml   = $node.is('html');
               }
             }
             return ($node && $node.length > 0)
@@ -12579,7 +12579,7 @@ $.fn.search = function(parameters) {
                 action    : 'search',
                 onError   : module.error
               },
-              searchHTML
+              searchHtml
             ;
             module.verbose('First request, initializing API');
             $module.api(apiSettings);
@@ -12755,20 +12755,20 @@ $.fn.search = function(parameters) {
           local: function(searchTerm) {
             var
               results = module.search.object(searchTerm, settings.content),
-              searchHTML
+              searchHtml
             ;
             module.set.loading();
             module.save.results(results);
             module.debug('Returned local search results', results);
 
-            searchHTML = module.generateResults({
+            searchHtml = module.generateResults({
               results: results
             });
             module.remove.loading();
-            module.addResults(searchHTML);
+            module.addResults(searchHtml);
             module.inject.id(results);
             module.write.cache(searchTerm, {
-              html    : searchHTML,
+              html    : searchHtml,
               results : results
             });
           },
@@ -12887,15 +12887,15 @@ $.fn.search = function(parameters) {
         parse: {
           response: function(response, searchTerm) {
             var
-              searchHTML = module.generateResults(response)
+              searchHtml = module.generateResults(response)
             ;
             module.verbose('Parsing server response', response);
             if(response !== undefined) {
               if(searchTerm !== undefined && response[fields.results] !== undefined) {
-                module.addResults(searchHTML);
+                module.addResults(searchHtml);
                 module.inject.id(response[fields.results]);
                 module.write.cache(searchTerm, {
-                  html    : searchHTML,
+                  html    : searchHtml,
                   results : response[fields.results]
                 });
                 module.save.results(response[fields.results]);
@@ -12958,20 +12958,20 @@ $.fn.search = function(parameters) {
         create: {
           id: function(resultIndex, categoryIndex) {
             var
-              resultID      = (resultIndex + 1), // not zero indexed
-              categoryID    = (categoryIndex + 1),
+              resultId      = (resultIndex + 1), // not zero indexed
+              categoryId    = (categoryIndex + 1),
               firstCharCode,
-              letterID,
+              letterId,
               id
             ;
             if(categoryIndex !== undefined) {
               // start char code for "A"
-              letterID = String.fromCharCode(97 + categoryIndex);
-              id          = letterID + resultID;
+              letterId = String.fromCharCode(97 + categoryIndex);
+              id          = letterId + resultId;
               module.verbose('Creating category result id', id);
             }
             else {
-              id = resultID;
+              id = resultId;
               module.verbose('Creating result id', id);
             }
             return id;
@@ -14716,7 +14716,7 @@ $.fn.sidebar = function(parameters) {
             var
               width     = module.cache.width  || $module.outerWidth(),
               height    = module.cache.height || $module.outerHeight(),
-              isRTL     = module.is.rtl(),
+              isRtl     = module.is.rtl(),
               direction = module.get.direction(),
               distance  = {
                 left   : width,
@@ -14727,7 +14727,7 @@ $.fn.sidebar = function(parameters) {
               style
             ;
 
-            if(isRTL){
+            if(isRtl){
               module.verbose('RTL detected, flipping widths');
               distance.left = -width;
               distance.right = width;
@@ -15205,19 +15205,19 @@ $.fn.sidebar = function(parameters) {
 
           ie: function() {
             var
-              isIE11 = (!(window.ActiveXObject) && 'ActiveXObject' in window),
-              isIE   = ('ActiveXObject' in window)
+              isIe11 = (!(window.ActiveXObject) && 'ActiveXObject' in window),
+              isIe   = ('ActiveXObject' in window)
             ;
-            return (isIE11 || isIE);
+            return (isIe11 || isIe);
           },
 
           ios: function() {
             var
               userAgent      = navigator.userAgent,
-              isIOS          = userAgent.match(regExp.ios),
+              isIos          = userAgent.match(regExp.ios),
               isMobileChrome = userAgent.match(regExp.mobileChrome)
             ;
-            if(isIOS && !isMobileChrome) {
+            if(isIos && !isMobileChrome) {
               module.verbose('Browser was found to be iOS', userAgent);
               return true;
             }
@@ -19009,10 +19009,10 @@ $.api = $.fn.api = function(parameters) {
               asyncResponder = settings.mockResponseAsync || settings.responseAsync,
               asyncCallback,
               response,
-              mockedXHR
+              mockedXhr
             ;
 
-            mockedXHR = $.Deferred()
+            mockedXhr = $.Deferred()
               .always(module.event.xhr.complete)
               .done(module.event.xhr.done)
               .fail(module.event.xhr.fail)
@@ -19028,23 +19028,23 @@ $.api = $.fn.api = function(parameters) {
                 response = responder;
               }
               // simulating response
-              mockedXHR.resolveWith(context, [ response, textStatus, { responseText: response }]);
+              mockedXhr.resolveWith(context, [ response, textStatus, { responseText: response }]);
             }
             else if( $.isFunction(asyncResponder) ) {
               asyncCallback = function(response) {
                 module.debug('Async callback returned response', response);
 
                 if(response) {
-                  mockedXHR.resolveWith(context, [ response, textStatus, { responseText: response }]);
+                  mockedXhr.resolveWith(context, [ response, textStatus, { responseText: response }]);
                 }
                 else {
-                  mockedXHR.rejectWith(context, [{ responseText: response }, status, httpMessage]);
+                  mockedXhr.rejectWith(context, [{ responseText: response }, status, httpMessage]);
                 }
               };
               module.debug('Using specified async response callback', asyncResponder);
               asyncResponder.call(context, requestSettings, asyncCallback);
             }
-            return mockedXHR;
+            return mockedXhr;
           },
 
           xhr: function() {

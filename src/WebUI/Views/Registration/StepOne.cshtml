@@ -1,0 +1,83 @@
+﻿@using System.Collections.Specialized
+@model WebUI.ViewModels.Registration.MainFamilyData
+@{
+    ViewBag.Title = "Registration | Step One";
+}
+
+<div class="ui text container">
+    <div class="ui steps top attached center aligned">
+        <div class="active step">
+            <div class="content">
+                <div class="title">Step 1</div>
+                <div class="description">Create new family</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">Step 2</div>
+                <div class="description">Enter information about family members</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">Step 3</div>
+                <div class="description">Choose an avatar</div>
+            </div>
+        </div>
+    </div>
+    <div class="ui attached segment" id="content">
+        <div class="ui form" id="regForm">
+            <h2 class="ui center aligned header">New family</h2>
+
+            <form asp-controller="Registration" asp-action="StepOne" class="ui form segment">
+
+                <div class="field">
+                    <label asp-for="FamilyName">Family Name</label>
+                    <div class="ui corner labeled input">
+                        <input asp-for="FamilyName"/>
+                        <div class="ui corner label">
+                            <i class="asterisk icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label asp-for="HeadEmail">Head Email</label>
+                    <div class="ui corner labeled input">
+                        <input asp-for="HeadEmail"/>
+                        <div class="ui corner label">
+                            <i class="asterisk icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <label asp-for="FamilyType">Family Type</label>
+                    <select asp-for="FamilyType" class="ui dropdown">
+                        <option value="">Family type</option>
+                        <option value="MARRIED">Married</option>
+                        <option value="UNMARRIED">Unmarried</option>
+                        <option value="DIVORCED">Divorced</option>
+                    </select>
+                </div>
+
+                <div class="field" id="buttons">
+                    <div>
+                        <input type="submit" value="Submit" class="ui button blue fluid"/>
+                    </div>
+                </div>
+            </form>
+
+            <div class="ui page dimmer" id="page-dimmer">
+                <div class="ui text loader">Loading</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $('form').submit(
+            function() {
+                $('#page-dimmer').addClass('active');
+            });
+    </script>
+}

@@ -210,7 +210,7 @@ $.fn.sidebar = function(parameters) {
             var
               width     = module.cache.width  || $module.outerWidth(),
               height    = module.cache.height || $module.outerHeight(),
-              isRTL     = module.is.rtl(),
+              isRtl     = module.is.rtl(),
               direction = module.get.direction(),
               distance  = {
                 left   : width,
@@ -221,7 +221,7 @@ $.fn.sidebar = function(parameters) {
               style
             ;
 
-            if(isRTL){
+            if(isRtl){
               module.verbose('RTL detected, flipping widths');
               distance.left = -width;
               distance.right = width;
@@ -699,19 +699,19 @@ $.fn.sidebar = function(parameters) {
 
           ie: function() {
             var
-              isIE11 = (!(window.ActiveXObject) && 'ActiveXObject' in window),
-              isIE   = ('ActiveXObject' in window)
+              isIe11 = (!(window.ActiveXObject) && 'ActiveXObject' in window),
+              isIe   = ('ActiveXObject' in window)
             ;
-            return (isIE11 || isIE);
+            return (isIe11 || isIe);
           },
 
           ios: function() {
             var
               userAgent      = navigator.userAgent,
-              isIOS          = userAgent.match(regExp.ios),
+              isIos          = userAgent.match(regExp.ios),
               isMobileChrome = userAgent.match(regExp.mobileChrome)
             ;
-            if(isIOS && !isMobileChrome) {
+            if(isIos && !isMobileChrome) {
               module.verbose('Browser was found to be iOS', userAgent);
               return true;
             }

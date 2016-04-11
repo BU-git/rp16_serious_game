@@ -599,10 +599,10 @@ $.api = $.fn.api = function(parameters) {
               asyncResponder = settings.mockResponseAsync || settings.responseAsync,
               asyncCallback,
               response,
-              mockedXHR
+              mockedXhr
             ;
 
-            mockedXHR = $.Deferred()
+            mockedXhr = $.Deferred()
               .always(module.event.xhr.complete)
               .done(module.event.xhr.done)
               .fail(module.event.xhr.fail)
@@ -618,23 +618,23 @@ $.api = $.fn.api = function(parameters) {
                 response = responder;
               }
               // simulating response
-              mockedXHR.resolveWith(context, [ response, textStatus, { responseText: response }]);
+              mockedXhr.resolveWith(context, [ response, textStatus, { responseText: response }]);
             }
             else if( $.isFunction(asyncResponder) ) {
               asyncCallback = function(response) {
                 module.debug('Async callback returned response', response);
 
                 if(response) {
-                  mockedXHR.resolveWith(context, [ response, textStatus, { responseText: response }]);
+                  mockedXhr.resolveWith(context, [ response, textStatus, { responseText: response }]);
                 }
                 else {
-                  mockedXHR.rejectWith(context, [{ responseText: response }, status, httpMessage]);
+                  mockedXhr.rejectWith(context, [{ responseText: response }, status, httpMessage]);
                 }
               };
               module.debug('Using specified async response callback', asyncResponder);
               asyncResponder.call(context, requestSettings, asyncCallback);
             }
-            return mockedXHR;
+            return mockedXhr;
           },
 
           xhr: function() {

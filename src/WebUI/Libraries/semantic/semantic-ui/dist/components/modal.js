@@ -239,9 +239,9 @@ $.fn.modal = function(parameters) {
             var
               $target   = $(event.target),
               isInModal = ($target.closest(selector.modal).length > 0),
-              isInDOM   = $.contains(document.documentElement, event.target)
+              isInDom   = $.contains(document.documentElement, event.target)
             ;
-            if(!isInModal && isInDOM) {
+            if(!isInModal && isInDom) {
               module.debug('Dimmer clicked, hiding all modals');
               if( module.is.active() ) {
                 module.remove.clickaway();

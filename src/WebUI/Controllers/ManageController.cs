@@ -1,13 +1,13 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Domain.Entities;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 using WebUI.Services;
 using WebUI.ViewModels.Manage;
+using Domain.Entities;
 
 namespace WebUI.Controllers
 {

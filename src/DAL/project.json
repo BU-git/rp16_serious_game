@@ -5,40 +5,30 @@
   "tags": [""],
   "projectUrl": "",
   "licenseUrl": "",
-  "frameworks": {
-    "dnx451": {
+  "frameworks":
+  {
+    "dnx451":
+    {
       "dependencies": {
-
-        "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final",
         "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",
+        "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final",
         "Moq": "4.2.1510.2205"
-      }
       },
-      "dotnet5.4": {
-        "dependencies": {
-          "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final",
-          "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",
-          "Microsoft.CSharp": "4.0.1-beta-23516",
-          "System.Collections": "4.0.11-beta-23516",
-          "System.Linq": "4.0.1-beta-23516",
-          "System.Runtime": "4.0.21-beta-23516",
-          "System.Threading": "4.0.11-beta-23516"
-        }
-      },
-      "net451": {
-        "dependencies": {
-          "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",
-          "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final"
-        }
+      "frameworkAssemblies": {
+        "System.Web": "4.0.0.0"
       }
-    },
-  "dependencies": {
-    "Domain": "1.0.0-*"
-
+    }
   },
-
+  "dependencies": {
+    "Domain": "1.0.0-*",
+    "EntityFramework.Commands": "7.0.0-rc1-final",
+    "Interfaces": "1.0.0-*"
+  },
   "commands": {
     "web": "Microsoft.AspNet.Server.Kestrel",
-    "ef": "EntityFramework.Commands"
+    "ef": "EntityFramework.Commands",
+    "dependencies": {
+      "EntityFramework.Core": "7.0.0-rc1-final"
+    }
   }
 }

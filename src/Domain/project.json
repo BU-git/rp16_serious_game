@@ -10,19 +10,7 @@
     "net451": {
       "dependencies": {
         "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final"
-
-      }
-    },
-    "dotnet5.4": {
-      "dependencies": {
-        "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",
-        "Microsoft.CSharp": "4.0.1-beta-23516",
-        "System.Collections": "4.0.11-beta-23516",
-        "System.Linq": "4.0.1-beta-23516",
-        "System.Runtime": "4.0.21-beta-23516",
-        "System.Threading": "4.0.11-beta-23516"
-      },
-      "dnx451": {      }
       }
     }
+  }
 }

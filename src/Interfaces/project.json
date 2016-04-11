@@ -1,4 +1,4 @@
-﻿{
+{
   "version": "1.0.0-*",
   "description": "Interfaces Class Library",
   "authors": [ "Andrew" ],
@@ -7,14 +7,9 @@
   "licenseUrl": "",
 
   "frameworks": {
-    "net451": { },
-    "dotnet5.4": {
+    "dnx451": {
       "dependencies": {
-        "Microsoft.CSharp": "4.0.1-beta-23516",
-        "System.Collections": "4.0.11-beta-23516",
-        "System.Linq": "4.0.1-beta-23516",
-        "System.Runtime": "4.0.21-beta-23516",
-        "System.Threading": "4.0.11-beta-23516"
+        "Domain": "1.0.0-*"
       }
     }
   }

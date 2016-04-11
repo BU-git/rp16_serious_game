@@ -10,17 +10,17 @@ using System.Threading.Tasks;
 
 namespace WebUI.Services
 {
-    class JSONTranslationProvider : ITranslationProvider
+    class JsonTranslationProvider : ITranslationProvider
     {
         public IEnumerable<string> Languages { get; private set; }
 
-        private IDictionary<Tuple<string, string>,string>  translations;
+        private IDictionary<Tuple<string, string>,string>  _translations;
         public string Translate(string key)
         {
-            return translations[Tuple.Create(key, TranslationManager.Instance.CurrentLanguage)] ?? translations[Tuple.Create(key, "en")];
+            return _translations[Tuple.Create(key, TranslationManager.Instance.CurrentLanguage)] ?? _translations[Tuple.Create(key, "en")];
         }
 
-        public JSONTranslationProvider(string fileName)
+        public JsonTranslationProvider(string fileName)
         {
 
             using (var strm = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
@@ -29,7 +29,7 @@ namespace WebUI.Services
                 
                 if (obj.Count > 0)
                 {                   
-                    translations = new Dictionary<Tuple<string, string>, string>();
+                    _translations = new Dictionary<Tuple<string, string>, string>();
                     foreach (KeyValuePair<string, JToken> item in obj)
                     {
                         
@@ -39,14 +39,14 @@ namespace WebUI.Services
                         foreach (var lang in dictionary)
                         {
                             var rec = new KeyValuePair<Tuple<string, string>, string>(Tuple.Create(item.Key, lang.Key), lang.Value);
-                            translations.Add(rec);
+                            _translations.Add(rec);
                         }
 
 
                     }
                 }
 
-                Languages = translations.Keys.Select(t => t.Item2).Distinct();
+                Languages = _translations.Keys.Select(t => t.Item2).Distinct();
             }          
         }
     }
