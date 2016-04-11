@@ -54,7 +54,7 @@ namespace WebUI
             services.AddMvc();
 
             //Add DAL
-            services.AddScoped<IDAL, DAL.DAL>();
+            services.AddScoped<IDal, DAL.Dal>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -110,7 +110,7 @@ namespace WebUI
             });
 
             //Seed DataBase TODO
-            await dataInitializer.InitializeDataAsync();
+            //await dataInitializer.InitializeDataAsync();
 
 
         }

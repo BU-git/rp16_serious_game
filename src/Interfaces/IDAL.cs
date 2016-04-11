@@ -6,7 +6,7 @@ using Domain.Entities;
 
 namespace Interfaces
 {
-    public interface IDAL
+    public interface IDal
     {
         /// <summary>
         /// Create Coach user

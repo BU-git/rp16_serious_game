@@ -24,6 +24,6 @@ namespace WebUI.ViewModels.Registration
 
     public enum Gender
     {
-        MALE, FEMALE, OTHER, NONE, UNKNOWN
+        Male, Female, Other, None, Unknown
     }
 }

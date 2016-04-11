@@ -10,7 +10,6 @@
     "net451": {
       "dependencies": {
         "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final"
-
       }
     }
   }

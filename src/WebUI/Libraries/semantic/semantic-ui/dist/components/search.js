@@ -295,7 +295,7 @@ $.fn.search = function(parameters) {
                 action    : 'search',
                 onError   : module.error
               },
-              searchHTML
+              searchHtml
             ;
             module.verbose('First request, initializing API');
             $module.api(apiSettings);
@@ -471,20 +471,20 @@ $.fn.search = function(parameters) {
           local: function(searchTerm) {
             var
               results = module.search.object(searchTerm, settings.content),
-              searchHTML
+              searchHtml
             ;
             module.set.loading();
             module.save.results(results);
             module.debug('Returned local search results', results);
 
-            searchHTML = module.generateResults({
+            searchHtml = module.generateResults({
               results: results
             });
             module.remove.loading();
-            module.addResults(searchHTML);
+            module.addResults(searchHtml);
             module.inject.id(results);
             module.write.cache(searchTerm, {
-              html    : searchHTML,
+              html    : searchHtml,
               results : results
             });
           },
@@ -603,15 +603,15 @@ $.fn.search = function(parameters) {
         parse: {
           response: function(response, searchTerm) {
             var
-              searchHTML = module.generateResults(response)
+              searchHtml = module.generateResults(response)
             ;
             module.verbose('Parsing server response', response);
             if(response !== undefined) {
               if(searchTerm !== undefined && response[fields.results] !== undefined) {
-                module.addResults(searchHTML);
+                module.addResults(searchHtml);
                 module.inject.id(response[fields.results]);
                 module.write.cache(searchTerm, {
-                  html    : searchHTML,
+                  html    : searchHtml,
                   results : response[fields.results]
                 });
                 module.save.results(response[fields.results]);
@@ -674,20 +674,20 @@ $.fn.search = function(parameters) {
         create: {
           id: function(resultIndex, categoryIndex) {
             var
-              resultID      = (resultIndex + 1), // not zero indexed
-              categoryID    = (categoryIndex + 1),
+              resultId      = (resultIndex + 1), // not zero indexed
+              categoryId    = (categoryIndex + 1),
               firstCharCode,
-              letterID,
+              letterId,
               id
             ;
             if(categoryIndex !== undefined) {
               // start char code for "A"
-              letterID = String.fromCharCode(97 + categoryIndex);
-              id          = letterID + resultID;
+              letterId = String.fromCharCode(97 + categoryIndex);
+              id          = letterId + resultId;
               module.verbose('Creating category result id', id);
             }
             else {
-              id = resultID;
+              id = resultId;
               module.verbose('Creating result id', id);
             }
             return id;

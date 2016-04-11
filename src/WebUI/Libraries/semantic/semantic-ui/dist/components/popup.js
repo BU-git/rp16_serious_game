@@ -581,14 +581,14 @@ $.fn.popup = function(parameters) {
               var
                 is2D     = ($node.css('transform') === 'none'),
                 isStatic = ($node.css('position') === 'static'),
-                isHTML   = $node.is('html')
+                isHtml   = $node.is('html')
               ;
-              while(parentNode && !isHTML && isStatic && is2D) {
+              while(parentNode && !isHtml && isStatic && is2D) {
                 parentNode = parentNode.parentNode;
                 $node    = $(parentNode);
                 is2D     = ($node.css('transform') === 'none');
                 isStatic = ($node.css('position') === 'static');
-                isHTML   = $node.is('html');
+                isHtml   = $node.is('html');
               }
             }
             return ($node && $node.length > 0)

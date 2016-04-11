@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - RP16_SeriousGame</title>
+    <title>@ViewData["Title"] - Growth Pad</title>
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/semantic/semantic-ui/dist/semantic.css"/>
@@ -26,12 +26,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>*@
-            <a asp-controller="Home" asp-action="Index" class="navbar-brand">RP16_SeriousGame</a>
+            <a asp-controller="Home" asp-action="Index" class="navbar-brand">Growth Pad</a>
         </div>
         <div class="ui inverted menu">
             <a asp-controller="Home" asp-action="Index" class="item">Home</a>
-            <a asp-controller="Home" asp-action="About" class="item">About</a>
-            <a asp-controller="Home" asp-action="Contact" class="item">Contact</a>
+            <a asp-controller="Registration" asp-action="StepOne" class="item">Sign Up</a>
         </div>
         <div class="right menu">
             @await Html.PartialAsync("_LoginPartial")

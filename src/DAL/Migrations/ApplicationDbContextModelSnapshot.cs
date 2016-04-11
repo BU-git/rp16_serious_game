@@ -21,9 +21,9 @@ namespace DAL.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("BSN");
-
                     b.Property<DateTime>("BirthDate");
+
+                    b.Property<int>("Bsn");
 
                     b.Property<string>("BuildingNumber");
 
@@ -67,7 +67,7 @@ namespace DAL.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ApplicationUser_UserGourp", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUserUserGroup", b =>
                 {
                     b.Property<string>("Id");
 
@@ -92,13 +92,13 @@ namespace DAL.Migrations
 
                     b.Property<DateTime>("DisactivationDate");
 
+                    b.Property<bool>("IsActive");
+
                     b.Property<int>("RegisteredBy");
 
                     b.Property<int>("Resident");
 
                     b.Property<string>("SchoolGrade");
-
-                    b.Property<bool>("isActive");
 
                     b.HasKey("Id");
                 });
@@ -110,7 +110,7 @@ namespace DAL.Migrations
 
                     b.Property<string>("GroupName");
 
-                    b.Property<string>("Type");
+                    b.Property<int>("Type");
 
                     b.HasKey("UserGroupId");
                 });
@@ -197,7 +197,7 @@ namespace DAL.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ApplicationUser_UserGourp", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUserUserGroup", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser")
                         .WithMany()

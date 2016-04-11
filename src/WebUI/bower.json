@@ -1,5 +1,5 @@
 {
-  "name": "ASP.NET",
+  "name": "serious_game",
   "private": true,
   "dependencies": {
     "jquery-validation-unobtrusive": "^3.2.6",

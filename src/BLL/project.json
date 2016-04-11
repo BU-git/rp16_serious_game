@@ -6,19 +6,17 @@
   "projectUrl": "",
   "licenseUrl": "",
   "frameworks": {
-    "net451": {
-      "frameworkAssemblies": {
-        "System.configuration": "4.0.0.0",
-        "System.Net": "4.0.0.0"
-      }
-    },
-    "dnx4.5.1": {
+    "dnx451": {
       "dependencies": {
         "Microsoft.CSharp": "4.0.1-beta-23516",
         "System.Collections": "4.0.11-beta-23516",
         "System.Linq": "4.0.1-beta-23516",
         "System.Runtime": "4.0.21-beta-23516",
         "System.Threading": "4.0.11-beta-23516"
+      },
+      "frameworkAssemblies": {
+        "System.configuration": "4.0.0.0",
+        "System.Net": "4.0.0.0"
       }
     }
   },

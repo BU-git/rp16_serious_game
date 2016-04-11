@@ -32,7 +32,7 @@
             <form asp-controller="Registration" asp-action="StepOne" class="ui form segment">
 
                 <div class="field">
-                    <label asp-for="FamilyName"></label>
+                    <label asp-for="FamilyName">Family Name</label>
                     <div class="ui corner labeled input">
                         <input asp-for="FamilyName"/>
                         <div class="ui corner label">
@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label asp-for="HeadEmail"></label>
+                    <label asp-for="HeadEmail">Head Email</label>
                     <div class="ui corner labeled input">
                         <input asp-for="HeadEmail"/>
                         <div class="ui corner label">
@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label asp-for="FamilyType"></label>
+                    <label asp-for="FamilyType">Family Type</label>
                     <select asp-for="FamilyType" class="ui dropdown">
                         <option value="">Family type</option>
                         <option value="MARRIED">Married</option>

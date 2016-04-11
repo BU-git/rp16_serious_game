@@ -5,7 +5,7 @@ using Microsoft.Data.Entity.Metadata;
 
 namespace DAL.Migrations
 {
-    public partial class FirstdMigration : Migration
+    public partial class InitMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,8 +14,8 @@ namespace DAL.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
-                    BSN = table.Column<int>(nullable: false),
                     BirthDate = table.Column<DateTime>(nullable: false),
+                    Bsn = table.Column<int>(nullable: false),
                     BuildingNumber = table.Column<string>(nullable: true),
                     City = table.Column<string>(nullable: true),
                     ConcurrencyStamp = table.Column<string>(nullable: true),
@@ -45,7 +45,7 @@ namespace DAL.Migrations
                     UserGroupId = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     GroupName = table.Column<string>(nullable: true),
-                    Type = table.Column<string>(nullable: true)
+                    Type = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -75,10 +75,10 @@ namespace DAL.Migrations
                     Contact = table.Column<int>(nullable: false),
                     CustomerId = table.Column<int>(nullable: false),
                     DisactivationDate = table.Column<DateTime>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
                     RegisteredBy = table.Column<int>(nullable: false),
                     Resident = table.Column<int>(nullable: false),
-                    SchoolGrade = table.Column<string>(nullable: true),
-                    isActive = table.Column<bool>(nullable: false)
+                    SchoolGrade = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -130,7 +130,7 @@ namespace DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
-                name: "ApplicationUser_UserGourp",
+                name: "ApplicationUserUserGroup",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
@@ -138,15 +138,15 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationUser_UserGourp", x => new { x.Id, x.UserGoupId });
+                    table.PrimaryKey("PK_ApplicationUserUserGroup", x => new { x.Id, x.UserGoupId });
                     table.ForeignKey(
-                        name: "FK_ApplicationUser_UserGourp_ApplicationUser_Id",
+                        name: "FK_ApplicationUserUserGroup_ApplicationUser_Id",
                         column: x => x.Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ApplicationUser_UserGourp_UserGroup_UserGoupId",
+                        name: "FK_ApplicationUserUserGroup_UserGroup_UserGoupId",
                         column: x => x.UserGoupId,
                         principalTable: "UserGroup",
                         principalColumn: "UserGroupId",
@@ -203,7 +203,7 @@ namespace DAL.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable("ApplicationUser_UserGourp");
+            migrationBuilder.DropTable("ApplicationUserUserGroup");
             migrationBuilder.DropTable("Customer");
             migrationBuilder.DropTable("AspNetRoleClaims");
             migrationBuilder.DropTable("AspNetUserClaims");

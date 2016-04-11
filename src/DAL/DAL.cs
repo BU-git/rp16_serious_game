@@ -9,20 +9,20 @@ using Microsoft.Data.Entity;
 
 namespace DAL
 {
-    public class DAL : IDAL
+    public class Dal : IDal
     {
-        private const string COACH_ROLE = "Coach";
-        private const string PARTICIPANT_ROLE = "Participant";
+        private const string CoachRole = "Coach";
+        private const string ParticipantRole = "Participant";
 
-        private ApplicationDbContext context;
-        private UserManager<ApplicationUser> userManager;
-        private RoleManager<IdentityRole> roleManager;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public DAL(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public Dal(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            this.context = context;
-            this.userManager = userManager;
-            this.roleManager = roleManager;
+            this._context = context;
+            this._userManager = userManager;
+            this._roleManager = roleManager;
         }
 
         /// <summary>
@@ -33,16 +33,16 @@ namespace DAL
         /// <returns></returns>
         public async Task CreateCoach(ApplicationUser coach, string password)
         {
-            var coachRole = await roleManager.FindByNameAsync(COACH_ROLE);
+            var coachRole = await _roleManager.FindByNameAsync(CoachRole);
             if (coachRole == null)
                 throw new Exception("Coach Role is missing.");
 
-            var user = await userManager.FindByEmailAsync(coach.Email);
+            var user = await _userManager.FindByEmailAsync(coach.Email);
             if (user != null)
                 throw new Exception("User already exists.");
 
-            await userManager.CreateAsync(coach, password);
-            await userManager.AddToRoleAsync(coach, COACH_ROLE);
+            await _userManager.CreateAsync(coach, password);
+            await _userManager.AddToRoleAsync(coach, CoachRole);
         }
 
         /// <summary>
@@ -53,16 +53,16 @@ namespace DAL
         /// <returns></returns>
         public async Task CreateParticipant(ApplicationUser participant, string password)
         {
-            var participantRole = await roleManager.FindByNameAsync(PARTICIPANT_ROLE);
+            var participantRole = await _roleManager.FindByNameAsync(ParticipantRole);
             if (participantRole == null)
                 throw new Exception("Participant Role is missing.");
 
-            var user = await userManager.FindByEmailAsync(participant.Email);
+            var user = await _userManager.FindByEmailAsync(participant.Email);
             if (user != null)
                 throw new Exception("User already exists.");
 
-            await userManager.CreateAsync(participant, password);
-            await userManager.AddToRoleAsync(participant, PARTICIPANT_ROLE);
+            await _userManager.CreateAsync(participant, password);
+            await _userManager.AddToRoleAsync(participant, ParticipantRole);
         }
 
         /// <summary>
@@ -72,8 +72,8 @@ namespace DAL
         /// <returns></returns>
         public async Task CreateUserGroup(UserGroup userGroup)
         {
-            context.UserGroups.Add(userGroup);
-            await context.SaveChangesAsync();
+            _context.UserGroups.Add(userGroup);
+            await _context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -84,14 +84,14 @@ namespace DAL
         /// <returns></returns>
         public async Task AddUserToGroup(ApplicationUser user, UserGroup group)
         {
-            var userToGroup = new ApplicationUser_UserGourp()
+            var userToGroup = new ApplicationUser_UserGroup()
             {
                 ApplicationUser = user,
                 UserGroup = group
             };
 
-            context.Add(userToGroup);
-            await context.SaveChangesAsync();
+            _context.Add(userToGroup);
+            await _context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace DAL
         /// <returns></returns>
         public async Task<ApplicationUser> GetUserById(string id)
         {
-            return await userManager.FindByIdAsync(id);
+            return await _userManager.FindByIdAsync(id);
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace DAL
         /// <returns></returns>
         public async Task<ApplicationUser> GetUserByEmail(string email)
         {
-            return await userManager.FindByEmailAsync(email);
+            return await _userManager.FindByEmailAsync(email);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace DAL
         /// <returns></returns>
         public async Task<UserGroup> GetUserGroupById(int id)
         {
-            return await context.UserGroups.FirstOrDefaultAsync(g => g.UserGroupId == id);
+            return await _context.UserGroups.FirstOrDefaultAsync(g => g.UserGroupId == id);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace DAL
         /// <returns></returns>
         public async Task<IList<string>> GetUserRoles(ApplicationUser user)
         {
-            return await userManager.GetRolesAsync(user);
+            return await _userManager.GetRolesAsync(user);
         }
 
         /// <summary>
@@ -141,8 +141,8 @@ namespace DAL
         /// <returns></returns>
         public async Task EditUser(ApplicationUser user)
         {
-            context.Update(user);
-            await context.SaveChangesAsync();
+            _context.Update(user);
+            await _context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -152,8 +152,8 @@ namespace DAL
         /// <returns></returns>
         public async Task EditUserGroup(UserGroup userGroup)
         {
-            context.Update(userGroup);
-            await context.SaveChangesAsync();
+            _context.Update(userGroup);
+            await _context.SaveChangesAsync();
         }
     }
 }
