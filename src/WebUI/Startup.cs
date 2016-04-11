@@ -9,11 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WebUI.Infrastructure.Abstract;
 using WebUI.Infrastructure.Concrete;
-using WebUI.Models;
 using WebUI.Services;
 using Domain.Entities;
 using DAL;
 using Microsoft.AspNet.Identity;
+using Interfaces;
 
 namespace WebUI
 {
@@ -54,7 +54,7 @@ namespace WebUI
             services.AddMvc();
 
             //Add DAL
-            services.AddScoped<IDAL, DAL>();
+            services.AddScoped<IDAL, DAL.DAL>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -110,7 +110,7 @@ namespace WebUI
             });
 
             //Seed DataBase
-            await dataInitializer.InitializeDataAsync();
+            //await dataInitializer.InitializeDataAsync();
 
 
         }

@@ -1,22 +1,16 @@
-using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.Data.Entity;
 using Microsoft.Extensions.Logging;
-using RP16_SeriousGame.Models;
-using RP16_SeriousGame.Services;
-using RP16_SeriousGame.ViewModels.Account;
-using WebUI.Models;
 using WebUI.Services;
 using WebUI.ViewModels.Account;
 using Domain.Entities;
-using Domain.Entities;
+using System.Linq;
 
-namespace RP16_SeriousGame.Controllers
+namespace WebUI.Controllers
 {
     [Authorize]
     public class AccountController : Controller

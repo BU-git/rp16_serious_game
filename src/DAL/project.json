@@ -13,18 +13,15 @@
       {
         "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",
         "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final",
-		"Moq": "4.2.1510.2205"
+		    "Moq": "4.2.1510.2205"
       }
-    },
-    "dnx451": {
-      "Moq": "4.2.1510.2205"
     }
   },
   "dependencies": {
     "Domain": "1.0.0-*",
-    "EntityFramework.Commands": "7.0.0-rc1-final"
+    "EntityFramework.Commands": "7.0.0-rc1-final",
+    "Interfaces": "1.0.0-*"
   },
-
   "commands": {
     "web": "Microsoft.AspNet.Server.Kestrel",
     "ef": "EntityFramework.Commands",

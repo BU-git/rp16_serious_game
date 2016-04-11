@@ -1,10 +1,10 @@
 ﻿using System;
 using Domain.Entities;
-using Interfaces;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Interfaces;
 using Microsoft.Data.Entity;
 
 namespace DAL
