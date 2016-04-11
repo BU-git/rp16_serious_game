@@ -1,4 +1,5 @@
-﻿@model WebUI.ViewModels.Registration.MainFamilyData
+﻿@using System.Collections.Specialized
+@model WebUI.ViewModels.Registration.MainFamilyData
 @{
     ViewBag.Title = "Registration | Step One";
 }
@@ -25,9 +26,6 @@
         </div>
     </div>
     <div class="ui attached segment" id="content">
-        @*<div class="ui active dimmer">
-                <div class="ui text loader">Loading</div>
-            </div>*@
         <div class="ui form" id="regForm">
             <h2 class="ui center aligned header">New family</h2>
 
@@ -36,7 +34,7 @@
                 <div class="field">
                     <label asp-for="FamilyName"></label>
                     <div class="ui corner labeled input">
-                        <input asp-for="FamilyName" />
+                        <input asp-for="FamilyName"/>
                         <div class="ui corner label">
                             <i class="asterisk icon"></i>
                         </div>
@@ -45,7 +43,7 @@
                 <div class="field">
                     <label asp-for="HeadEmail"></label>
                     <div class="ui corner labeled input">
-                        <input asp-for="HeadEmail" />
+                        <input asp-for="HeadEmail"/>
                         <div class="ui corner label">
                             <i class="asterisk icon"></i>
                         </div>
@@ -68,7 +66,18 @@
                 </div>
             </form>
 
-            <div id="waitingPost">Posting..</div>
+            <div class="ui page dimmer" id="page-dimmer">
+                <div class="ui text loader">Loading</div>
+            </div>
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        $('form').submit(
+            function() {
+                $('#page-dimmer').addClass('active');
+            });
+    </script>
+}

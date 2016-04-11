@@ -27,6 +27,7 @@
             </div>
         </div>
     </div>
+
     <div class="ui attached segment" id="content">
         <div class="ui page dimmer" id="page-dimmer">
             <div class="ui text loader">Loading</div>
@@ -104,6 +105,7 @@
                         await Html.RenderPartialAsync("_StepTwoForm", new UserViewModel { Index = 0 });
                     }
 
+                    <div class="ui hidden divider"></div>
                     <div class="ui hidden divider"></div>
                     <div id="loadingSpinner">loading..</div>
                     <div id="fieldsAppender"></div>

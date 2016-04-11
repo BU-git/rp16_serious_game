@@ -9,11 +9,13 @@
   {
     "net451":
     {
-      "dependencies": 
-      {
+      "dependencies": {
         "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",
         "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final",
-		    "Moq": "4.2.1510.2205"
+        "Moq": "4.2.1510.2205"
+      },
+      "frameworkAssemblies": {
+        "System.Web": "4.0.0.0"
       }
     }
   },

@@ -75,7 +75,7 @@ namespace WebUI
 
             if (env.IsDevelopment())
             {
-                app.UseBrowserLink();
+                //app.UseBrowserLink(); WTF: The method is not defined at the interface???
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
@@ -110,7 +110,7 @@ namespace WebUI
             });
 
             //Seed DataBase TODO
-            //await dataInitializer.InitializeDataAsync();
+            await dataInitializer.InitializeDataAsync();
 
 
         }
