@@ -109,7 +109,7 @@ namespace WebUI
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
 
-            //Seed DataBase
+            //Seed DataBase TODO
             //await dataInitializer.InitializeDataAsync();
 
 

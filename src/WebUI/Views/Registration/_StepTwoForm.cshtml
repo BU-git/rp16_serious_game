@@ -1,10 +1,10 @@
 ﻿@model WebUI.ViewModels.Registration.UserViewModel
 
-<div class="userForm">
-    <h3>Personal data for user</h3>
-    <div>
+<h3 class="ui top attached header">Family member #@(Model.Index + 1)</h3>
+<div class="userForm ui attached segment">
+    <div class="field">
         <label asp-for="Gender"></label>
-        <select asp-for="Gender" name="Users[@Model.Index].Gender" id="Users[@Model.Index].Gender">
+        <select asp-for="Gender" name="Users[@Model.Index].Gender" id="Users[@Model.Index].Gender" class="ui dropdown">
             <option value="MALE">Male</option>
             <option value="FEMALE">Female</option>
             <option value="UNKNOWN">Unknown</option>
@@ -12,26 +12,63 @@
             <option value="NONE">None</option>
         </select>
     </div>
-    <div>
+    <div class="field">
         <label asp-for="Name"></label>
-        <input asp-for="Name" name="Users[@Model.Index].Name" id="Users[@Model.Index].Name"/>*
+        <div class="ui corner labeled input">
+            <input asp-for="Name" name="Users[@Model.Index].Name" id="Users[@Model.Index].Name" placeholder="First name" />
+            <div class="ui corner label">
+                <i class="asterisk icon"></i>
+            </div>
+        </div>
     </div>
-    <div>
+    <div class="field">
         <label asp-for="LastName"></label>
-        <input asp-for="LastName" name="Users[@Model.Index].LastName" id="Users[@Model.Index].LastName"/>*
+        <div class="ui corner labeled input">
+            <input asp-for="LastName" name="Users[@Model.Index].LastName" id="Users[@Model.Index].LastName" placeholder="Last name" />
+            <div class="ui corner label">
+                <i class="asterisk icon"></i>
+            </div>
+        </div>
     </div>
-    <div>
+    <div class="field">
         <label>Birth date</label>
-        <input asp-for="Day" name="Users[@Model.Index].Day" id="Users[@Model.Index].Day"/>
-        <input asp-for="Month" name="Users[@Model.Index].Month" id="Users[@Model.Index].Month"/>
-        <input asp-for="Year" name="Users[@Model.Index].Year" id="Users[@Model.Index].Year"/>
+        <div class="fields">
+            <div class="ui corner labeled input">
+                <input asp-for="Day" name="Users[@Model.Index].Day" id="Users[@Model.Index].Day" placeholder="Day" />
+                <div class="ui corner label">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+            <div class="ui corner labeled input">
+                <input asp-for="Month" name="Users[@Model.Index].Month" id="Users[@Model.Index].Month" placeholder="Month" />
+                <div class="ui corner label">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+            <div class="ui corner labeled input">
+                <input asp-for="Year" name="Users[@Model.Index].Year" id="Users[@Model.Index].Year" placeholder="Year" />
+                <div class="ui corner label">
+                    <i class="asterisk icon"></i>
+                </div>
+            </div>
+        </div>
     </div>
-    <div>
+    <div class="field">
         <label asp-for="Phone"></label>
-        <input asp-for="Phone" name="Users[@Model.Index].Phone" id="Users[@Model.Index].Phone"/>
+        <div class="ui corner labeled input">
+            <input asp-for="Phone" name="Users[@Model.Index].Phone" id="Users[@Model.Index].Phone" placeholder="Phone number" />
+            <div class="ui corner label">
+                <i class="asterisk icon"></i>
+            </div>
+        </div>
     </div>
-    <div>
+    <div class="field">
         <label asp-for="Email"></label>
-        <input asp-for="Email" name="Users[@Model.Index].Email" id="Users[@Model.Index].Email"/>
+        <div class="ui corner labeled input">
+            <input asp-for="Email" name="Users[@Model.Index].Email" id="Users[@Model.Index].Email" placeholder="your@mail.com" />
+            <div class="ui corner label">
+                <i class="asterisk icon"></i>
+            </div>
+        </div>
     </div>
 </div>
