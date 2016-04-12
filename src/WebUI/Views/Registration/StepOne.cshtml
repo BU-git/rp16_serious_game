@@ -34,7 +34,7 @@
                 <div class="field">
                     <label asp-for="FamilyName">Family Name</label>
                     <div class="ui corner labeled input">
-                        <input asp-for="FamilyName"/>
+                        <input asp-for="FamilyName" />
                         <div class="ui corner label">
                             <i class="asterisk icon"></i>
                         </div>
@@ -43,7 +43,7 @@
                 <div class="field">
                     <label asp-for="HeadEmail">Head Email</label>
                     <div class="ui corner labeled input">
-                        <input asp-for="HeadEmail"/>
+                        <input asp-for="HeadEmail" />
                         <div class="ui corner label">
                             <i class="asterisk icon"></i>
                         </div>
@@ -58,10 +58,10 @@
                         <option value="DIVORCED">Divorced</option>
                     </select>
                 </div>
-
+                <div class="ui error message"></div>
                 <div class="field" id="buttons">
                     <div>
-                        <input type="submit" value="Submit" class="ui button blue fluid"/>
+                        <input type="submit" value="Submit" class="ui button blue fluid" />
                     </div>
                 </div>
             </form>
@@ -76,12 +76,46 @@
 @section Scripts{
     <script>
         $('form').submit(
-            function() {
+            function () {
                 $('#page-dimmer').addClass('active');
-            });
+            }).error(
+            );
 
-        $('body').load(function() {
+        $('body').load(function () {
             $('#stepOneForm')[0].reset();
+        });
+
+        $('.ui.form').form(
+        {
+            fields: {
+                FamilyName: {
+                    identifier: 'FamilyName',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: 'Please, enter family name'
+                        }
+                    ]
+                },
+                HeadEmail: {
+                    identifier: 'HeadEmail',
+                    rules: [
+                        {
+                            type: 'empty',
+                            prompt: 'Please, enter family head email'
+                        }
+                    ]
+                },
+                FamilyType: {
+                    identifier: 'FamilyType',
+                    rules: [
+                      {
+                          type: 'empty',
+                          prompt: 'Please select a family type'
+                      }
+                   ]
+                }
+            }
         });
     </script>
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -22,7 +23,7 @@ namespace WebUI.Infrastructure.Concrete
         public async Task<bool> SendRegistrationMailAsync(string password, string address)
         {
             StringBuilder body = new StringBuilder();
-            string host = Dns.GetHostName();
+            //string host = Dns.GetHostName(); //TODO: get from configs
             string subj = "You were successfully registered to Serious Games";
             
             body.Append("<!DOCTYPE html>\r\n<html>\r\n<head></head>\r\n<body><p>Your login: ");
@@ -30,12 +31,25 @@ namespace WebUI.Infrastructure.Concrete
             body.Append("</p><p>Your password: ");
             body.Append(password);
             body.Append("</p><p>Continue registration by clicking <a href=\"");
-            body.Append(host);
+            body.Append("http://localhost:51842");
             body.Append("/Registration/StepTwo/\">here</a></p></body>\r\n</html>");
             
             var result = await _mailSender.SendMailAsync(subj, body.ToString(), address);
 
             return result;
+        }
+
+        public static string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            return "localhost";
         }
     }
 }
