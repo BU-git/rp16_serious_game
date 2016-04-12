@@ -16,7 +16,7 @@
             <h2 class="ui center aligned header">
                 @ViewData["Title"].
             </h2>
-            <form class="ui large form">
+            <form asp-controller="Account" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" role="form" class="ui large form">
                 <div class="field">
                     <div class="ui left icon input">
                         <i class="user icon"></i>
@@ -42,7 +42,7 @@
                             <label asp-for="RememberMe"></label>
                         </div>
                     </div>
-                    <button class="ui teal fluid large submit button">Login</button>
+                    <button type="submit" class="ui teal fluid large submit button">Login</button>
                 </div>
             </form>
             <div class="ui message">

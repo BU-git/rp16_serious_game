@@ -1,7 +1,7 @@
 {
   "version": "1.0.0-*",
   "description": "BLL Class Library",
-  "authors": [ "Andrew" ],
+  "authors": ["Ivan", "Yehor", "Yevgen", "Andrew" ],
   "tags": [ "" ],
   "projectUrl": "",
   "licenseUrl": "",
