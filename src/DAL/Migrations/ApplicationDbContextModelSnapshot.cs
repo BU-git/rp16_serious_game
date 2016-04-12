@@ -16,6 +16,22 @@ namespace DAL.Migrations
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Domain.Entities.ApplicationTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Coins");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("Recurency");
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+                });
+
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -45,6 +61,12 @@ namespace DAL.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<string>("NormalizedEmail")
+                        .HasAnnotation("MaxLength", 256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasAnnotation("MaxLength", 256);
+
                     b.Property<string>("Passport");
 
                     b.Property<string>("PasswordHash");
@@ -63,6 +85,12 @@ namespace DAL.Migrations
                     b.Property<string>("ZipCode");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasAnnotation("Relational:Name", "EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .HasAnnotation("Relational:Name", "UserNameIndex");
 
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
@@ -113,6 +141,21 @@ namespace DAL.Migrations
                     b.Property<int>("Type");
 
                     b.HasKey("UserGroupId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserTask", b =>
+                {
+                    b.Property<int>("TaskId");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<int>("Coins");
+
+                    b.Property<DateTime>("ExpireDt");
+
+                    b.Property<int>("Status");
+
+                    b.HasKey("TaskId", "UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>
@@ -213,6 +256,17 @@ namespace DAL.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("Id");
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserTask", b =>
+                {
+                    b.HasOne("Domain.Entities.ApplicationTask")
+                        .WithMany()
+                        .HasForeignKey("TaskId");
+
+                    b.HasOne("Domain.Entities.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using RP16_SeriousGame.Services;
 using WebUI.Services;
 using DAL;
+using Interfaces;
 
 namespace WebUI
 {
@@ -49,6 +50,9 @@ namespace WebUI
                 .AddDefaultTokenProviders();
 
             services.AddMvc();
+
+            //Add DAL
+            services.AddScoped<IDAL, DAL.DAL>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();

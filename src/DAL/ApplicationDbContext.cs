@@ -32,11 +32,23 @@ namespace DAL
                 .WithMany(u => u.ApplicationUser_UserGourps)
                 .HasForeignKey(ug => ug.UserGoupId);
 
-
             builder.Entity<Customer>()
                 .HasOne(a => a.ApplicationUser)
                 .WithMany(c => c.Customer)
                 .HasForeignKey(x => x.Id);
+
+            builder.Entity<ApplicationTask>()
+                .HasMany(ut => ut.UserTasks)
+                .WithOne(t => t.ApplicationTask)
+                .HasForeignKey(t => t.TaskId);
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(ut => ut.UserTasks)
+                .WithOne(u => u.User)
+                .HasForeignKey(u => u.UserId);
+
+            builder.Entity<UserTask>()
+                .HasKey(ut => new {ut.TaskId, ut.UserId});
 
             builder.Entity<ApplicationUser>().Ignore(x => x.AccessFailedCount);
             builder.Entity<ApplicationUser>().Ignore(x => x.EmailConfirmed);
@@ -45,8 +57,6 @@ namespace DAL
             builder.Entity<ApplicationUser>().Ignore(x => x.LockoutEnabled);
             builder.Entity<ApplicationUser>().Ignore(x => x.LockoutEnd);
             builder.Entity<ApplicationUser>().Ignore(x => x.TwoFactorEnabled);
-            builder.Entity<ApplicationUser>().Ignore(x => x.NormalizedEmail);
-            builder.Entity<ApplicationUser>().Ignore(x => x.NormalizedUserName);
             builder.Entity<ApplicationUser>().Ignore(x => x.SecurityStamp);
 
             
@@ -55,6 +65,8 @@ namespace DAL
 
         public DbSet<Customer> Customers {get;set;}
         public DbSet<UserGroup> UserGroups { get; set; }
+        public DbSet<ApplicationTask> Tasks { get; set; } 
+        public DbSet<UserTask> UserTasks { get; set; } 
        
 
     }
