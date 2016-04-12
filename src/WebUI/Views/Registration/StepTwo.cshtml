@@ -37,6 +37,7 @@
             <form asp-controller="Registration" asp-action="StepTwo" class="ui form segment">
                 <div>
                     <div>
+                        <input asp-for="FamilyName" type="hidden"/>
                         <div class="field">
                             <label asp-for="FamilyName"></label>
                             <label>@Model.FamilyName</label>
@@ -44,7 +45,7 @@
                         <div class="field">
                             <label asp-for="ZipCode"></label>
                             <div class="ui corner labeled input">
-                                <input asp-for="ZipCode" />
+                                <input asp-for="ZipCode"/>
                                 <div class="ui corner label">
                                     <i class="asterisk icon"></i>
                                 </div>
@@ -53,7 +54,7 @@
                         <div class="field">
                             <label asp-for="Country"></label>
                             <div class="ui corner labeled input">
-                                <input asp-for="Country" />
+                                <input asp-for="Country"/>
                                 <div class="ui corner label">
                                     <i class="asterisk icon"></i>
                                 </div>
@@ -62,7 +63,7 @@
                         <div class="field">
                             <label asp-for="Region"></label>
                             <div class="ui corner labeled input">
-                                <input asp-for="Region" />
+                                <input asp-for="Region"/>
                                 <div class="ui corner label">
                                     <i class="asterisk icon"></i>
                                 </div>
@@ -71,7 +72,7 @@
                         <div class="field">
                             <label asp-for="City"></label>
                             <div class="ui corner labeled input">
-                                <input asp-for="City" />
+                                <input asp-for="City"/>
                                 <div class="ui corner label">
                                     <i class="asterisk icon"></i>
                                 </div>
@@ -80,7 +81,7 @@
                         <div class="field">
                             <label asp-for="Street"></label>
                             <div class="ui corner labeled input">
-                                <input asp-for="Street" />
+                                <input asp-for="Street"/>
                                 <div class="ui corner label">
                                     <i class="asterisk icon"></i>
                                 </div>
@@ -89,7 +90,7 @@
                         <div class="field">
                             <label asp-for="BuildingNumber"></label>
                             <div class="ui corner labeled input">
-                                <input asp-for="BuildingNumber" />
+                                <input asp-for="BuildingNumber"/>
                                 <div class="ui corner label">
                                     <i class="asterisk icon"></i>
                                 </div>
@@ -105,10 +106,8 @@
                         await Html.RenderPartialAsync("_StepTwoForm", new UserViewModel { Index = 0 });
                     }
 
-                    <div class="ui hidden divider"></div>
-                    <div class="ui hidden divider"></div>
-                    <div id="loadingSpinner">loading..</div>
                     <div id="fieldsAppender"></div>
+                    <div class="ui hidden divider"></div>
 
                     <div class="row">
                         <div class="ui three column grid">

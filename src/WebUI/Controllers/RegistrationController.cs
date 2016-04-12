@@ -58,9 +58,7 @@ namespace WebUI.Controllers
                 Email = regVm.HeadEmail
             };
             await _dal.CreateParticipant(user, randomPass);
-
-            await _dal.AddUserToGroup(user, group);
-
+            
             await _mailManager.SendRegistrationMailAsync(randomPass, regVm.HeadEmail);
 
             return View(new MainFamilyData());
@@ -91,32 +89,40 @@ namespace WebUI.Controllers
                 var randomPass = _cryptoServices.GenerateRandomPassword();
                 Gender gender;
                 Enum.TryParse(u.Gender.ToString(), out gender);
+                DateTime dateTime;
+                DateTime.TryParse($"{u.Day}/{u.Month}/{u.Year}", out dateTime);
 
-                var user = new ApplicationUser
+                var user = new ApplicationUser();
+                user.Name = u.Name;
+                user.MidleName = u.MidleName;
+                user.LastName = regVm.FamilyName;
+                user.BirthDate = dateTime;
+                user.Email = u.Email;
+                user.Phone = u.Phone;
+                user.Gender = gender;
+                user.ZipCode = regVm.ZipCode;
+                user.Street = regVm.Street;
+                user.Country = regVm.Country;
+                user.Region = regVm.Region;
+                user.City = regVm.City;
+                user.BuildingNumber = regVm.BuildingNumber;
+
+                try
                 {
-                    Name = u.Name,
-                    MidleName = u.MidleName,
-                    LastName = regVm.FamilyName,
-                    BirthDate = DateTime.Parse($"{u.Day}/{u.Month}/{u.Year}"),
-                    Email = u.Email,
-                    Phone = u.Phone,
-                    Gender = gender,
-                    ZipCode = regVm.ZipCode,
-                    Street = regVm.Street,
-                    Country = regVm.Country,
-                    Region = regVm.Region,
-                    City = regVm.City,
-                    BuildingNumber = regVm.BuildingNumber
-                };
-
-                await _dal.CreateParticipant(user, randomPass);
+                    await _dal.CreateParticipant(user, randomPass); //TODO: The try/catch block shouldn't be here!
+                }
+                catch (Exception)
+                {
+                    return View(regVm);
+                }
 
                 await _mailManager.SendRegistrationMailAsync(randomPass, u.Email);
             }
             
             //TODO: assign members to concrete family considering previous comment about DAL
+            //TODO: add success message
 
-            return View(regVm);
+            return await StepTwo("");
         }
 
         [HttpPost]

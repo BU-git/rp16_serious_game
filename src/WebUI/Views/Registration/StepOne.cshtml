@@ -29,7 +29,7 @@
         <div class="ui form" id="regForm">
             <h2 class="ui center aligned header">New family</h2>
 
-            <form asp-controller="Registration" asp-action="StepOne" class="ui form segment">
+            <form asp-controller="Registration" asp-action="StepOne" class="ui form segment" id="stepOneForm">
 
                 <div class="field">
                     <label asp-for="FamilyName">Family Name</label>
@@ -79,5 +79,9 @@
             function() {
                 $('#page-dimmer').addClass('active');
             });
+
+        $('body').load(function() {
+            $('#stepOneForm')[0].reset();
+        });
     </script>
 }
