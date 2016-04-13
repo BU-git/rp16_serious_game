@@ -157,66 +157,86 @@ namespace DAL
             await context.SaveChangesAsync();
         }
 
-        public async Task AddTask(ApplicationTask appTask)
+        public async Task AddTaskAsync(ApplicationTask appTask)
         {
-            using (context)
-            {
-                var task = context.Tasks.FirstOrDefault(x => x.Id == appTask.Id);
-                if (task != null)
-                    throw new Exception($"Task {appTask.Id} already exists in database.");
+            var task = context.Tasks.FirstOrDefault(x => x.Name == appTask.Name);
+            if (task != null)
+                throw new Exception($"Task {appTask.Name} already exists in database.Task Id: {task.Id}");
 
-                context.Tasks.Add(appTask);
-                await context.SaveChangesAsync();
-                
-            }
+            context.Tasks.Add(appTask);
+            await context.SaveChangesAsync();
+
+
         }
 
-        public async Task UpdateTask(ApplicationTask appTask)
+        public ApplicationTask FindTaskbyName(string name)
         {
-            using (context)
-            {
-                var task = context.Tasks.FirstOrDefault(x=>x.Id ==appTask.Id);
-                if (task == null)
-                    throw new Exception($"There is no task: {appTask.Id} in database.");
+            var task = context.Tasks.FirstOrDefault(x => x.Name == name);
+            return task;
 
-                context.Entry(task).State = EntityState.Modified;
-                await context.SaveChangesAsync();
-             
-            }
         }
 
-        public async Task AssignTask(UserTask userTask)
+        public ApplicationTask FindTaskbyId(int taskId)
         {
-            using (context)
-            {
-                var user = await userManager.FindByIdAsync(userTask.UserId);
-                var task = context.Tasks.FirstOrDefault(x => x.Id == userTask.TaskId);
-                if (user == null || task == null)
-                    throw new Exception("There is no such User or Task");
 
-                var usertask =
-                    context.UserTasks.FirstOrDefault(x => x.UserId == userTask.UserId && x.TaskId == userTask.TaskId);
+            var task = context.Tasks.FirstOrDefault(x => x.Id == taskId);
+            return task;
 
-                if (usertask!=null)
-                    throw new Exception($"User {usertask.UserId} already has task {usertask.TaskId}");
-                context.UserTasks.Add(userTask);
-                await context.SaveChangesAsync();
-            }
+        }
+        
+        public async Task UpdateTaskAsync(ApplicationTask appTask)
+        {
+            var taskWithSameName = context.Tasks.FirstOrDefault(x => x.Name == appTask.Name && x.Id != appTask.Id);
+            if (taskWithSameName!=null)
+                throw new Exception($"Task {taskWithSameName.Id} already has this name.");
+            var task = context.Tasks.FirstOrDefault(x => x.Id == appTask.Id);
+            if (task == null)
+                throw new Exception($"There is no task: {appTask.Name} in database.");
+
+            context.Entry(task).State = EntityState.Detached;
+            context.Entry(appTask).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+
+
         }
 
-        public async Task UpdateUserTask(UserTask userTask)
+        public async Task AssignTaskAsync(UserTask userTask)
         {
-            using (context)
-            {
-                var usertask =
-                    context.UserTasks.FirstOrDefault(x => x.UserId == userTask.UserId && x.TaskId == userTask.TaskId);
+            var user = await userManager.FindByIdAsync(userTask.UserId);
+            var task = context.Tasks.FirstOrDefault(x => x.Id == userTask.TaskId);
+            if (user == null || task == null)
+                throw new Exception("There is no such User or Task");
 
-                if (usertask == null)
-                    throw new Exception($"User {userTask.UserId} doesn't have task {userTask.TaskId}");
+            var usertask =
+                context.UserTasks.FirstOrDefault(x => x.UserId == userTask.UserId && x.TaskId == userTask.TaskId);
 
-                context.Entry(usertask).State = EntityState.Modified;
-                await context.SaveChangesAsync();
-            }
+            if (usertask != null)
+                throw new Exception($"User {usertask.UserId} already has task {usertask.TaskId}");
+            context.UserTasks.Add(userTask);
+            await context.SaveChangesAsync();
+
+        }
+
+        public async Task UpdateUserTaskAsync(UserTask userTask)
+        {
+            var usertask =
+                context.UserTasks.FirstOrDefault(x => x.UserId == userTask.UserId && x.TaskId == userTask.TaskId);
+
+            if (usertask == null)
+                throw new Exception($"User {userTask.UserId} doesn't have task {userTask.TaskId}");
+            
+            context.Entry(usertask).State = EntityState.Detached;
+            context.Entry(userTask).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+
+        }
+
+        public List<UserTask> GetUserTasks(ApplicationUser user)
+        {
+
+            var userTasks = context.UserTasks.Where(x => x.UserId == user.Id).ToList();
+            return userTasks;
+
         }
 
     }

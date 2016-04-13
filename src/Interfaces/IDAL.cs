@@ -74,9 +74,12 @@ namespace Interfaces
         /// <returns></returns>
         Task EditUserGroup(UserGroup userGroup);
 
-        Task AddTask(ApplicationTask appTask);
-        Task UpdateTask(ApplicationTask appTask);
-        Task AssignTask(UserTask userTask);
-        Task UpdateUserTask(UserTask userTask);
+        Task AddTaskAsync(ApplicationTask appTask);
+        Task UpdateTaskAsync(ApplicationTask appTask);
+        Task AssignTaskAsync(UserTask userTask);
+        Task UpdateUserTaskAsync(UserTask userTask);
+        List<UserTask> GetUserTasks(ApplicationUser user);
+        ApplicationTask FindTaskbyName(string name);
+        ApplicationTask FindTaskbyId(int taskId);
     }
 }

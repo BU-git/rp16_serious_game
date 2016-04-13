@@ -16,17 +16,8 @@ namespace RP16_SeriousGame.Controllers
         {
             reposetory = repo;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var task = new ApplicationTask()
-            {
-                Id = 1,
-                Coins = 1,
-                Name = "First Task",
-                Recurency = new DateTime(),
-                Text = "This is first test task"
-            };
-            reposetory.AddTask(task);
             return View();
         }
 
@@ -40,7 +31,7 @@ namespace RP16_SeriousGame.Controllers
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
-
+        
             return View();
         }
 
