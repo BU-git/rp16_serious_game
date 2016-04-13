@@ -65,7 +65,7 @@ namespace DAL
         private async Task CreateUsersAsync()
         {
             var user1 =
-                await _userManager.FindByEmailAsync(new UpperInvariantLookupNormalizer().Normalize("Admin@admin.com"));
+                await _userManager.FindByEmailAsync("Admin@admin.com");
             if (user1 == null)
             {
                 ApplicationUser admin = new ApplicationUser() { UserName = "Admin@admin.com", Name = "Admin1", Email = "Admin@admin.com", Gender = Gender.Male };
@@ -80,7 +80,6 @@ namespace DAL
                 ApplicationUser admin2 = new ApplicationUser() { UserName = "Admin2@admin.com", Name = "Admin2", Email = "Admin2@admin.com" };
                 await _userManager.CreateAsync(admin2, "User2016!");
                 await _userManager.AddToRoleAsync(admin2, "Admin");
-
             }
 
             var user3 = await _userManager.FindByEmailAsync("FirstCoach@coach.com");

@@ -11,6 +11,7 @@ using NUnit.Framework.Constraints;
 using WebUI.Infrastructure.Abstract;
 using WebUI.ViewModels.Registration;
 using Interfaces;
+using Microsoft.AspNet.Authorization;
 using Gender = Domain.Entities.Gender;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -22,12 +23,14 @@ namespace WebUI.Controllers
         private readonly IMailManager _mailManager;
         private readonly ICryptoServices _cryptoServices;
         private readonly IDal _dal;
+        private readonly SignInManager<ApplicationUser> _signInManager; 
 
-        public RegistrationController(IMailManager mailManager, ICryptoServices crypto, IDal dal)
+        public RegistrationController(IMailManager mailManager, ICryptoServices crypto, IDal dal, SignInManager<ApplicationUser> signInManager)
         {
             _mailManager = mailManager;
             _cryptoServices = crypto;
             _dal = dal;
+            _signInManager = signInManager;
         }
 
         public IActionResult StepOne()
@@ -36,6 +39,8 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> StepOne([FromForm]MainFamilyData regVm)
         {
             if (!ModelState.IsValid)
@@ -44,7 +49,7 @@ namespace WebUI.Controllers
             }
 
             string randomPass = _cryptoServices.GenerateRandomPassword();
-
+            string randomUserName = _cryptoServices.GenerateRandomAlphanumericString(6);
             UserGroup group = new UserGroup
             {
                 GroupName = regVm.FamilyName,
@@ -55,10 +60,10 @@ namespace WebUI.Controllers
             ApplicationUser user = new ApplicationUser
             {
                 LastName = regVm.FamilyName,
-                Email = regVm.HeadEmail
+                Email = regVm.HeadEmail,
+                UserName = randomUserName
             };
             await _dal.CreateParticipant(user, randomPass);
-            
             await _mailManager.SendRegistrationMailAsync(randomPass, regVm.HeadEmail);
 
             return View(new MainFamilyData());

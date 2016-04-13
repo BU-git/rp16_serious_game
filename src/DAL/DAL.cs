@@ -51,7 +51,7 @@ namespace DAL
         /// <param name="participant">User model</param>
         /// <param name="password">Password</param>
         /// <returns></returns>
-        public async Task CreateParticipant(ApplicationUser participant, string password)
+        public async Task<IdentityResult> CreateParticipant(ApplicationUser participant, string password)
         {
             var participantRole = await _roleManager.FindByNameAsync(ParticipantRole);
             if (participantRole == null)
@@ -61,8 +61,9 @@ namespace DAL
             if (user != null)
                 throw new Exception("User already exists.");
 
-            await _userManager.CreateAsync(participant, password);
+            var result = await _userManager.CreateAsync(participant, password);
             await _userManager.AddToRoleAsync(participant, ParticipantRole);
+            return result;
         }
 
         /// <summary>

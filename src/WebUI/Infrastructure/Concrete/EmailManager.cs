@@ -30,7 +30,7 @@ namespace WebUI.Infrastructure.Concrete
             body.Append("</p><p>Your password: ");
             body.Append(password);
             body.Append("</p><p>Continue registration by clicking <a href=\"");
-            body.Append(host);
+            body.Append("http://localhost:51842");
             body.Append("/Registration/StepTwo/\">here</a></p></body>\r\n</html>");
             
             var result = await _mailSender.SendMailAsync(subj, body.ToString(), address);
