@@ -99,7 +99,7 @@ namespace WebUI.Controllers
 
                 var user = new ApplicationUser();
                 user.Name = u.Name;
-                user.MidleName = u.MidleName;
+                user.MiddleName = u.MiddleName;
                 user.LastName = regVm.FamilyName;
                 user.BirthDate = dateTime;
                 user.Email = u.Email;

@@ -46,6 +46,7 @@ namespace WebUI.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.UpdateUserSuccess ? "User details have been changed"
                 : "";
 
             var user = await GetCurrentUserAsync();
@@ -59,7 +60,6 @@ namespace WebUI.Controllers
             };
             return View(model);
         }
-
 
         //
         // GET: /Manage/ChangePassword
@@ -139,14 +139,35 @@ namespace WebUI.Controllers
         // POST: /Manage/SetPassword
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditPersonalInformation(PersonalInformationViewModel model)
+        public async Task<IActionResult> EditPersonalInformation([FromForm]PersonalInformationViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
-
-            
+            var user = await GetCurrentUserAsync();
+            if (user != null)
+            {
+                user.Name = model.Name ?? user.Name;
+                user.LastName = model.LastName ?? user.LastName;
+                user.MiddleName = model.MiddleName ?? user.MiddleName;
+                user.Phone = model.MiddleName ?? user.Phone;
+                user.ZipCode = model.ZipCode ?? user.ZipCode;
+                user.Street = model.Street ?? user.Street;
+                user.Country = model.Country ?? user.Country;
+                user.Region = model.Region ?? user.Region;
+                user.City = model.City ?? user.City;
+                user.BuildingNumber = model.BuildingNumber ?? user.BuildingNumber;
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation(7, "User information was successfully updated.");
+                    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.UpdateUserSuccess });
+                }
+                AddErrors(result);
+                return View(model);
+            }
+            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         }
 
         #region Helpers
@@ -168,6 +189,7 @@ namespace WebUI.Controllers
             SetPasswordSuccess,
             RemoveLoginSuccess,
             RemovePhoneSuccess,
+            UpdateUserSuccess,
             Error
         }
 
