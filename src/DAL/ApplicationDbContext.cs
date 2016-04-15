@@ -50,10 +50,7 @@ namespace DAL
 
         }
 
-
-        public DbSet<Customer> Customers {get;set;}
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
-       
-
     }
 }

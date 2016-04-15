@@ -13,7 +13,7 @@ namespace Domain.Entities
         public Gender Gender { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
-        public string MidleName { get; set; }
+        public string MiddleName { get; set; }
         public DateTime BirthDate { get; set; }
 
         public string Passport { get; set; }

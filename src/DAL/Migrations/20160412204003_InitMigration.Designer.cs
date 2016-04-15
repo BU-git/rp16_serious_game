@@ -8,9 +8,10 @@ using DAL;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160412204003_InitMigration")]
+    partial class InitMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -41,7 +42,7 @@ namespace DAL.Migrations
 
                     b.Property<string>("LastName");
 
-                    b.Property<string>("MiddleName");
+                    b.Property<string>("MidleName");
 
                     b.Property<string>("Name");
 
