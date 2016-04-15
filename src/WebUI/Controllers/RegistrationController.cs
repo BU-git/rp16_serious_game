@@ -18,6 +18,7 @@ using Gender = Domain.Entities.Gender;
 
 namespace WebUI.Controllers
 {
+    [Authorize]
     public class RegistrationController : Controller
     {
         private readonly IMailManager _mailManager;
@@ -33,13 +34,13 @@ namespace WebUI.Controllers
             _signInManager = signInManager;
         }
 
+        [HttpGet]
         public IActionResult StepOne()
         {
             return View(new MainFamilyData());
         }
 
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> StepOne([FromForm]MainFamilyData regVm)
         {
@@ -69,6 +70,8 @@ namespace WebUI.Controllers
             return View(new MainFamilyData());
         }
 
+
+        [HttpGet]
         public async Task<IActionResult> StepTwo(string familyName)
         {
             //TODO: get main data 'bout family 
@@ -87,6 +90,7 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> StepTwo([FromForm]FamilyViewModel regVm)
         {
             foreach (var u in regVm.Users)

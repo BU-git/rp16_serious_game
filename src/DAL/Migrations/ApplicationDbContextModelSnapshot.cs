@@ -41,7 +41,7 @@ namespace DAL.Migrations
 
                     b.Property<string>("LastName");
 
-                    b.Property<string>("MidleName");
+                    b.Property<string>("MiddleName");
 
                     b.Property<string>("Name");
 
