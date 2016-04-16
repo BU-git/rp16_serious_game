@@ -1,4 +1,4 @@
-using Domain.Entities;
+﻿using Domain.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System;
@@ -64,8 +64,7 @@ namespace DAL
 
         private async Task CreateUsersAsync()
         {
-            var user1 =
-                await _userManager.FindByEmailAsync("Admin@admin.com");
+            var user1 = await _userManager.FindByEmailAsync("Admin@admin.com");
             if (user1 == null)
             {
                 ApplicationUser admin = new ApplicationUser() { UserName = "Admin@admin.com", Name = "Admin1", Email = "Admin@admin.com", Gender = Gender.Male };

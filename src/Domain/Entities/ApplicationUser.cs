@@ -30,7 +30,7 @@ namespace Domain.Entities
 
         public string Phone { get; set; }
         
-        public List<ApplicationUserUserGroup> ApplicationUserUserGroups { get; set; }
+        public List<ApplicationUser_UserGroup> ApplicationUserUserGroups { get; set; }
         public List<Customer> Customer { get; set; }
 
     }

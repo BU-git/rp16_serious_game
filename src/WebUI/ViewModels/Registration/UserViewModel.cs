@@ -24,7 +24,7 @@ namespace WebUI.ViewModels.Registration
 
         [Required(ErrorMessage = "This field should not be empty")]
         [Display(Name = "Middle name")]
-        public string MidleName { get; set; }
+        public string MiddleName { get; set; }
 
 
         [Required(ErrorMessage = "This field should not be empty")]

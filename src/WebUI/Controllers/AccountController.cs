@@ -10,6 +10,7 @@ using WebUI.ViewModels.Account;
 using Domain.Entities;
 using System.Linq;
 using Interfaces;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace WebUI.Controllers
 {
@@ -60,7 +61,8 @@ namespace WebUI.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _dal.GetUserByEmail(model.Email);
-                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+                user.SecurityStamp = ""; //The next method throws exception if the field is not set ?\_(?)_/?
+                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");

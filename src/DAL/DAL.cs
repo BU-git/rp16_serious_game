@@ -85,7 +85,7 @@ namespace DAL
         /// <returns></returns>
         public async Task AddUserToGroup(ApplicationUser user, UserGroup group)
         {
-            var userToGroup = new ApplicationUserUserGroup()
+            var userToGroup = new ApplicationUser_UserGroup()
             {
                 ApplicationUser = user,
                 UserGroup = group
