@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain.Entities;
 
 namespace WebUI.ViewModels.Registration
 {
@@ -53,10 +54,5 @@ namespace WebUI.ViewModels.Registration
         public string Phone { get; set; }
 
         public int Index { get; set; }
-    }
-
-    public enum Gender
-    {
-        Male, Female, Other, None, Unknown
     }
 }

@@ -45,17 +45,12 @@ namespace DAL
             builder.Entity<ApplicationUser>().Ignore(x => x.LockoutEnabled);
             builder.Entity<ApplicationUser>().Ignore(x => x.LockoutEnd);
             builder.Entity<ApplicationUser>().Ignore(x => x.TwoFactorEnabled);
-            builder.Entity<ApplicationUser>().Ignore(x => x.NormalizedEmail);
-            builder.Entity<ApplicationUser>().Ignore(x => x.NormalizedUserName);
             builder.Entity<ApplicationUser>().Ignore(x => x.SecurityStamp);
 
-            
+
         }
 
-
-        public DbSet<Customer> Customers {get;set;}
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
-       
-
     }
 }

@@ -14,6 +14,8 @@ using Domain.Entities;
 using DAL;
 using Microsoft.AspNet.Identity;
 using Interfaces;
+using Microsoft.AspNet.Authentication.Cookies;
+using Microsoft.AspNet.Http;
 
 namespace WebUI
 {
@@ -65,7 +67,13 @@ namespace WebUI
 
             //Add Seed Method
             services.AddTransient<DataInitializer>();
-        }
+
+            //Add Login Redirection
+            services.Configure<CookieAuthenticationOptions>(options =>
+            {
+                options.LoginPath = new PathString("/Account/Login");
+            });
+    }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DataInitializer dataInitializer)

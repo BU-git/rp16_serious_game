@@ -1,4 +1,3 @@
-﻿
 @model WebUI.ViewModels.Registration.UserViewModel
 
 <h3 class="ui top attached header">Family member #@(Model.Index + 1)</h3>
@@ -23,6 +22,16 @@
             </div>
         </div>
         <span asp-validation-for="Name"></span>
+    </div>
+	<div class="field">
+        <label asp-for="MiddleName"></label>
+        <div class="ui corner labeled input">
+            <input asp-for="MiddleName" name="Users[@Model.Index].MiddleName" id="Users[@Model.Index].MiddleName" placeholder="Middle name"/>
+            <div class="ui corner label">
+                <i class="asterisk icon red"></i>
+            </div>
+        </div>
+        <span asp-validation-for="MiddleName"></span>
     </div>
     <div class="field">
         <label asp-for="LastName"></label>

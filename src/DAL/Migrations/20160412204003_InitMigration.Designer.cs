@@ -8,7 +8,7 @@ using DAL;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160411213340_InitMigration")]
+    [Migration("20160412204003_InitMigration")]
     partial class InitMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,6 +46,12 @@ namespace DAL.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<string>("NormalizedEmail")
+                        .HasAnnotation("MaxLength", 256);
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasAnnotation("MaxLength", 256);
+
                     b.Property<string>("Passport");
 
                     b.Property<string>("PasswordHash");
@@ -65,10 +71,16 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("NormalizedEmail")
+                        .HasAnnotation("Relational:Name", "EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .HasAnnotation("Relational:Name", "UserNameIndex");
+
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ApplicationUserUserGroup", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUser_UserGroup", b =>
                 {
                     b.Property<string>("Id");
 
@@ -198,7 +210,7 @@ namespace DAL.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ApplicationUserUserGroup", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUser_UserGroup", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser")
                         .WithMany()

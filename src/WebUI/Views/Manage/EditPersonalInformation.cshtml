@@ -1,0 +1,84 @@
+@model WebUI.ViewModels.Manage.PersonalInformationViewModel
+
+@{
+    ViewData["Title"] = "EditPersonalInformation";
+}
+
+<h2>EditPersonalInformation</h2>
+
+<div class="ui form" id="editform">
+    <form asp-action="EditPersonalInformation">
+        <div class="fields">
+            <div class="field">
+                <label asp-for="Name"></label>
+                <div class="ui corner labeled input">
+                    <input asp-for="Name" name="Users[@Model.Index].Name" id="Users[@Model.Index].Name" placeholder="First name" />
+                </div>
+            </div>
+            <div class="field">
+                <label asp-for="MiddleName"></label>
+                <div class="ui corner labeled input">
+                    <input asp-for="MiddleName" name="Users[@Model.Index].Name" id="Users[@Model.Index].Name" placeholder="First name" />
+                </div>
+            </div>
+            <div class="field">
+                <label asp-for="LastName">Last Name</label>
+                <div class="ui corner labeled input">
+                    <input asp-for="LastName" name="Users[@Model.Index].LastName" id="Users[@Model.Index].LastName" placeholder="Last name" />
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label asp-for="Phone"></label>
+            <div class="ui corner labeled input">
+                <input asp-for="Phone" name="Users[@Model.Index].Phone" id="Users[@Model.Index].Phone" placeholder="Phone number" />
+            </div>
+        </div>
+        <div class="fields">
+            <div class="eight wide field">
+                <label asp-for="Street"></label>
+                <div class="ui corner labeled input">
+                    <input asp-for="Street" />
+                </div>
+            </div>
+            <div class="four wide field">
+                <label asp-for="BuildingNumber">Building Number</label>
+                <div class="ui corner labeled input">
+                    <input asp-for="BuildingNumber" />
+                </div>
+            </div>
+            <div class="four wide field">
+                <label asp-for="ZipCode">Zip Code</label>
+                <div class="ui corner labeled input">
+                    <input asp-for="ZipCode" />
+                </div>
+            </div>
+        </div>
+        <div class="fields">
+            <div class="field">
+                <label asp-for="Country"></label>
+                <div class="ui corner labeled input">
+                    <input asp-for="Country" />
+                </div>
+            </div>
+            <div class="field">
+                <label asp-for="Region"></label>
+                <div class="ui corner labeled input">
+                    <input asp-for="Region" />
+                </div>
+            </div>
+            <div class="field">
+                <label asp-for="City"></label>
+                <div class="ui corner labeled input">
+                    <input asp-for="City" />
+                </div>
+            </div>
+        </div>
+        <input type="submit" class="ui button" />
+    </form>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

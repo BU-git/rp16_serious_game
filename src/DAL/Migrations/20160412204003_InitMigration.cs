@@ -25,6 +25,8 @@ namespace DAL.Migrations
                     LastName = table.Column<string>(nullable: true),
                     MidleName = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
+                    NormalizedEmail = table.Column<string>(nullable: true),
+                    NormalizedUserName = table.Column<string>(nullable: true),
                     Passport = table.Column<string>(nullable: true),
                     PasswordHash = table.Column<string>(nullable: true),
                     Phone = table.Column<string>(nullable: true),
@@ -130,7 +132,7 @@ namespace DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
-                name: "ApplicationUserUserGroup",
+                name: "ApplicationUser_UserGroup",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
@@ -138,15 +140,15 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationUserUserGroup", x => new { x.Id, x.UserGoupId });
+                    table.PrimaryKey("PK_ApplicationUser_UserGroup", x => new { x.Id, x.UserGoupId });
                     table.ForeignKey(
-                        name: "FK_ApplicationUserUserGroup_ApplicationUser_Id",
+                        name: "FK_ApplicationUser_UserGroup_ApplicationUser_Id",
                         column: x => x.Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ApplicationUserUserGroup_UserGroup_UserGoupId",
+                        name: "FK_ApplicationUser_UserGroup_UserGroup_UserGoupId",
                         column: x => x.UserGoupId,
                         principalTable: "UserGroup",
                         principalColumn: "UserGroupId",
@@ -196,6 +198,14 @@ namespace DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateIndex(
+                name: "EmailIndex",
+                table: "AspNetUsers",
+                column: "NormalizedEmail");
+            migrationBuilder.CreateIndex(
+                name: "UserNameIndex",
+                table: "AspNetUsers",
+                column: "NormalizedUserName");
+            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
                 column: "NormalizedName");
@@ -203,7 +213,7 @@ namespace DAL.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable("ApplicationUserUserGroup");
+            migrationBuilder.DropTable("ApplicationUser_UserGroup");
             migrationBuilder.DropTable("Customer");
             migrationBuilder.DropTable("AspNetRoleClaims");
             migrationBuilder.DropTable("AspNetUserClaims");
