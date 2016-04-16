@@ -92,7 +92,7 @@ namespace WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> StepTwo([FromForm]FamilyViewModel regVm)
+        public async Task<IActionResult> StepTwo(FamilyViewModel regVm)
         {
             foreach (var u in regVm.Users)
             {
@@ -136,9 +136,9 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult RegistrationForm(int index, string lastName)
+        public PartialViewResult RegistrationForm()
         {
-            return PartialView("_StepTwoForm", new UserViewModel { Index = index, LastName = lastName });
+            return PartialView("_UserDetails", new UserViewModel());
         }
     }
 }

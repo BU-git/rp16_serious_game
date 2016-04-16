@@ -1,10 +1,9 @@
-@model WebUI.ViewModels.Registration.UserViewModel
+﻿@model WebUI.ViewModels.Registration.UserViewModel
 
-<h3 class="ui top attached header">Family member #@(Model.Index + 1)</h3>
 <div class="userForm ui attached segment">
     <div class="field">
         <label asp-for="Gender"></label>
-        <select asp-for="Gender" name="Users[@Model.Index].Gender" id="Users[@Model.Index].Gender" class="ui dropdown">
+        <select asp-for="Gender" class="ui dropdown">
             <option value="MALE">Male</option>
             <option value="FEMALE">Female</option>
             <option value="UNKNOWN">Unknown</option>
@@ -16,17 +15,17 @@
     <div class="field">
         <label asp-for="Name"></label>
         <div class="ui corner labeled input">
-            <input asp-for="Name" name="Users[@Model.Index].Name" id="Users[@Model.Index].Name" placeholder="First name"/>
+            <input asp-for="Name" placeholder="First name"/>
             <div class="ui corner label">
                 <i class="asterisk icon red"></i>
             </div>
         </div>
         <span asp-validation-for="Name"></span>
     </div>
-	<div class="field">
+    <div class="field">
         <label asp-for="MiddleName"></label>
         <div class="ui corner labeled input">
-            <input asp-for="MiddleName" name="Users[@Model.Index].MiddleName" id="Users[@Model.Index].MiddleName" placeholder="Middle name"/>
+            <input asp-for="MiddleName" placeholder="Middle name"/>
             <div class="ui corner label">
                 <i class="asterisk icon red"></i>
             </div>
@@ -36,7 +35,7 @@
     <div class="field">
         <label asp-for="LastName"></label>
         <div class="ui corner labeled input">
-            <input asp-for="LastName" name="Users[@Model.Index].LastName" id="Users[@Model.Index].LastName" placeholder="Last name"/>
+            <input asp-for="LastName" placeholder="Last name"/>
             <div class="ui corner label">
                 <i class="asterisk icon red"></i>
             </div>
@@ -47,19 +46,19 @@
         <label>Birth date</label>
         <div class="fields">
             <div class="ui corner labeled input">
-                <input asp-for="Day" name="Users[@Model.Index].Day" id="Users[@Model.Index].Day" placeholder="Day" type="number" min="1" max="31" />
+                <input asp-for="Day" placeholder="1" type="number" min="1" max="31"/>
                 <div class="ui corner label">
                     <i class="asterisk icon red"></i>
                 </div>
             </div>
             <div class="ui corner labeled input">
-                <input asp-for="Month" name="Users[@Model.Index].Month" id="Users[@Model.Index].Month" placeholder="Month" />
+                <input asp-for="Month" placeholder="1"/>
                 <div class="ui corner label">
                     <i class="asterisk icon red"></i>
                 </div>
             </div>
             <div class="ui corner labeled input">
-                <input asp-for="Year" name="Users[@Model.Index].Year" id="Users[@Model.Index].Year" placeholder="Year" type="number" min="1900" max="2020" />
+                <input asp-for="Year" placeholder="1991" type="number" min="1900" max="2020"/>
                 <div class="ui corner label">
                     <i class="asterisk icon red"></i>
                 </div>
@@ -78,7 +77,7 @@
     <div class="field">
         <label asp-for="Phone"></label>
         <div class="ui corner labeled input">
-            <input asp-for="Phone" name="Users[@Model.Index].Phone" id="Users[@Model.Index].Phone" placeholder="Phone number" class="modelName"/>
+            <input asp-for="Phone" placeholder="Phone number" class="modelName"/>
             <div class="ui corner label">
                 <i class="asterisk icon red"></i>
             </div>
@@ -88,7 +87,7 @@
     <div class="field">
         <label asp-for="Email"></label>
         <div class="ui corner labeled input">
-            <input asp-for="Email" name="Users[@Model.Index].Email" id="Users[@Model.Index].Email" placeholder="your@mail.com"/>
+            <input asp-for="Email" placeholder="your@mail.com" type="email"/>
             <div class="ui corner label">
                 <i class="asterisk icon red"></i>
             </div>
@@ -96,3 +95,4 @@
         <span asp-validation-for="Email"></span>
     </div>
 </div>
+@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

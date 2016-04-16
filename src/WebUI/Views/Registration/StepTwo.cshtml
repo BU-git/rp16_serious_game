@@ -1,6 +1,4 @@
 ﻿@using System.Threading.Tasks
-@using System.Web.ModelBinding
-@using WebUI.ViewModels.Registration
 @model WebUI.ViewModels.Registration.FamilyViewModel
 @{
     ViewBag.Title = "Registration | Step Two";
@@ -52,136 +50,104 @@
         </div>
     </div>
 
-    <div class="ui attached segment" id="content">
-        <div class="ui page dimmer" id="page-dimmer">
-            <div class="ui text loader">Loading</div>
-        </div>
-        <div class="ui form" id="regForm">
-            <h2 class="ui center aligned header">General information about @Model.FamilyName family</h2>
-            <form asp-controller="Registration" asp-action="StepTwo" class="ui form segment">
-                <div>
-                    <div>
-                        <input asp-for="FamilyName" type="hidden" />
-                        <div class="field">
-                            <label asp-for="ZipCode">Zip Code</label>
-                            <div class="ui corner labeled input">
-                                <input asp-for="ZipCode" />
-                                <div class="ui corner label">
-                                    <i class="asterisk icon red"></i>
-                                </div>
-                            </div>
-                            <span asp-validation-for="ZipCode"></span>
-                        </div>
-                        <div class="field">
-                            <label asp-for="Country"></label>
-                            <div class="ui corner labeled input">
-                                <input asp-for="Country" />
-                                <div class="ui corner label">
-                                    <i class="asterisk icon red"></i>
-                                </div>
-                            </div>
-                            <span asp-validation-for="Country"></span>
-                        </div>
-                        <div class="field">
-                            <label asp-for="Region"></label>
-                            <div class="ui corner labeled input">
-                                <input asp-for="Region" />
-                                <div class="ui corner label">
-                                    <i class="asterisk icon red"></i>
-                                </div>
-                            </div>
-                            <span asp-validation-for="Region"></span>
-                        </div>
-                        <div class="field">
-                            <label asp-for="City"></label>
-                            <div class="ui corner labeled input">
-                                <input asp-for="City" />
-                                <div class="ui corner label">
-                                    <i class="asterisk icon red"></i>
-                                </div>
-                            </div>
-                            <span asp-validation-for="City"></span>
-                        </div>
-                        <div class="field">
-                            <label asp-for="Street"></label>
-                            <div class="ui corner labeled input">
-                                <input asp-for="Street" />
-                                <div class="ui corner label">
-                                    <i class="asterisk icon red"></i>
-                                </div>
-                            </div>
-                            <span asp-validation-for="Street"></span>
-                        </div>
-                        <div class="field">
-                            <label asp-for="BuildingNumber">Building Number</label>
-                            <div class="ui corner labeled input">
-                                <input asp-for="BuildingNumber" type="number" />
-                                <div class="ui corner label">
-                                    <i class="asterisk icon red"></i>
-                                </div>
-                            </div>
-                            <span asp-validation-for="BuildingNumber"></span>
-                        </div>
-                    </div>
+    <div class="ui form" id="regForm">
+        <form asp-controller="Registration" asp-action="StepTwo" class="ui form segment" id="form">
+            <div>
+                <div id="fieldsAppender">
+                    @{ await Html.RenderPartialAsync("_FamilyDetails", Model); }
+                </div>
 
-                    <div class="ui hidden divider"></div>
-
-                    <h2 class="ui header center aligned">Personal data for user</h2>
-                    @foreach (var user in Model.Users)
-                    {
-                        await Html.RenderPartialAsync("_StepTwoForm", new UserViewModel { Index = 0, LastName = Model.FamilyName });
-                    }
-
-                    <div id="fieldsAppender"></div>
-                    <div class="ui hidden divider"></div>
-
-                    <div class="row">
-                        <div class="ui three column grid">
-                            <div class="row">
-                                <div class="column">
-                                    <input type="reset" value="Reset" class="ui button fluid" />
-                                </div>
-                                <div class="column">
-                                    <button type="button" class="addUser ui button green fluid">Add new member</button>
-                                </div>
-                                <div class="column">
-                                    <input type="submit" value="Submit" class="ui button blue fluid" id="submitButton" />
-                                </div>
+                <div class="row">
+                    <div class="ui three column grid">
+                        <div class="row">
+                            <div class="column">
+                                <input type="reset" value="Reset" class="ui button fluid"/>
+                            </div>
+                            <div class="column">
+                                <input type="button" value="Next" class="ui button blue fluid" id="submitButton"/>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
+    </div>
+    <div class="ui page dimmer" id="page-dimmer">
+        <div class="ui text loader">Loading</div>
     </div>
 </div>
 
 @section Scripts{
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script>
-        this.FormIndexer = 1;
-        $('#loadingSpinner').hide();
-        $('#waitingPost').hide();
+        var userCount = 1;
+        var currentUser = 0;
+        var regVm = { Users: [] };
+        $("#usersCount").text(userCount);
 
-        $('.addUser').click(function () {
-            $.post({
-                url: "/Registration/RegistrationForm",
-                data: { index: FormIndexer, lastName: "@Model.FamilyName" },
-                success: function (data) {
-                    $('#fieldsAppender').append(data);
-                    $('#loadingSpinner').hide();
-                    FormIndexer++;
+        $("#submitButton").click(function () {
+            if ($("#form").valid()) {
+                if (currentUser == 0) {
+                    $.each($("#form").serializeArray(), function (i, field) {
+                        regVm[field.name] = field.value;
+                    });
+
+                    $.post({
+                        url: "/Registration/RegistrationForm",
+                        success: function (data) {
+                            $('#fieldsAppender').empty();
+                            $('#fieldsAppender').append(data);
+                            currentUser++;
+                        }
+                    });
                 }
-            });
+                else if (currentUser > 0 && currentUser < userCount) {
+                    var data = {};
+                    $.each($("#form").serializeArray(), function (i, field) {
+                        data[field.name] = field.value;
+                    });
+                    regVm.Users.push(data);
+
+                    $("#form")[0].reset();
+
+                    if (currentUser == userCount - 1) {
+                        $('#submitButton').val("To step 3");
+                    }
+
+                    currentUser++;
+                }
+                else if (currentUser == userCount) {
+                    $('#page-dimmer').addClass('active');
+
+                    var data = {};
+                    $.each($("#form").serializeArray(), function (i, field) {
+                        data[field.name] = field.value;
+                    });
+                    regVm.Users.push(data);
+
+                    $.post({
+                        url: "/Registration/StepTwo",
+                        data: regVm
+                    });
+                }
+            }
+            else {
+                return false;
+            }
         });
 
-        $('#submitButton').click(function () {
-            if (!$("form").valid()) {
+        $('#removeUser').click(function() {
+            if (userCount < 2)
                 return false;
-            } else {
-                $('form').submit();
-                $('#page-dimmer').addClass('active');
+            else {
+                userCount--;
+                $('#usersCount').text(userCount);
             }
+        });
+
+        $('#addUser').click(function() {
+            userCount++;
+            $('#usersCount').text(userCount);
         });
     </script>
 }    
