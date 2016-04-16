@@ -156,6 +156,56 @@ namespace DAL
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Create Appointment and assign it's owner
+        /// </summary>
+        /// <param name="creator">Creator which automatically assigned as owner</param>
+        /// <param name="appointment">Appointment</param>
+        /// <returns></returns>
+        public async Task CreateAppointment(ApplicationUser creator, Appointment appointment)
+        {
+            _context.Appointments.Add(appointment);
+
+            var appointment_User = new Appointment_User()
+            {
+                User = creator,
+                IsOwner = true,
+                Appointment = appointment
+            };
+            _context.Add(appointment_User);
+
+            await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Add user to specified appointment
+        /// </summary>
+        /// <param name="user">User</param>
+        /// <param name="appointment">Appointment</param>
+        /// <returns></returns>
+        public async Task AddUserToAppointment(ApplicationUser user, Appointment appointment)
+        {
+            var appointment_User = new Appointment_User()
+            {
+                User = user,
+                Appointment = appointment
+            };
+
+            _context.Add(appointment_User);
+            await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Edit appointment
+        /// </summary>
+        /// <param name="appointment">Appointment</param>
+        /// <returns></returns>
+        public async Task EditAppointment(Appointment appointment)
+        {
+            _context.Update(appointment);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task AddTaskAsync(ApplicationTask appTask)
         {
             var task = _context.Tasks.FirstOrDefault(x => x.Name == appTask.Name);

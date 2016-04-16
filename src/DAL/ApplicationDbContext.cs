@@ -75,6 +75,8 @@ namespace DAL
 
         public DbSet<Customer> Customers {get;set;}
         public DbSet<UserGroup> UserGroups { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
+
         public DbSet<ApplicationTask> Tasks { get; set; } 
         public DbSet<UserTask> UserTasks { get; set; } 
         public DbSet<Media> Medias { get; set; }

@@ -89,5 +89,26 @@ namespace Interfaces
         Task<int> UpdateAvatarPath(Avatar avatar, string path);
         List<UserTask> GetUserGroupTasks(UserGroup group);
         List<UserGroup> GetUsersUserGroups(string userId);
+
+        /// <summary>
+        /// Create Appointment and assign it's owner
+        /// </summary>
+        /// <param name="creator">Creator which automatically assigned as owner</param>
+        /// <param name="appointment">Appointment</param>
+        /// <returns></returns>
+        Task CreateAppointment(ApplicationUser creator, Appointment appointment);
+        /// <summary>
+        /// Add user to specified appointment
+        /// </summary>
+        /// <param name="user">User</param>
+        /// <param name="appointment">Appointment</param>
+        /// <returns></returns>
+        Task AddUserToAppointment(ApplicationUser user, Appointment appointment);
+        /// <summary>
+        /// Edit appointment
+        /// </summary>
+        /// <param name="appointment">Appointment</param>
+        /// <returns></returns>
+        Task EditAppointment(Appointment appointment);
     }
 }
