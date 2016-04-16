@@ -6,6 +6,30 @@
     ViewBag.Title = "Registration | Step Two";
 }
 
+<style>
+    .field-validation-error {
+        color: #f00;
+    }
+
+    .field-validation-valid {
+        display: none;
+    }
+
+    .input-validation-error {
+        border: 1px solid #f00;
+        background-color: #fee;
+    }
+
+    .validation-summary-errors {
+        font-weight: bold;
+        color: #f00;
+    }
+
+    .validation-summary-valid {
+        display: none;
+    }
+</style>
+
 <div class="ui text container">
     <div class="ui steps top attached center aligned">
         <div class="step">
@@ -33,68 +57,70 @@
             <div class="ui text loader">Loading</div>
         </div>
         <div class="ui form" id="regForm">
-            <h2 class="ui center aligned header">General information</h2>
+            <h2 class="ui center aligned header">General information about @Model.FamilyName family</h2>
             <form asp-controller="Registration" asp-action="StepTwo" class="ui form segment">
                 <div>
                     <div>
-                        <input asp-for="FamilyName" type="hidden"/>
-                        <div class="field">
-                            <label asp-for="FamilyName"></label>
-                            <label>@Model.FamilyName</label>
-                        </div>
+                        <input asp-for="FamilyName" type="hidden" />
                         <div class="field">
                             <label asp-for="ZipCode">Zip Code</label>
                             <div class="ui corner labeled input">
-                                <input asp-for="ZipCode"/>
+                                <input asp-for="ZipCode" />
                                 <div class="ui corner label">
-                                    <i class="asterisk icon"></i>
+                                    <i class="asterisk icon red"></i>
                                 </div>
                             </div>
+                            <span asp-validation-for="ZipCode"></span>
                         </div>
                         <div class="field">
                             <label asp-for="Country"></label>
                             <div class="ui corner labeled input">
-                                <input asp-for="Country"/>
+                                <input asp-for="Country" />
                                 <div class="ui corner label">
-                                    <i class="asterisk icon"></i>
+                                    <i class="asterisk icon red"></i>
                                 </div>
                             </div>
+                            <span asp-validation-for="Country"></span>
                         </div>
                         <div class="field">
                             <label asp-for="Region"></label>
                             <div class="ui corner labeled input">
-                                <input asp-for="Region"/>
+                                <input asp-for="Region" />
                                 <div class="ui corner label">
-                                    <i class="asterisk icon"></i>
+                                    <i class="asterisk icon red"></i>
                                 </div>
                             </div>
+                            <span asp-validation-for="Region"></span>
                         </div>
                         <div class="field">
                             <label asp-for="City"></label>
                             <div class="ui corner labeled input">
-                                <input asp-for="City"/>
+                                <input asp-for="City" />
                                 <div class="ui corner label">
-                                    <i class="asterisk icon"></i>
+                                    <i class="asterisk icon red"></i>
                                 </div>
                             </div>
+                            <span asp-validation-for="City"></span>
                         </div>
                         <div class="field">
                             <label asp-for="Street"></label>
                             <div class="ui corner labeled input">
-                                <input asp-for="Street"/>
+                                <input asp-for="Street" />
                                 <div class="ui corner label">
-                                    <i class="asterisk icon"></i>
+                                    <i class="asterisk icon red"></i>
                                 </div>
                             </div>
+                            <span asp-validation-for="Street"></span>
                         </div>
                         <div class="field">
                             <label asp-for="BuildingNumber">Building Number</label>
                             <div class="ui corner labeled input">
-                                <input asp-for="BuildingNumber"/>
+                                <input asp-for="BuildingNumber" type="number" />
                                 <div class="ui corner label">
-                                    <i class="asterisk icon"></i>
+                                    <i class="asterisk icon red"></i>
                                 </div>
                             </div>
+                            <span asp-validation-for="BuildingNumber"></span>
                         </div>
                     </div>
 
@@ -103,7 +129,7 @@
                     <h2 class="ui header center aligned">Personal data for user</h2>
                     @foreach (var user in Model.Users)
                     {
-                        await Html.RenderPartialAsync("_StepTwoForm", new UserViewModel { Index = 0 });
+                        await Html.RenderPartialAsync("_StepTwoForm", new UserViewModel { Index = 0, LastName = Model.FamilyName });
                     }
 
                     <div id="fieldsAppender"></div>
@@ -119,7 +145,7 @@
                                     <button type="button" class="addUser ui button green fluid">Add new member</button>
                                 </div>
                                 <div class="column">
-                                    <input type="submit" value="Submit" class="ui button blue fluid" />
+                                    <input type="submit" value="Submit" class="ui button blue fluid" id="submitButton" />
                                 </div>
                             </div>
                         </div>
@@ -131,18 +157,16 @@
 </div>
 
 @section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script>
         this.FormIndexer = 1;
         $('#loadingSpinner').hide();
         $('#waitingPost').hide();
 
         $('.addUser').click(function () {
-            $('#loadingSpinner').show();
-
-            $.ajax({
+            $.post({
                 url: "/Registration/RegistrationForm",
-                method: "POST",
-                data: "index=" + FormIndexer,
+                data: { index: FormIndexer, lastName: "@Model.FamilyName" },
                 success: function (data) {
                     $('#fieldsAppender').append(data);
                     $('#loadingSpinner').hide();
@@ -151,11 +175,13 @@
             });
         });
 
-
-        $('form').submit(function (form) {
-            /* Validate form */
-            $('#page-dimmer').addClass('active');
-            $('#waitingPost').show();
+        $('#submitButton').click(function () {
+            if (!$("form").valid()) {
+                return false;
+            } else {
+                $('form').submit();
+                $('#page-dimmer').addClass('active');
+            }
         });
     </script>
 }    

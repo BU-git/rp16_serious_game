@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class ApplicationUser_UserGroup
+    public class ApplicationUserUserGroup
     {
         public string Id { get; set; }
         public ApplicationUser ApplicationUser { get; set; }

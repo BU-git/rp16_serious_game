@@ -65,10 +65,14 @@ namespace DAL
         private async Task CreateUsersAsync()
         {
             var user1 = await _userManager.FindByEmailAsync("Admin@admin.com");
+            //_userManager
             if (user1 == null)
             {
+                var users = _userManager.Users;
+                var use = users.FirstOrDefault(user => user.Email == "Admin2@admin.com");
                 ApplicationUser admin = new ApplicationUser() { UserName = "Admin@admin.com", Name = "Admin1", Email = "Admin@admin.com", Gender = Gender.Male };
                 await _userManager.CreateAsync(admin, "User2016!");
+                //_userManager.cre
                 await _userManager.AddToRoleAsync(admin, "Admin");
   
             }
@@ -139,9 +143,9 @@ namespace DAL
 
                 if (user1!=null && user2!=null && coach!=null)
                 {
-                    ApplicationUser_UserGroup uug1 = new ApplicationUser_UserGroup();
-                    ApplicationUser_UserGroup uug2 = new ApplicationUser_UserGroup();
-                    ApplicationUser_UserGroup uug3 = new ApplicationUser_UserGroup();
+                    ApplicationUserUserGroup uug1 = new ApplicationUserUserGroup();
+                    ApplicationUserUserGroup uug2 = new ApplicationUserUserGroup();
+                    ApplicationUserUserGroup uug3 = new ApplicationUserUserGroup();
 
                     uug1.ApplicationUser = user1;
                     uug1.UserGroup = userGroup;

@@ -61,7 +61,7 @@ namespace WebUI.Controllers
             
             await _mailManager.SendRegistrationMailAsync(randomPass, regVm.HeadEmail);
 
-            return View(new MainFamilyData());
+            return StepOne();
         }
 
         public async Task<IActionResult> StepTwo(string familyName)
@@ -74,7 +74,8 @@ namespace WebUI.Controllers
                 Users = new List<UserViewModel>
                 {
                     new UserViewModel()
-                }
+                },
+                FamilyName = "Doe"
                 //Here must be users
             };
 
@@ -82,8 +83,10 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> StepTwo([FromForm]FamilyViewModel regVm)
+        public async Task<IActionResult> StepTwo(FamilyViewModel regVm, [FromForm]UserViewModel[] users)
         {
+            return await StepTwo(""); //DEBUG
+
             foreach (var u in regVm.Users)
             {
                 var randomPass = _cryptoServices.GenerateRandomPassword();
@@ -126,9 +129,9 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult RegistrationForm(int index)
+        public PartialViewResult RegistrationForm(int index, string lastName)
         {
-            return PartialView("_StepTwoForm", new UserViewModel { Index = index });
+            return PartialView("_StepTwoForm", new UserViewModel { Index = index, LastName = lastName });
         }
     }
 }
