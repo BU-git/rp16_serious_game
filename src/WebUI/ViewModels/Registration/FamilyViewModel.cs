@@ -12,11 +12,12 @@ namespace WebUI.ViewModels.Registration
 
         [Required(ErrorMessage = "This field should not be empty")]
         [Display(Name = "Family name")]
+        [RegularExpression("[A-Za-z\\-]+", ErrorMessage = "Family name should contain only alphabetic characters")]
         public string FamilyName { get; set; }
 
         [Required(ErrorMessage = "This field should not be empty")]
         [Display(Name = "Zip code")]
-        [RegularExpression("[\\d]+", ErrorMessage = "Please enter only numeric symbols")]
+        [RegularExpression("[0-9]+", ErrorMessage = "Please enter only numeric symbols")]
         public string ZipCode { get; set; }
 
         [Required(ErrorMessage = "This field should not be empty")]
@@ -37,7 +38,6 @@ namespace WebUI.ViewModels.Registration
 
         [Required(ErrorMessage = "This field should not be empty")]
         [Display(Name = "Building number")]
-        [RegularExpression("[\\d]+", ErrorMessage = "Please enter only positive numeric symbols")]
         public string BuildingNumber { get; set; }
     }
 }

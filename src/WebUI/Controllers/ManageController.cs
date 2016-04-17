@@ -130,9 +130,29 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditPersonalInformation()
+        public async Task<IActionResult> EditPersonalInformation()
         {
-            return View();
+            var user = await GetCurrentUserAsync();
+            if (user != null)
+            {
+                var userInfo = new PersonalInformationViewModel
+                {
+                    BuildingNumber = user.BuildingNumber,
+                    City = user.City,
+                    Country = user.Country,
+                    LastName = user.LastName,
+                    MiddleName = user.MiddleName,
+                    Name = user.Name,
+                    Phone = user.Phone,
+                    Region = user.Region,
+                    Street = user.Street,
+                    ZipCode = user.ZipCode
+                };
+                return View(userInfo);
+            }
+
+            ModelState.AddModelError("", "The user was not found");
+            return RedirectToAction("LogIn", "Account");
         }
 
         //
@@ -158,6 +178,7 @@ namespace WebUI.Controllers
                 user.Region = model.Region ?? user.Region;
                 user.City = model.City ?? user.City;
                 user.BuildingNumber = model.BuildingNumber ?? user.BuildingNumber;
+
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {

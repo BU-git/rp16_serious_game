@@ -1,84 +1,126 @@
 @model WebUI.ViewModels.Manage.PersonalInformationViewModel
 
 @{
-    ViewData["Title"] = "EditPersonalInformation";
+    ViewData["Title"] = "Edit profile";
 }
+<style>
+    .field-validation-error {
+        color: #f00;
+    }
 
-<h2>EditPersonalInformation</h2>
+    .field-validation-valid {
+        display: none;
+    }
 
-<div class="ui form" id="editform">
-    <form asp-action="EditPersonalInformation">
-        <div class="fields">
-            <div class="field">
-                <label asp-for="Name"></label>
-                <div class="ui corner labeled input">
-                    <input asp-for="Name" name="Users[@Model.Index].Name" id="Users[@Model.Index].Name" placeholder="First name" />
-                </div>
-            </div>
-            <div class="field">
-                <label asp-for="MiddleName"></label>
-                <div class="ui corner labeled input">
-                    <input asp-for="MiddleName" name="Users[@Model.Index].Name" id="Users[@Model.Index].Name" placeholder="First name" />
-                </div>
-            </div>
-            <div class="field">
-                <label asp-for="LastName">Last Name</label>
-                <div class="ui corner labeled input">
-                    <input asp-for="LastName" name="Users[@Model.Index].LastName" id="Users[@Model.Index].LastName" placeholder="Last name" />
-                </div>
-            </div>
-        </div>
-        <div class="field">
-            <label asp-for="Phone"></label>
-            <div class="ui corner labeled input">
-                <input asp-for="Phone" name="Users[@Model.Index].Phone" id="Users[@Model.Index].Phone" placeholder="Phone number" />
-            </div>
-        </div>
-        <div class="fields">
-            <div class="eight wide field">
-                <label asp-for="Street"></label>
-                <div class="ui corner labeled input">
-                    <input asp-for="Street" />
-                </div>
-            </div>
-            <div class="four wide field">
-                <label asp-for="BuildingNumber">Building Number</label>
-                <div class="ui corner labeled input">
-                    <input asp-for="BuildingNumber" />
-                </div>
-            </div>
-            <div class="four wide field">
-                <label asp-for="ZipCode">Zip Code</label>
-                <div class="ui corner labeled input">
-                    <input asp-for="ZipCode" />
-                </div>
-            </div>
-        </div>
-        <div class="fields">
-            <div class="field">
-                <label asp-for="Country"></label>
-                <div class="ui corner labeled input">
-                    <input asp-for="Country" />
-                </div>
-            </div>
-            <div class="field">
-                <label asp-for="Region"></label>
-                <div class="ui corner labeled input">
-                    <input asp-for="Region" />
-                </div>
-            </div>
-            <div class="field">
-                <label asp-for="City"></label>
-                <div class="ui corner labeled input">
-                    <input asp-for="City" />
-                </div>
-            </div>
-        </div>
-        <input type="submit" class="ui button" />
-    </form>
+    .input-validation-error {
+        border: 1px solid #f00;
+        background-color: #fee;
+    }
+
+    .validation-summary-errors {
+        font-weight: bold;
+        color: #f00;
+    }
+
+    .validation-summary-valid {
+        display: none;
+    }
+</style>
+
+<div style="float: left">
+    <a asp-action="Index" class="ui button large basic labeled icon">
+        <i class="left arrow icon"></i>
+        Back to List
+    </a>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="ui text container">
+    <h2 class="ui header top attached center aligned">Edit personal information</h2>
+    <div class="ui form" id="editform">
+        <form asp-action="EditPersonalInformation" class="ui form segment">
+            <div class="fields">
+                <div class="field six wide">
+                    <label asp-for="Name"></label>
+                    <div class="ui input">
+                        <input asp-for="Name" placeholder="First name" />
+                    </div>
+                    <span asp-validation-for="Name"></span>
+                </div>
+                <div class="field five wide">
+                    <label asp-for="MiddleName"></label>
+                    <div class="ui input">
+                        <input asp-for="MiddleName" placeholder="Middle name" />
+                    </div>
+                    <span asp-validation-for="MiddleName"></span>
+                </div>
+                <div class="field five wide">
+                    <label asp-for="LastName">Last Name</label>
+                    <div class="ui input">
+                        <input asp-for="LastName" placeholder="Last name" />
+                    </div>
+                    <span asp-validation-for="LastName"></span>
+                </div>
+            </div>
+            <div class="fields">
+                <div class="eight wide field">
+                    <label asp-for="Phone"></label>
+                    <div class="ui input">
+                        <input asp-for="Phone" placeholder="Phone number" />
+                    </div>
+                    <span asp-validation-for="Phone"></span>
+                </div>
+                <div class="eight wide field">
+                    <label asp-for="ZipCode">Zip Code</label>
+                    <div class="ui input">
+                        <input asp-for="ZipCode" placeholder="Zip code" />
+                    </div>
+                </div>
+                <div>
+                    <span asp-validation-for="ZipCode"></span>
+                </div>
+            </div>
+            <div class="fields">
+                <div class="field five wide">
+                    <label asp-for="Country"></label>
+                    <div class="ui input">
+                        <input asp-for="Country" placeholder="Country" />
+                    </div>
+                </div>
+                <div class="field five wide">
+                    <label asp-for="Region"></label>
+                    <div class="ui input">
+                        <input asp-for="Region" placeholder="Region" />
+                    </div>
+                </div>
+                <div class="field six wide">
+                    <label asp-for="City"></label>
+                    <div class="ui input">
+                        <input asp-for="City" placeholder="City" />
+                    </div>
+                </div>
+            </div>
+            <div class="fields">
+                <div class="nine wide field">
+                    <label asp-for="Street"></label>
+                    <div class="ui input">
+                        <input asp-for="Street" placeholder="Street" />
+                    </div>
+                </div>
+                <div class="seven wide field">
+                    <label asp-for="BuildingNumber">Building Number</label>
+                    <div class="ui input">
+                        <input asp-for="BuildingNumber" placeholder="Building number" />
+                    </div>
+                </div>
+            </div>
+            <div class="ui divider hidden"></div>
+            <div class="field">
+                <input type="submit" class="ui button green fluid" value="Save changes" />
+            </div>
+        </form>
+    </div>
 </div>
 
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

@@ -7,6 +7,7 @@ namespace WebUI.ViewModels.Registration
     {
         [Required(ErrorMessage = "This field should not be empty")]
         [Display(Name = "Family name")]
+        [RegularExpression("[a-zA-Z]+", ErrorMessage = "Family name should contain only alphabetic characters")]
         public string FamilyName { get; set; }
 
         [Required(ErrorMessage = "This field should not be empty")]
