@@ -3,65 +3,71 @@
 <h2 class="ui top attached center aligned header">General information</h2>
 <div class="ui attached segment">
     <input asp-for="FamilyName" type="hidden"/>
-    <div class="field">
-        <label asp-for="ZipCode">Zip Code</label>
-        <div class="ui corner labeled input">
-            <input asp-for="ZipCode"/>
-            <div class="ui corner label">
-                <i class="asterisk icon red"></i>
+    <div class="fields">
+        <div class="field eight wide">
+            <label asp-for="ZipCode">Zip Code</label>
+            <div class="ui corner labeled input">
+                <input asp-for="ZipCode" />
+                <div class="ui corner label">
+                    <i class="asterisk icon red"></i>
+                </div>
             </div>
+            <span asp-validation-for="ZipCode"></span>
         </div>
-        <span asp-validation-for="ZipCode"></span>
+        <div class="field eight wide">
+            <label asp-for="Country"></label>
+            <div class="ui corner labeled input">
+                <input asp-for="Country" />
+                <div class="ui corner label">
+                    <i class="asterisk icon red"></i>
+                </div>
+            </div>
+            <span asp-validation-for="Country"></span>
+        </div>
     </div>
-    <div class="field">
-        <label asp-for="Country"></label>
-        <div class="ui corner labeled input">
-            <input asp-for="Country"/>
-            <div class="ui corner label">
-                <i class="asterisk icon red"></i>
+    <div class="fields">
+        <div class="field eight wide">
+            <label asp-for="Region"></label>
+            <div class="ui corner labeled input">
+                <input asp-for="Region" />
+                <div class="ui corner label">
+                    <i class="asterisk icon red"></i>
+                </div>
             </div>
+            <span asp-validation-for="Region"></span>
         </div>
-        <span asp-validation-for="Country"></span>
+        <div class="field eight wide">
+            <label asp-for="City"></label>
+            <div class="ui corner labeled input">
+                <input asp-for="City" />
+                <div class="ui corner label">
+                    <i class="asterisk icon red"></i>
+                </div>
+            </div>
+            <span asp-validation-for="City"></span>
+        </div>
     </div>
-    <div class="field">
-        <label asp-for="Region"></label>
-        <div class="ui corner labeled input">
-            <input asp-for="Region"/>
-            <div class="ui corner label">
-                <i class="asterisk icon red"></i>
+    <div class="fields">
+        <div class="field eight wide">
+            <label asp-for="Street"></label>
+            <div class="ui corner labeled input">
+                <input asp-for="Street" />
+                <div class="ui corner label">
+                    <i class="asterisk icon red"></i>
+                </div>
             </div>
+            <span asp-validation-for="Street"></span>
         </div>
-        <span asp-validation-for="Region"></span>
-    </div>
-    <div class="field">
-        <label asp-for="City"></label>
-        <div class="ui corner labeled input">
-            <input asp-for="City"/>
-            <div class="ui corner label">
-                <i class="asterisk icon red"></i>
+        <div class="field eight wide">
+            <label asp-for="BuildingNumber">Building Number</label>
+            <div class="ui corner labeled input">
+                <input asp-for="BuildingNumber" />
+                <div class="ui corner label">
+                    <i class="asterisk icon red"></i>
+                </div>
             </div>
+            <span asp-validation-for="BuildingNumber"></span>
         </div>
-        <span asp-validation-for="City"></span>
-    </div>
-    <div class="field">
-        <label asp-for="Street"></label>
-        <div class="ui corner labeled input">
-            <input asp-for="Street"/>
-            <div class="ui corner label">
-                <i class="asterisk icon red"></i>
-            </div>
-        </div>
-        <span asp-validation-for="Street"></span>
-    </div>
-    <div class="field">
-        <label asp-for="BuildingNumber">Building Number</label>
-        <div class="ui corner labeled input">
-            <input asp-for="BuildingNumber" type="number"/>
-            <div class="ui corner label">
-                <i class="asterisk icon red"></i>
-            </div>
-        </div>
-        <span asp-validation-for="BuildingNumber"></span>
     </div>
 </div>
 <h2 class="ui attached header">Members count</h2>
@@ -70,5 +76,3 @@
     <button type="button" class="ui button disabled" id="usersCount"></button>
     <button type="button" class="ui positive button" id="addUser">More</button>
 </div>
-
-@{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }

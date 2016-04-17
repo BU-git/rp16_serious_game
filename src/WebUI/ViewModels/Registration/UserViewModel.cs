@@ -24,9 +24,8 @@ namespace WebUI.ViewModels.Registration
         [RegularExpression("[A-Za-z\\-]+", ErrorMessage = "Last name should contain only alphabetic characters")]
         public string LastName { get; set; }
 
-        [Required(ErrorMessage = "This field should not be empty")]
         [Display(Name = "Middle name")]
-        [RegularExpression("[A-Za-z\\-]+", ErrorMessage = "Middle name should contain only alphabetic characters")]
+        [RegularExpression("[A-Za-z\\-]*", ErrorMessage = "Middle name should contain only alphabetic characters")]
         public string MiddleName { get; set; }
 
 

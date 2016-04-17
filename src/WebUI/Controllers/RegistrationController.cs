@@ -91,7 +91,7 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> StepTwo(FamilyViewModel regVm)
         {
             foreach (var u in regVm.Users)

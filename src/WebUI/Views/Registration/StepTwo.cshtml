@@ -1,4 +1,5 @@
 ﻿@using System.Threading.Tasks
+@using WebUI.ViewModels.Registration
 @model WebUI.ViewModels.Registration.FamilyViewModel
 @{
     ViewBag.Title = "Registration | Step Two";
@@ -50,30 +51,52 @@
         </div>
     </div>
 
-    <div class="ui form" id="regForm">
-        <form asp-controller="Registration" asp-action="StepTwo" class="ui form segment" id="form">
+    
+        <form class="ui form segment attached" id="familyForm">
             <div>
-                <div id="fieldsAppender">
-                    @{ await Html.RenderPartialAsync("_FamilyDetails", Model); }
-                </div>
-
-                <div class="row">
-                    <div class="ui three column grid">
-                        <div class="row">
-                            <div class="column">
-                                <input type="reset" value="Reset" class="ui button fluid"/>
-                            </div>
-                            <div class="column">
-                                <input type="button" value="Next" class="ui button blue fluid" id="submitButton"/>
-                            </div>
-                        </div>
+                @{ await Html.RenderPartialAsync("_FamilyDetails", Model); }
+            </div>
+            <div class="ui divider hidden"></div>
+            <div class="ui grid">
+                <div class="two column row">
+                    <div class="column">
+                        <input type="reset" value="Reset" class="ui button red fluid" />
+                    </div>
+                    <div class="column">
+                        <input type="button" value="Next" class="ui button blue fluid" id="submitFamily" />
                     </div>
                 </div>
             </div>
         </form>
-    </div>
+        <form class="ui form segment attached" id="userForm">
+            <div>
+                @{ await Html.RenderPartialAsync("_UserDetails", new UserViewModel {LastName = Model.FamilyName}); }
+            </div>
+            <div class="ui divider hidden"></div>
+            <div class="ui grid">
+                <div class="two column row">
+                    <div class="column">
+                        <input type="reset" value="Reset" class="ui button red fluid" />
+                    </div>
+                    <div class="column">
+                        <input type="button" value="Next" class="ui button blue fluid" id="submitUser" />
+                    </div>
+                </div>
+            </div>
+        </form>
     <div class="ui page dimmer" id="page-dimmer">
         <div class="ui text loader">Loading</div>
+    </div>
+    <div id="successMessage" class="ui segment attached">
+        <div class="ui divider hidden"></div>
+        <h1 class="ui header center aligned">Your family was successfully registered</h1>
+        <div class="ui divider hidden"></div>
+        <div class="ui text right aligned">
+            <a asp-action="StepThree" class="ui blue button large basic labeled icon">
+                Continue to step 3
+                <i class="right arrow icon"></i>
+            </a>
+        </div>
     </div>
 </div>
 
@@ -84,34 +107,41 @@
         var currentUser = 0;
         var regVm = { Users: [] };
         $("#usersCount").text(userCount);
+        $("#userForm").hide();
+        $("#successMessage").hide();
 
-        $("#submitButton").click(function () {
-            if ($("#form").valid()) {
-                if (currentUser == 0) {
-                    $.each($("#form").serializeArray(), function (i, field) {
-                        regVm[field.name] = field.value;
-                    });
+        $("#submitFamily").click(function () {
+            if ($("#familyForm").valid()) {
+                $.each($("#familyForm").serializeArray(), function (i, field) {
+                    regVm[field.name] = field.value;
+                });
+                $("#familyForm").hide();
+                $("#userForm").show();
 
-                    $.post({
-                        url: "/Registration/RegistrationForm",
-                        success: function (data) {
-                            $('#fieldsAppender').empty();
-                            $('#fieldsAppender').append(data);
-                            currentUser++;
-                        }
-                    });
+                if (currentUser == userCount - 1) {
+                    $('#submitUser').val("Finish");
                 }
-                else if (currentUser > 0 && currentUser < userCount) {
+
+                currentUser++;
+            }
+            else {
+                return false;
+            }
+        });
+
+        $("#submitUser").click(function () {
+            if ($("#userForm").valid()) {
+                if (currentUser > 0 && currentUser < userCount) {
                     var data = {};
-                    $.each($("#form").serializeArray(), function (i, field) {
+                    $.each($("#userForm").serializeArray(), function (i, field) {
                         data[field.name] = field.value;
                     });
                     regVm.Users.push(data);
 
-                    $("#form")[0].reset();
+                    $("#userForm")[0].reset();
 
                     if (currentUser == userCount - 1) {
-                        $('#submitButton').val("To step 3");
+                        $('#submitUser').val("Finish");
                     }
 
                     currentUser++;
@@ -120,23 +150,32 @@
                     $('#page-dimmer').addClass('active');
 
                     var data = {};
-                    $.each($("#form").serializeArray(), function (i, field) {
+                    $.each($("#userForm").serializeArray(), function (i, field) {
                         data[field.name] = field.value;
                     });
                     regVm.Users.push(data);
 
                     $.post({
                         url: "/Registration/StepTwo",
-                        data: regVm
+                        data: regVm,
+                        success: function (data) {
+                            $('#page-dimmer').removeClass('active');
+                            $("#userForm").hide();
+                            $("#successMessage").show();
+                        }
+                    }).fail(function () {
+                        $('#page-dimmer').removeClass('active');
+                        alert("Something went wrong..\nPlease repeat the registration");
+                        $("#userForm").hide();
+                        $("#familyForm").show();
                     });
                 }
-            }
-            else {
+            } else {
                 return false;
             }
         });
 
-        $('#removeUser').click(function() {
+        $('#removeUser').click(function () {
             if (userCount < 2)
                 return false;
             else {
@@ -145,9 +184,9 @@
             }
         });
 
-        $('#addUser').click(function() {
+        $('#addUser').click(function () {
             userCount++;
             $('#usersCount').text(userCount);
         });
     </script>
-}    
+}
