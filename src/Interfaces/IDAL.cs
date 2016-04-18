@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Domain.Entities;
+using Microsoft.AspNet.Identity;
 
 namespace Interfaces
 {
@@ -21,7 +22,7 @@ namespace Interfaces
         /// <param name="participant">User model</param>
         /// <param name="password">Password</param>
         /// <returns></returns>
-        Task CreateParticipant(ApplicationUser participant, string password);
+        Task<IdentityResult> CreateParticipant(ApplicationUser participant, string password);
         /// <summary>
         /// Create UserGroup
         /// </summary>

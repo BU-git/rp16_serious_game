@@ -1,0 +1,115 @@
+﻿@using System.Collections.Specialized
+@model WebUI.ViewModels.Registration.MainFamilyData
+@{
+    ViewBag.Title = "Registration | Step One";
+}
+
+<style>
+    .field-validation-error {
+        color: #f00;
+    }
+
+    .field-validation-valid {
+        display: none;
+    }
+
+    .input-validation-error {
+        border: 1px solid #f00;
+        background-color: #fee;
+    }
+
+    .validation-summary-errors {
+        font-weight: bold;
+        color: #f00;
+    }
+
+    .validation-summary-valid {
+        display: none;
+    }
+</style>
+
+<div class="ui text container">
+    <div class="ui steps top attached center aligned">
+        <div class="active step">
+            <div class="content">
+                <div class="title">Step 1</div>
+                <div class="description">Create new family</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">Step 2</div>
+                <div class="description">Enter information about family members</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">Step 3</div>
+                <div class="description">Choose an avatar</div>
+            </div>
+        </div>
+    </div>
+    <div class="ui attached segment" id="content">
+        <div class="ui form" id="regForm">
+            <h2 class="ui center aligned header">New family</h2>
+
+            <form asp-controller="Registration" asp-action="StepOne" class="ui form segment" id="stepOneForm">
+                <div asp-validation-summary="ValidationSummary.ModelOnly"></div>
+                <div class="field">
+                    <label asp-for="FamilyName"></label>
+                    <div class="ui corner labeled input">
+                        <input asp-for="FamilyName" />
+                        <div class="ui corner label">
+                            <i class="asterisk icon"></i>
+                        </div>
+                    </div>
+                    <span asp-validation-for="FamilyName"></span>
+                </div>
+                <div class="field">
+                    <label asp-for="HeadEmail"></label>
+                    <div class="ui corner labeled input">
+                        <input asp-for="HeadEmail" type="email"/>
+                        <div class="ui corner label">
+                            <i class="asterisk icon"></i>
+                        </div>
+                    </div>
+                    <span asp-validation-for="HeadEmail"></span>
+                </div>
+                <div class="field">
+                    <label asp-for="FamilyType"></label>
+                    <select asp-for="FamilyType" class="ui dropdown">
+                        <option value="">Family type</option>
+                        <option value="MARRIED">Married</option>
+                        <option value="UNMARRIED">Unmarried</option>
+                        <option value="DIVORCED">Divorced</option>
+                    </select>
+                    <span asp-validation-for="FamilyType"></span>
+                </div>
+                <div class="ui error message"></div>
+                <div class="field" id="buttons">
+                    <div>
+                        <input type="submit" value="Submit" class="ui button blue fluid" id="submitButton" />
+                    </div>
+                </div>
+            </form>
+            <div class="ui page dimmer" id="page-dimmer">
+                <div class="ui text loader">Loading</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script>
+        $('#submitButton').click(function () {
+            if (!$("form").valid()) {
+                return false;
+            } else {
+                $('form').submit();
+                $('#page-dimmer').addClass('active');
+            }
+        });
+    </script>
+}

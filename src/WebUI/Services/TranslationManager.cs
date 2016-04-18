@@ -37,18 +37,18 @@ namespace WebUI.Services
             }
         }
 
-        private string currentLanguage;
+        private string _currentLanguage;
         public string CurrentLanguage
         {
             get
             {
-                return currentLanguage ?? (currentLanguage = "en");
+                return _currentLanguage ?? (_currentLanguage = "en");
             }
             set
             {
-                if (value != currentLanguage)
+                if (value != _currentLanguage)
                 {
-                    currentLanguage = value;
+                    _currentLanguage = value;
 
                 }
             }

@@ -1,28 +1,16 @@
 {
   "version": "1.0.0-*",
   "description": "Domain Class Library",
-  "authors": [ "Andrew" ],
+  "authors": ["Ivan", "Yehor", "Yevgen", "Andrew" ],
   "tags": [ "" ],
   "projectUrl": "",
   "licenseUrl": "",
 
   "frameworks": {
-    "net451": {
+    "dnx451": {
       "dependencies": {
         "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final"
-
-      }
-    },
-    "dotnet5.4": {
-      "dependencies": {
-        "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",
-        "Microsoft.CSharp": "4.0.1-beta-23516",
-        "System.Collections": "4.0.11-beta-23516",
-        "System.Linq": "4.0.1-beta-23516",
-        "System.Runtime": "4.0.21-beta-23516",
-        "System.Threading": "4.0.11-beta-23516"
-      },
-      "dnx451": {      }
       }
     }
+  }
 }

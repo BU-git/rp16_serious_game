@@ -1,0 +1,192 @@
+﻿@using System.Threading.Tasks
+@using WebUI.ViewModels.Registration
+@model WebUI.ViewModels.Registration.FamilyViewModel
+@{
+    ViewBag.Title = "Registration | Step Two";
+}
+
+<style>
+    .field-validation-error {
+        color: #f00;
+    }
+
+    .field-validation-valid {
+        display: none;
+    }
+
+    .input-validation-error {
+        border: 1px solid #f00;
+        background-color: #fee;
+    }
+
+    .validation-summary-errors {
+        font-weight: bold;
+        color: #f00;
+    }
+
+    .validation-summary-valid {
+        display: none;
+    }
+</style>
+
+<div class="ui text container">
+    <div class="ui steps top attached center aligned">
+        <div class="step">
+            <div class="content">
+                <div class="title">Step 1</div>
+                <div class="description">Create new family</div>
+            </div>
+        </div>
+        <div class="active step">
+            <div class="content">
+                <div class="title">Step 2</div>
+                <div class="description">Enter information about family members</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">Step 3</div>
+                <div class="description">Choose an avatar</div>
+            </div>
+        </div>
+    </div>
+
+    
+        <form class="ui form segment attached" id="familyForm">
+            <div>
+                @{ await Html.RenderPartialAsync("_FamilyDetails", Model); }
+            </div>
+            <div class="ui divider hidden"></div>
+            <div class="ui grid">
+                <div class="two column row">
+                    <div class="column">
+                        <input type="reset" value="Reset" class="ui button red fluid" />
+                    </div>
+                    <div class="column">
+                        <input type="button" value="Next" class="ui button blue fluid" id="submitFamily" />
+                    </div>
+                </div>
+            </div>
+        </form>
+        <form class="ui form segment attached" id="userForm">
+            <div>
+                @{ await Html.RenderPartialAsync("_UserDetails", new UserViewModel {LastName = Model.FamilyName}); }
+            </div>
+            <div class="ui divider hidden"></div>
+            <div class="ui grid">
+                <div class="two column row">
+                    <div class="column">
+                        <input type="reset" value="Reset" class="ui button red fluid" />
+                    </div>
+                    <div class="column">
+                        <input type="button" value="Next" class="ui button blue fluid" id="submitUser" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    <div class="ui page dimmer" id="page-dimmer">
+        <div class="ui text loader">Loading</div>
+    </div>
+    <div id="successMessage" class="ui segment attached">
+        <div class="ui divider hidden"></div>
+        <h1 class="ui header center aligned">Your family was successfully registered</h1>
+        <div class="ui divider hidden"></div>
+        <div class="ui text right aligned">
+            <a asp-action="StepThree" class="ui blue button large basic labeled icon">
+                Continue to step 3
+                <i class="right arrow icon"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        var userCount = 1;
+        var currentUser = 0;
+        var regVm = { Users: [] };
+        $("#usersCount").text(userCount);
+        $("#userForm").hide();
+        $("#successMessage").hide();
+
+        $("#submitFamily").click(function () {
+            if ($("#familyForm").valid()) {
+                $.each($("#familyForm").serializeArray(), function (i, field) {
+                    regVm[field.name] = field.value;
+                });
+                $("#familyForm").hide();
+                $("#userForm").show();
+
+                if (currentUser == userCount - 1) {
+                    $('#submitUser').val("Finish");
+                }
+
+                currentUser++;
+            }
+            else {
+                return false;
+            }
+        });
+
+        $("#submitUser").click(function () {
+            if ($("#userForm").valid()) {
+                if (currentUser > 0 && currentUser < userCount) {
+                    var data = {};
+                    $.each($("#userForm").serializeArray(), function (i, field) {
+                        data[field.name] = field.value;
+                    });
+                    regVm.Users.push(data);
+
+                    $("#userForm")[0].reset();
+
+                    if (currentUser == userCount - 1) {
+                        $('#submitUser').val("Finish");
+                    }
+
+                    currentUser++;
+                }
+                else if (currentUser == userCount) {
+                    $('#page-dimmer').addClass('active');
+
+                    var data = {};
+                    $.each($("#userForm").serializeArray(), function (i, field) {
+                        data[field.name] = field.value;
+                    });
+                    regVm.Users.push(data);
+
+                    $.post({
+                        url: "/Registration/StepTwo",
+                        data: regVm,
+                        success: function (data) {
+                            $('#page-dimmer').removeClass('active');
+                            $("#userForm").hide();
+                            $("#successMessage").show();
+                        }
+                    }).fail(function () {
+                        $('#page-dimmer').removeClass('active');
+                        alert("Something went wrong..\nPlease repeat the registration");
+                        $("#userForm").hide();
+                        $("#familyForm").show();
+                    });
+                }
+            } else {
+                return false;
+            }
+        });
+
+        $('#removeUser').click(function () {
+            if (userCount < 2)
+                return false;
+            else {
+                userCount--;
+                $('#usersCount').text(userCount);
+            }
+        });
+
+        $('#addUser').click(function () {
+            userCount++;
+            $('#usersCount').text(userCount);
+        });
+    </script>
+}

@@ -1,4 +1,4 @@
-﻿ /// <binding Clean='clean' />
+/// <binding />
 "use strict";
 
 var gulp = require("gulp"),
@@ -10,7 +10,7 @@ var gulp = require("gulp"),
 
 
 var paths = {
-  webroot: "./wwwroot/"
+    webroot: "./wwwroot/"
 };
 
 paths.js = "./Assets/js/**/*.js";
@@ -24,42 +24,50 @@ paths.concatCssDest = paths.webroot + "css/site.min.css";
 paths.libsDest = paths.webroot + "lib";
 paths.imagesDest = paths.webroot + "images";
 
-gulp.task("clean:js", function(cb) {
-  rimraf(paths.concatJsDest, cb);
+gulp.task("clean:js", function (cb) {
+    rimraf(paths.concatJsDest, cb);
 });
 
-gulp.task("clean:css", function(cb) {
-  rimraf(paths.concatCssDest, cb);
+gulp.task("clean:css", function (cb) {
+    rimraf(paths.concatCssDest, cb);
 });
 
-gulp.task("min:js", function() {
-  return gulp.src([paths.js, "!" + paths.minJs], {
-      base: "."
+gulp.task("clean:libs", function (cb) {
+    rimraf(paths.libsDest, cb);
+});
+
+gulp.task("clean:all", function (cb) {
+    rimraf(paths.webroot, cb);
+})
+
+gulp.task("min:js", function () {
+    return gulp.src([paths.js, "!" + paths.minJs], {
+        base: "."
     })
-    .pipe(concat(paths.concatJsDest))
-    .pipe(uglify())
-    .pipe(gulp.dest("."));
+      .pipe(concat(paths.concatJsDest))
+      .pipe(uglify())
+      .pipe(gulp.dest("."));
 });
 
-gulp.task("min:css", function() {
-  return gulp.src([paths.css, "!" + paths.minCss])
-    .pipe(concat(paths.concatCssDest))
-    .pipe(cssmin())
-    .pipe(gulp.dest("."));
+gulp.task("min:css", function () {
+    return gulp.src([paths.css, "!" + paths.minCss])
+      .pipe(concat(paths.concatCssDest))
+      .pipe(cssmin())
+      .pipe(gulp.dest("."));
 });
 
-gulp.task("copy:libraries", function() {
-  return gulp.src(paths.libs, { base: './Libraries' })
-    .pipe(gulp.dest(paths.libsDest));
+gulp.task("copy:libraries", function () {
+    return gulp.src(paths.libs, { base: './Libraries' })
+      .pipe(gulp.dest(paths.libsDest));
 });
 
-gulp.task("copy:images", function() {
-  return gulp.src(paths.images, { base: './Assets' })
-    .pipe(gulp.dest(paths.imagesDest));
+gulp.task("copy:images", function () {
+    return gulp.src(paths.images, { base: './Assets' })
+      .pipe(gulp.dest(paths.imagesDest));
 });
 
 
-gulp.task("clean", ["clean:js", "clean:css"]);
+gulp.task("clean", ["clean:js", "clean:css", "clean:libs", "clean:all"]);
 gulp.task("min", ["min:js", "min:css"]);
 gulp.task("copy", ["copy:libraries", "copy:images"]);
-gulp.task("default", ["min", "clean"]);
+gulp.task("default", ["clean", "min", "copy"]);

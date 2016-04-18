@@ -3806,10 +3806,10 @@ $.fn.dimmer = function(parameters) {
             var
               color      = $dimmer.css('background-color'),
               colorArray = color.split(','),
-              isRGBA     = (colorArray && colorArray.length == 4)
+              isRgba     = (colorArray && colorArray.length == 4)
             ;
             opacity    = settings.opacity === 0 ? 0 : settings.opacity || opacity;
-            if(isRGBA) {
+            if(isRgba) {
               colorArray[3] = opacity + ')';
               color         = colorArray.join(',');
             }
@@ -5663,9 +5663,9 @@ $.fn.dropdown = function(parameters) {
             }
             return remoteValues;
           },
-          choiceText: function($choice, preserveHTML) {
-            preserveHTML = (preserveHTML !== undefined)
-              ? preserveHTML
+          choiceText: function($choice, preserveHtml) {
+            preserveHtml = (preserveHtml !== undefined)
+              ? preserveHtml
               : settings.preserveHTML
             ;
             if($choice) {
@@ -5677,7 +5677,7 @@ $.fn.dropdown = function(parameters) {
               }
               return ($choice.data(metadata.text) !== undefined)
                 ? $choice.data(metadata.text)
-                : (preserveHTML)
+                : (preserveHtml)
                   ? $.trim($choice.html())
                   : $.trim($choice.text())
               ;
@@ -8218,7 +8218,7 @@ $.fn.embed.settings = {
 })( jQuery, window, document );
 
 /*!
- * # Semantic UI 2.1.8 - Modal
+ * # Semantic UI 2.1.8 - modal
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -8276,8 +8276,8 @@ $.fn.modal = function(parameters) {
         $context        = $(settings.context),
         $close          = $module.find(selector.close),
 
-        $allModals,
-        $otherModals,
+        $allmodals,
+        $othermodals,
         $focusedElement,
         $dimmable,
         $dimmer,
@@ -8297,7 +8297,7 @@ $.fn.modal = function(parameters) {
 
           module.create.id();
           module.create.dimmer();
-          module.refreshModals();
+          module.refreshmodals();
 
           module.bind.events();
           if(settings.observeChanges) {
@@ -8340,7 +8340,7 @@ $.fn.modal = function(parameters) {
             module.debug('Creating dimmer with settings', dimmerSettings);
             $dimmable = $context.dimmer(dimmerSettings);
             if(settings.detachable) {
-              module.verbose('Modal is detachable, moving content into dimmer');
+              module.verbose('modal is detachable, moving content into dimmer');
               $dimmable.dimmer('add content', $module);
             }
             else {
@@ -8391,9 +8391,9 @@ $.fn.modal = function(parameters) {
           module.set.position();
         },
 
-        refreshModals: function() {
-          $otherModals = $module.siblings(selector.modal);
-          $allModals   = $otherModals.add($module);
+        refreshmodals: function() {
+          $othermodals = $module.siblings(selector.modal);
+          $allmodals   = $othermodals.add($module);
         },
 
         attachEvents: function(selector, event) {
@@ -8457,10 +8457,10 @@ $.fn.modal = function(parameters) {
           click: function(event) {
             var
               $target   = $(event.target),
-              isInModal = ($target.closest(selector.modal).length > 0),
-              isInDOM   = $.contains(document.documentElement, event.target)
+              isInmodal = ($target.closest(selector.modal).length > 0),
+              isInDom   = $.contains(document.documentElement, event.target)
             ;
-            if(!isInModal && isInDOM) {
+            if(!isInmodal && isInDom) {
               module.debug('Dimmer clicked, hiding all modals');
               if( module.is.active() ) {
                 module.remove.clickaway();
@@ -8514,8 +8514,8 @@ $.fn.modal = function(parameters) {
             ? callback
             : function(){}
           ;
-          module.refreshModals();
-          module.showModal(callback);
+          module.refreshmodals();
+          module.showmodal(callback);
         },
 
         hide: function(callback) {
@@ -8523,11 +8523,11 @@ $.fn.modal = function(parameters) {
             ? callback
             : function(){}
           ;
-          module.refreshModals();
-          module.hideModal(callback);
+          module.refreshmodals();
+          module.hidemodal(callback);
         },
 
-        showModal: function(callback) {
+        showmodal: function(callback) {
           callback = $.isFunction(callback)
             ? callback
             : function(){}
@@ -8542,7 +8542,7 @@ $.fn.modal = function(parameters) {
             module.set.clickaway();
 
             if( !settings.allowMultiple && module.others.active() ) {
-              module.hideOthers(module.showModal);
+              module.hideOthers(module.showmodal);
             }
             else {
               settings.onShow.call(element);
@@ -8574,11 +8574,11 @@ $.fn.modal = function(parameters) {
             }
           }
           else {
-            module.debug('Modal is already visible');
+            module.debug('modal is already visible');
           }
         },
 
-        hideModal: function(callback, keepDimmed) {
+        hidemodal: function(callback, keepDimmed) {
           callback = $.isFunction(callback)
             ? callback
             : function(){}
@@ -8644,16 +8644,16 @@ $.fn.modal = function(parameters) {
 
         hideAll: function(callback) {
           var
-            $visibleModals = $allModals.filter('.' + className.active + ', .' + className.animating)
+            $visiblemodals = $allmodals.filter('.' + className.active + ', .' + className.animating)
           ;
           callback = $.isFunction(callback)
             ? callback
             : function(){}
           ;
-          if( $visibleModals.length > 0 ) {
+          if( $visiblemodals.length > 0 ) {
             module.debug('Hiding all visible modals');
             module.hideDimmer();
-            $visibleModals
+            $visiblemodals
               .modal('hide modal', callback)
             ;
           }
@@ -8661,15 +8661,15 @@ $.fn.modal = function(parameters) {
 
         hideOthers: function(callback) {
           var
-            $visibleModals = $otherModals.filter('.' + className.active + ', .' + className.animating)
+            $visiblemodals = $othermodals.filter('.' + className.active + ', .' + className.animating)
           ;
           callback = $.isFunction(callback)
             ? callback
             : function(){}
           ;
-          if( $visibleModals.length > 0 ) {
-            module.debug('Hiding other modals', $otherModals);
-            $visibleModals
+          if( $visiblemodals.length > 0 ) {
+            module.debug('Hiding other modals', $othermodals);
+            $visiblemodals
               .modal('hide modal', callback, true)
             ;
           }
@@ -8677,10 +8677,10 @@ $.fn.modal = function(parameters) {
 
         others: {
           active: function() {
-            return ($otherModals.filter('.' + className.active).length > 0);
+            return ($othermodals.filter('.' + className.active).length > 0);
           },
           animating: function() {
-            return ($otherModals.filter('.' + className.animating).length > 0);
+            return ($othermodals.filter('.' + className.animating).length > 0);
           }
         },
 
@@ -8809,7 +8809,7 @@ $.fn.modal = function(parameters) {
               $body.css('height', '');
             }
             else {
-              module.debug('Modal is taller than page content, resizing page height');
+              module.debug('modal is taller than page content, resizing page height');
               $body
                 .css('height', module.cache.height + (settings.padding * 2) )
               ;
@@ -8824,13 +8824,13 @@ $.fn.modal = function(parameters) {
           },
           type: function() {
             if(module.can.fit()) {
-              module.verbose('Modal fits on screen');
+              module.verbose('modal fits on screen');
               if(!module.others.active() && !module.others.animating()) {
                 module.remove.scrolling();
               }
             }
             else {
-              module.verbose('Modal cannot fit on screen setting to scrolling');
+              module.verbose('modal cannot fit on screen setting to scrolling');
               module.set.scrolling();
             }
           },
@@ -9036,7 +9036,7 @@ $.fn.modal = function(parameters) {
 
 $.fn.modal.settings = {
 
-  name           : 'Modal',
+  name           : 'modal',
   namespace      : 'modal',
 
   debug          : false,
@@ -10180,14 +10180,14 @@ $.fn.popup = function(parameters) {
               var
                 is2D     = ($node.css('transform') === 'none'),
                 isStatic = ($node.css('position') === 'static'),
-                isHTML   = $node.is('html')
+                isHtml   = $node.is('html')
               ;
-              while(parentNode && !isHTML && isStatic && is2D) {
+              while(parentNode && !isHtml && isStatic && is2D) {
                 parentNode = parentNode.parentNode;
                 $node    = $(parentNode);
                 is2D     = ($node.css('transform') === 'none');
                 isStatic = ($node.css('position') === 'static');
-                isHTML   = $node.is('html');
+                isHtml   = $node.is('html');
               }
             }
             return ($node && $node.length > 0)
@@ -12579,7 +12579,7 @@ $.fn.search = function(parameters) {
                 action    : 'search',
                 onError   : module.error
               },
-              searchHTML
+              searchHtml
             ;
             module.verbose('First request, initializing API');
             $module.api(apiSettings);
@@ -12755,20 +12755,20 @@ $.fn.search = function(parameters) {
           local: function(searchTerm) {
             var
               results = module.search.object(searchTerm, settings.content),
-              searchHTML
+              searchHtml
             ;
             module.set.loading();
             module.save.results(results);
             module.debug('Returned local search results', results);
 
-            searchHTML = module.generateResults({
+            searchHtml = module.generateResults({
               results: results
             });
             module.remove.loading();
-            module.addResults(searchHTML);
+            module.addResults(searchHtml);
             module.inject.id(results);
             module.write.cache(searchTerm, {
-              html    : searchHTML,
+              html    : searchHtml,
               results : results
             });
           },
@@ -12887,15 +12887,15 @@ $.fn.search = function(parameters) {
         parse: {
           response: function(response, searchTerm) {
             var
-              searchHTML = module.generateResults(response)
+              searchHtml = module.generateResults(response)
             ;
             module.verbose('Parsing server response', response);
             if(response !== undefined) {
               if(searchTerm !== undefined && response[fields.results] !== undefined) {
-                module.addResults(searchHTML);
+                module.addResults(searchHtml);
                 module.inject.id(response[fields.results]);
                 module.write.cache(searchTerm, {
-                  html    : searchHTML,
+                  html    : searchHtml,
                   results : response[fields.results]
                 });
                 module.save.results(response[fields.results]);
@@ -12958,20 +12958,20 @@ $.fn.search = function(parameters) {
         create: {
           id: function(resultIndex, categoryIndex) {
             var
-              resultID      = (resultIndex + 1), // not zero indexed
-              categoryID    = (categoryIndex + 1),
+              resultId      = (resultIndex + 1), // not zero indexed
+              categoryId    = (categoryIndex + 1),
               firstCharCode,
-              letterID,
+              letterId,
               id
             ;
             if(categoryIndex !== undefined) {
               // start char code for "A"
-              letterID = String.fromCharCode(97 + categoryIndex);
-              id          = letterID + resultID;
+              letterId = String.fromCharCode(97 + categoryIndex);
+              id          = letterId + resultId;
               module.verbose('Creating category result id', id);
             }
             else {
-              id = resultID;
+              id = resultId;
               module.verbose('Creating result id', id);
             }
             return id;
@@ -14716,7 +14716,7 @@ $.fn.sidebar = function(parameters) {
             var
               width     = module.cache.width  || $module.outerWidth(),
               height    = module.cache.height || $module.outerHeight(),
-              isRTL     = module.is.rtl(),
+              isRtl     = module.is.rtl(),
               direction = module.get.direction(),
               distance  = {
                 left   : width,
@@ -14727,7 +14727,7 @@ $.fn.sidebar = function(parameters) {
               style
             ;
 
-            if(isRTL){
+            if(isRtl){
               module.verbose('RTL detected, flipping widths');
               distance.left = -width;
               distance.right = width;
@@ -15205,19 +15205,19 @@ $.fn.sidebar = function(parameters) {
 
           ie: function() {
             var
-              isIE11 = (!(window.ActiveXObject) && 'ActiveXObject' in window),
-              isIE   = ('ActiveXObject' in window)
+              isIe11 = (!(window.ActiveXObject) && 'ActiveXObject' in window),
+              isIe   = ('ActiveXObject' in window)
             ;
-            return (isIE11 || isIE);
+            return (isIe11 || isIe);
           },
 
           ios: function() {
             var
               userAgent      = navigator.userAgent,
-              isIOS          = userAgent.match(regExp.ios),
+              isIos          = userAgent.match(regExp.ios),
               isMobileChrome = userAgent.match(regExp.mobileChrome)
             ;
-            if(isIOS && !isMobileChrome) {
+            if(isIos && !isMobileChrome) {
               module.verbose('Browser was found to be iOS', userAgent);
               return true;
             }
@@ -19009,10 +19009,10 @@ $.api = $.fn.api = function(parameters) {
               asyncResponder = settings.mockResponseAsync || settings.responseAsync,
               asyncCallback,
               response,
-              mockedXHR
+              mockedXhr
             ;
 
-            mockedXHR = $.Deferred()
+            mockedXhr = $.Deferred()
               .always(module.event.xhr.complete)
               .done(module.event.xhr.done)
               .fail(module.event.xhr.fail)
@@ -19028,23 +19028,23 @@ $.api = $.fn.api = function(parameters) {
                 response = responder;
               }
               // simulating response
-              mockedXHR.resolveWith(context, [ response, textStatus, { responseText: response }]);
+              mockedXhr.resolveWith(context, [ response, textStatus, { responseText: response }]);
             }
             else if( $.isFunction(asyncResponder) ) {
               asyncCallback = function(response) {
                 module.debug('Async callback returned response', response);
 
                 if(response) {
-                  mockedXHR.resolveWith(context, [ response, textStatus, { responseText: response }]);
+                  mockedXhr.resolveWith(context, [ response, textStatus, { responseText: response }]);
                 }
                 else {
-                  mockedXHR.rejectWith(context, [{ responseText: response }, status, httpMessage]);
+                  mockedXhr.rejectWith(context, [{ responseText: response }, status, httpMessage]);
                 }
               };
               module.debug('Using specified async response callback', asyncResponder);
               asyncResponder.call(context, requestSettings, asyncCallback);
             }
-            return mockedXHR;
+            return mockedXhr;
           },
 
           xhr: function() {

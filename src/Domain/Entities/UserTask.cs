@@ -16,5 +16,5 @@ namespace Domain.Entities
         public ApplicationUser User { get; set; }
         public ApplicationTask ApplicationTask { get; set; }
     }
-    public enum Status { OPEN, RESOLVED,COMPLETED,REOPENED,EXPIRED,CLOSED}
+    public enum Status { Open, Resolved,Completed,Reopened,Expired,Closed}
 }

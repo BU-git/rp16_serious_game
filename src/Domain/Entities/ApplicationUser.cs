@@ -13,11 +13,11 @@ namespace Domain.Entities
         public Gender Gender { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
-        public string MidleName { get; set; }
+        public string MiddleName { get; set; }
         public DateTime BirthDate { get; set; }
 
         public string Passport { get; set; }
-        public int BSN { get; set; }
+        public int Bsn { get; set; }
 
         public string ZipCode { get; set; }
         public string Street { get; set; }
@@ -30,7 +30,7 @@ namespace Domain.Entities
 
         public string Phone { get; set; }
         
-        public List<ApplicationUser_UserGourp> ApplicationUser_UserGourps { get; set; }
+        public List<ApplicationUserUserGroup> ApplicationUserUserGroups { get; set; }
         public List<Customer> Customer { get; set; }
         public List<UserTask> UserTasks { get; set; }
 
@@ -38,6 +38,6 @@ namespace Domain.Entities
 
     public enum Gender
     {
-       MALE,FEMALE,OTHER,NONE,UNKNOWN
+       Male,Female,Other,None,Unknown
     }
 }

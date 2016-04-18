@@ -1,5 +1,5 @@
 {
-  "name": "SeriousGame",
+  "name": "serious_game",
   "version": "0.0.0",
   "license": "MIT",
   "author": "Bionic University, Yehor Chankov, Ivan Malyshenko, Yevgen Kabanets, Sklyar Andrew",
@@ -10,13 +10,13 @@
   "readme": "Joint project with Rotterdam University of Applied Sciences",
   "private": true,
   "devDependencies": {
+    "bower": "^1.7.9",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.5.2",
     "gulp-cssmin": "^0.1.7",
     "gulp-uglify": "^1.2.0",
-    "rimraf": "^2.2.8"
-  },
-  "dependencies": {
-    "semantic-ui": "^2.1.8"
+    "rimraf": "^2.2.8",
+    "webpack": "^1.12.14",
+    "webpack-stream": "^3.1.0"
   }
 }

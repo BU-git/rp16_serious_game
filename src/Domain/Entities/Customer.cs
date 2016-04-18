@@ -11,7 +11,7 @@ namespace Domain.Entities
         public DateTime BirthDate { get; set; }
         public DateTime Birthplace { get; set; }
         public int Contact { get; set; }
-        public bool isActive { get; set; }
+        public bool IsActive { get; set; }
         public int Resident { get; set; }
         public DateTime ActivationDate { get; set; }
         public DateTime DisactivationDate { get; set; }

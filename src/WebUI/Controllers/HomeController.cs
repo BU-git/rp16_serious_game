@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Domain.Entities;
+﻿using System.Threading.Tasks;
 using Interfaces;
 using Microsoft.AspNet.Mvc;
 
-namespace RP16_SeriousGame.Controllers
+namespace WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        private IDAL reposetory;
+        private IDAL _repository;
 
        public  HomeController(IDAL repo)
         {
-            reposetory = repo;
+            _repository = repo;
         }
         public async Task<IActionResult> Index()
         {

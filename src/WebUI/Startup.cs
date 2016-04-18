@@ -7,7 +7,6 @@ using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using RP16_SeriousGame.Services;
 using WebUI.Services;
 using DAL;
 using Interfaces;
@@ -19,7 +18,7 @@ namespace WebUI
         public Startup(IHostingEnvironment env)
         {
             // Set up configuration sources.
-            var builder = new ConfigurationBuilder()
+            IConfigurationBuilder builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
             
@@ -62,10 +61,10 @@ namespace WebUI
             services.AddTransient<DataInitializer>();
     
             services.AddTransient<TranslationManager>();
-            services.AddTransient<ITranslationProvider, JSONTranslationProvider> ( x => new JSONTranslationProvider(Configuration["Data:Resources:Path"]));
+            services.AddTransient<ITranslationProvider, JsonTranslationProvider> ( x => new JsonTranslationProvider(Configuration["Data:Resources:Path"]));
 
-            var sp = services.BuildServiceProvider();
-            var service = sp.GetService<ITranslationProvider>();
+            IServiceProvider sp = services.BuildServiceProvider();
+            ITranslationProvider service = sp.GetService<ITranslationProvider>();
             TranslationManager.Instance.TranslationProvider = service;
             
         }
@@ -91,7 +90,7 @@ namespace WebUI
                 // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
                 try
                 {
-                    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+                    using (IServiceScope serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
                         .CreateScope())
                     {
                         serviceScope.ServiceProvider.GetService<ApplicationDbContext>()
@@ -118,8 +117,6 @@ namespace WebUI
 
             //Seed DataBase
             await dataInitializer.InitializeDataAsync();
-            
-
         }
 
         // Entry point for the application.

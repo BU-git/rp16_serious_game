@@ -1,79 +1,46 @@
-﻿@model IndexViewModel
+﻿@using WebUI.ViewModels.Manage
+@model WebUI.ViewModels.Manage.IndexViewModel
 @{
     ViewData["Title"] = "Manage your account";
 }
 
-<h2>@ViewData["Title"].</h2>
-<p class="text-success">@ViewData["StatusMessage"]</p>
-<div>
-    <h4>Change your account settings</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>Password:</dt>
-        <dd>
-            [
+<h2 class="ui header bottom attached center aligned">Change your account settings</h2>
+<div class="ui text container attached">
+    @if (ViewData["StatusMessage"] != null && ViewData["StatusMessage"]?.ToString() != "")
+    {
+        <div class="ui info message large">
+            <i class="close icon"></i>
+            <div class="header">
+                @ViewData["StatusMessage"]
+            </div>
+        </div>
+    }
+    <div class="ui fields">
+        <div class="field eight wide">
+            <a asp-action="EditPersonalInformation" class="ui button">Edit personal information</a>
+        </div>
+        <div class="field eight wide">
             @if (Model.HasPassword)
             {
-                <a asp-controller="Manage" asp-action="ChangePassword">Change</a>
+                <a asp-controller="Manage" asp-action="ChangePassword" class="ui button blue">Change password</a>
             }
             else
             {
-                <a asp-controller="Manage" asp-action="SetPassword">Create</a>
+                <a asp-controller="Manage" asp-action="SetPassword" class="ui button green">Create password</a>
             }
-            ]
-        </dd>
-        <dt>External Logins:</dt>
-        <dd>
+        </div>
+    </div>
 
-            @Model.Logins.Count [<a asp-controller="Manage" asp-action="ManageLogins">Manage</a>]
-        </dd>
-
-
-        <dt>Phone Number:</dt>
-        <dd>
-            <p>
-                Phone Numbers can used as a second factor of verification in two-factor authentication.
-                See <a href="http://go.microsoft.com/fwlink/?LinkID=532713">this article</a>
-                for details on setting up this ASP.NET application to support two-factor authentication using SMS.
-            </p>
-            @*@(Model.PhoneNumber ?? "None") [
-                @if (Model.PhoneNumber != null)
-                {
-                    <a asp-controller="Manage" asp-action="AddPhoneNumber">Change</a>
-                        @: &nbsp;|&nbsp;
-                        <a asp-controller="Manage" asp-action="RemovePhoneNumber">Remove</a>
-                }
-                else
-                {
-                    <a asp-controller="Manage" asp-action="AddPhoneNumber">Add</a>
-                }
-                ]*@
-        </dd>
-
-        <dt>Two-Factor Authentication:</dt>
-        <dd>
-            <p>
-                There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkID=532713">this article</a>
-                for setting up this application to support two-factor authentication.
-            </p>
-            @*@if (Model.TwoFactor)
-                {
-                    <form asp-controller="Manage" asp-action="DisableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
-                        <text>
-                            Enabled
-                            <button type="submit" class="btn btn-link">Disable</button>
-                        </text>
-                    </form>
-                }
-                else
-                {
-                    <form asp-controller="Manage" asp-action="EnableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
-                        <text>
-                            Disabled
-                            <button type="submit" class="btn btn-link">Enable</button>
-                        </text>
-                    </form>
-                }*@
-        </dd>
-    </dl>
 </div>
+
+@section Scripts{
+    <script>
+        $('.message .close')
+          .on('click', function () {
+              $(this)
+                .closest('.message')
+                .transition('fade')
+              ;
+          });
+    </script>
+}

@@ -38,14 +38,17 @@
   },
 
   "frameworks": {
+    
     "dnx451": {
       "dependencies": {
         "Moq": "4.2.1510.2205",
         "Ninject": "3.2.2",
         "React.AspNet": "2.2.1"
+      },
+      "frameworkAssemblies": {
+        "System.Web": "4.0.0.0"
       }
-    },
-    "dnxcore50": { }
+    }
   },
 
   "exclude": [
@@ -57,6 +60,7 @@
     "**.vspscc"
   ],
   "scripts": {
-    "prepublish": [ "npm install", "bower install", "gulp clean", "gulp min" ]
+    "prebuild": [ "npm install", "npm prune", "gulp copy", "gulp min", "bower install" ],
+    "prepublish": [ "npm install", "npm prune", "gulp copy", "gulp min", "bower install" ]
   }
 }

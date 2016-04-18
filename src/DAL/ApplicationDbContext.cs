@@ -16,20 +16,20 @@ namespace DAL
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<ApplicationUser_UserGourp>()
+            builder.Entity<ApplicationUserUserGroup>()
               .HasKey(t => new { t.Id, t.UserGoupId });
 
             builder.Entity<ApplicationUser>()
                 .Property(p => p.Id).ValueGeneratedOnAdd();
 
-            builder.Entity<ApplicationUser_UserGourp>()
+            builder.Entity<ApplicationUserUserGroup>()
                 .HasOne(u => u.ApplicationUser)
-                .WithMany(ug => ug.ApplicationUser_UserGourps)
+                .WithMany(ug => ug.ApplicationUserUserGroups)
                 .HasForeignKey(u => u.Id);
 
-            builder.Entity<ApplicationUser_UserGourp>()
+            builder.Entity<ApplicationUserUserGroup>()
                 .HasOne(ug => ug.UserGroup)
-                .WithMany(u => u.ApplicationUser_UserGourps)
+                .WithMany(u => u.ApplicationUserUserGroups)
                 .HasForeignKey(ug => ug.UserGoupId);
 
             builder.Entity<Customer>()
