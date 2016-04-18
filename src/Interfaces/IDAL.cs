@@ -7,7 +7,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Interfaces
 {
-    public interface IDal
+    public interface IDAL
     {
         /// <summary>
         /// Create Coach user
@@ -74,5 +74,13 @@ namespace Interfaces
         /// <param name="userGroup">User Group</param>
         /// <returns></returns>
         Task EditUserGroup(UserGroup userGroup);
+
+        Task AddTaskAsync(ApplicationTask appTask);
+        Task UpdateTaskAsync(ApplicationTask appTask);
+        Task AssignTaskAsync(UserTask userTask);
+        Task UpdateUserTaskAsync(UserTask userTask);
+        List<UserTask> GetUserTasks(ApplicationUser user);
+        ApplicationTask FindTaskbyName(string name);
+        ApplicationTask FindTaskbyId(int taskId);
     }
 }

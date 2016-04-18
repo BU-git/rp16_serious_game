@@ -29434,7 +29434,7 @@ select.ui.dropdown {
   padding-bottom: 42.85714286%;
 }
 /*!
- * # Semantic UI 2.1.8 - Modal
+ * # Semantic UI 2.1.8 - modal
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -29445,7 +29445,7 @@ select.ui.dropdown {
  */
 
 /*******************************
-             Modal
+             modal
 *******************************/
 
 .ui.modal {
@@ -29637,7 +29637,7 @@ select.ui.dropdown {
        Responsive
 --------------------*/
 
-/* Modal Width */
+/* modal Width */
 
 @media only screen and (max-width: 767px) {
   .ui.modal {
@@ -29906,7 +29906,7 @@ select.ui.dropdown {
   font-size: 1.3em;
 }
 
-/* Small Modal Width */
+/* Small modal Width */
 
 @media only screen and (max-width: 767px) {
   .ui.small.modal {
@@ -29943,7 +29943,7 @@ select.ui.dropdown {
   }
 }
 
-/* Large Modal Width */
+/* Large modal Width */
 
 .ui.large.modal > .header {
   font-size: 1.6em;

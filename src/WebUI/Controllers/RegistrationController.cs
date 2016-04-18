@@ -23,10 +23,10 @@ namespace WebUI.Controllers
     {
         private readonly IMailManager _mailManager;
         private readonly ICryptoServices _cryptoServices;
-        private readonly IDal _dal;
+        private readonly IDAL _dal;
         private readonly SignInManager<ApplicationUser> _signInManager; 
 
-        public RegistrationController(IMailManager mailManager, ICryptoServices crypto, IDal dal, SignInManager<ApplicationUser> signInManager)
+        public RegistrationController(IMailManager mailManager, ICryptoServices crypto, IDAL dal, SignInManager<ApplicationUser> signInManager)
         {
             _mailManager = mailManager;
             _cryptoServices = crypto;
@@ -77,7 +77,7 @@ namespace WebUI.Controllers
             //TODO: get main data 'bout family 
             //Can't get information about family because dal doesn't contain methods like GetFamilyByName(string familyName)
 
-            var familyInfo = new FamilyViewModel
+            FamilyViewModel familyInfo = new FamilyViewModel
             {
                 Users = new List<UserViewModel>
                 {
@@ -94,15 +94,15 @@ namespace WebUI.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> StepTwo(FamilyViewModel regVm)
         {
-            foreach (var u in regVm.Users)
+            foreach (UserViewModel u in regVm.Users)
             {
-                var randomPass = _cryptoServices.GenerateRandomPassword();
+                string randomPass = _cryptoServices.GenerateRandomPassword();
                 Gender gender;
                 Enum.TryParse(u.Gender.ToString(), out gender);
                 DateTime dateTime;
                 DateTime.TryParse($"{u.Day}/{u.Month}/{u.Year}", out dateTime);
 
-                var user = new ApplicationUser();
+                ApplicationUser user = new ApplicationUser();
                 user.Name = u.Name;
                 user.MiddleName = u.MiddleName;
                 user.LastName = regVm.FamilyName;

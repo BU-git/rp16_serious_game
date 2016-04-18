@@ -11,7 +11,7 @@ namespace Domain.Entities
         public string GroupName { get; set; }
         public UserGroupType Type { get; set; }
 
-        public List<ApplicationUser_UserGroup> ApplicationUserUserGroups { get; set; }
+        public List<ApplicationUserUserGroup> ApplicationUserUserGroups { get; set; }
     }
 
     public enum UserGroupType { Married, Unmarried, Divorced}

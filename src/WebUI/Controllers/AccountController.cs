@@ -22,7 +22,7 @@ namespace WebUI.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
-        private readonly IDal _dal;
+        private readonly IDAL _DAL;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -30,14 +30,14 @@ namespace WebUI.Controllers
             IEmailSender emailSender,
             ISmsSender smsSender,
             ILoggerFactory loggerFactory,
-            IDal dal)
+            IDAL DAL)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
-            _dal = dal;
+            _DAL = DAL;
         }
 
         //
@@ -60,9 +60,9 @@ namespace WebUI.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = await _dal.GetUserByEmail(model.Email);
+                ApplicationUser user = await _DAL.GetUserByEmail(model.Email);
                 user.SecurityStamp = ""; //The next method throws exception if the field is not set ?\_(?)_/?
-                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
+                SignInResult result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
@@ -116,7 +116,7 @@ namespace WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(model.Email);
+                ApplicationUser user = await _userManager.FindByNameAsync(model.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
@@ -165,13 +165,13 @@ namespace WebUI.Controllers
             {
                 return View(model);
             }
-            var user = await _userManager.FindByNameAsync(model.Email);
+            ApplicationUser user = await _userManager.FindByNameAsync(model.Email);
             if (user == null)
             {
                 // Don't reveal that the user does not exist
                 return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
             }
-            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            IdentityResult result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (result.Succeeded)
             {
                 return RedirectToAction(nameof(AccountController.ResetPasswordConfirmation), "Account");
@@ -193,7 +193,7 @@ namespace WebUI.Controllers
 
         private void AddErrors(IdentityResult result)
         {
-            foreach (var error in result.Errors)
+            foreach (IdentityError error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }

@@ -1,10 +1,18 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using System.Threading.Tasks;
+using Interfaces;
+using Microsoft.AspNet.Mvc;
 
 namespace WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private IDAL _repository;
+
+       public  HomeController(IDAL repo)
+        {
+            _repository = repo;
+        }
+        public async Task<IActionResult> Index()
         {
             return View();
         }
@@ -19,7 +27,7 @@ namespace WebUI.Controllers
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
-
+        
             return View();
         }
 

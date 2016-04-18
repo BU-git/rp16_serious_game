@@ -23,7 +23,7 @@ namespace WebUI.Services
         public JsonTranslationProvider(string fileName)
         {
 
-            using (var strm = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
+            using (StreamReader strm = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
             {
                 JObject obj = JObject.Parse(strm.ReadToEnd());
                 
@@ -33,12 +33,12 @@ namespace WebUI.Services
                     foreach (KeyValuePair<string, JToken> item in obj)
                     {
                         
-                        var dictionary = obj[item.Key].ToObject<Dictionary<string, string>>();
+                        Dictionary<string, string> dictionary = obj[item.Key].ToObject<Dictionary<string, string>>();
                         
                         
-                        foreach (var lang in dictionary)
+                        foreach (KeyValuePair<string, string> lang in dictionary)
                         {
-                            var rec = new KeyValuePair<Tuple<string, string>, string>(Tuple.Create(item.Key, lang.Key), lang.Value);
+                            KeyValuePair<Tuple<string, string>, string> rec = new KeyValuePair<Tuple<string, string>, string>(Tuple.Create(item.Key, lang.Key), lang.Value);
                             _translations.Add(rec);
                         }
 

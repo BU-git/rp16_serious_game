@@ -31,31 +31,31 @@ namespace DAL
 
         private async Task CreatRoles()
         {
-            var role1 = await _roleManager.FindByNameAsync("Admin");
+            IdentityRole role1 = await _roleManager.FindByNameAsync("Admin");
             if (role1 == null)
             {
-                var adminRole = new IdentityRole { Name = "Admin" };
+                IdentityRole adminRole = new IdentityRole { Name = "Admin" };
                 await _roleManager.CreateAsync(adminRole);
             }
 
-            var role2 = await _roleManager.FindByNameAsync("Participant");
+            IdentityRole role2 = await _roleManager.FindByNameAsync("Participant");
             if (role2 == null)
             {
-                var participant = new IdentityRole { Name = "Participant" };
+                IdentityRole participant = new IdentityRole { Name = "Participant" };
                 await _roleManager.CreateAsync(participant);
             }
 
-            var role3 = await _roleManager.FindByNameAsync("Coach");
+            IdentityRole role3 = await _roleManager.FindByNameAsync("Coach");
             if(role3== null)
             {
-                var coach = new IdentityRole { Name = "Coach" };
+                IdentityRole coach = new IdentityRole { Name = "Coach" };
                 await _roleManager.CreateAsync(coach);
             }
 
-            var role4 = await _roleManager.FindByNameAsync("Governor");
+            IdentityRole role4 = await _roleManager.FindByNameAsync("Governor");
             if (role4 == null)
             {
-                var governor = new IdentityRole { Name = "Governor" };
+                IdentityRole governor = new IdentityRole { Name = "Governor" };
                 await _roleManager.CreateAsync(governor);
             }
 
@@ -64,7 +64,7 @@ namespace DAL
 
         private async Task CreateUsersAsync()
         {
-            var user1 = await _userManager.FindByEmailAsync("Admin@admin.com");
+            ApplicationUser user1 = await _userManager.FindByEmailAsync("Admin@admin.com");
             if (user1 == null)
             {
                 ApplicationUser admin = new ApplicationUser() { UserName = "Admin@admin.com", Name = "Admin1", Email = "Admin@admin.com", Gender = Gender.Male };
@@ -73,7 +73,7 @@ namespace DAL
   
             }
 
-            var user2 = await _userManager.FindByEmailAsync("Admin2@admin.com");
+            ApplicationUser user2 = await _userManager.FindByEmailAsync("Admin2@admin.com");
             if (user2 == null)
             {
                 ApplicationUser admin2 = new ApplicationUser() { UserName = "Admin2@admin.com", Name = "Admin2", Email = "Admin2@admin.com" };
@@ -81,7 +81,7 @@ namespace DAL
                 await _userManager.AddToRoleAsync(admin2, "Admin");
             }
 
-            var user3 = await _userManager.FindByEmailAsync("FirstCoach@coach.com");
+            ApplicationUser user3 = await _userManager.FindByEmailAsync("FirstCoach@coach.com");
             if (user3 == null)
             {
                 ApplicationUser firstCoach = new ApplicationUser() { UserName = "FirstCoach@coach.com", Name = "Mentor1", Email = "FirstCoach@coach.com" };
@@ -91,7 +91,7 @@ namespace DAL
                 
             }
 
-            var user4 = await _userManager.FindByEmailAsync("SecondCoach@coach.com");
+            ApplicationUser user4 = await _userManager.FindByEmailAsync("SecondCoach@coach.com");
             if (user4 == null)
             {
                 ApplicationUser secondCoach = new ApplicationUser() { UserName = "SecondCoach@coach.com", Name = "Mentor2" , Email = "SecondCoach@coach.com" };              
@@ -100,7 +100,7 @@ namespace DAL
 
             }
 
-            var user5 = await _userManager.FindByEmailAsync("FirstParticipant@participant.com");
+            ApplicationUser user5 = await _userManager.FindByEmailAsync("FirstParticipant@participant.com");
             if (user5 == null)
             {
                 ApplicationUser participant = new ApplicationUser() { UserName = "FirstParticipant@participant.com", Name = "Participant1", Email= "FirstParticipant@participant.com" };
@@ -108,7 +108,7 @@ namespace DAL
                 await _userManager.AddToRoleAsync(participant, "Participant");
             }
 
-            var user6 = await _userManager.FindByEmailAsync("SecondParticipant@participant.com");
+            ApplicationUser user6 = await _userManager.FindByEmailAsync("SecondParticipant@participant.com");
             if (user6 == null)
             {
                 ApplicationUser secondParticipant = new ApplicationUser() { UserName = "SecondParticipant@participant.com", Name = "Participant2", Email = "SecondParticipant@participant.com" };
@@ -116,7 +116,7 @@ namespace DAL
                 await _userManager.AddToRoleAsync(secondParticipant, "Participant");
             }
 
-            var user7 = await _userManager.FindByEmailAsync("Governor@governor.com");
+            ApplicationUser user7 = await _userManager.FindByEmailAsync("Governor@governor.com");
             if (user7 == null)
             {
                 ApplicationUser governor = new ApplicationUser() { UserName = "Governor@governor.com", Name = "Governor", Email = "Governor@governor.com" };
@@ -130,17 +130,17 @@ namespace DAL
         {
             if (!_context.UserGroups.Any())
             {
-                var userGroup = new UserGroup();
-                var user1 = await _userManager.FindByEmailAsync("FirstParticipant@participant.com");
-                var user2 = await _userManager.FindByEmailAsync("SecondParticipant@participant.com");
-                var coach = await _userManager.FindByEmailAsync("FirstCoach@coach.com");
+                UserGroup userGroup = new UserGroup();
+                ApplicationUser user1 = await _userManager.FindByEmailAsync("FirstParticipant@participant.com");
+                ApplicationUser user2 = await _userManager.FindByEmailAsync("SecondParticipant@participant.com");
+                ApplicationUser coach = await _userManager.FindByEmailAsync("FirstCoach@coach.com");
                 
 
                 if (user1!=null && user2!=null && coach!=null)
                 {
-                    ApplicationUser_UserGroup uug1 = new ApplicationUser_UserGroup();
-                    ApplicationUser_UserGroup uug2 = new ApplicationUser_UserGroup();
-                    ApplicationUser_UserGroup uug3 = new ApplicationUser_UserGroup();
+                    ApplicationUserUserGroup uug1 = new ApplicationUserUserGroup();
+                    ApplicationUserUserGroup uug2 = new ApplicationUserUserGroup();
+                    ApplicationUserUserGroup uug3 = new ApplicationUserUserGroup();
 
                     uug1.ApplicationUser = user1;
                     uug1.UserGroup = userGroup;

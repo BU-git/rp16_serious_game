@@ -34,15 +34,15 @@ namespace WebUI.Infrastructure.Concrete
             body.Append("http://localhost:51842");
             body.Append("/Registration/StepTwo/\">here</a></p></body>\r\n</html>");
             
-            var result = await _mailSender.SendMailAsync(subj, body.ToString(), address);
+            bool result = await _mailSender.SendMailAsync(subj, body.ToString(), address);
 
             return result;
         }
 
-        public static string GetLocalIPAddress()
+        public static string GetLocalIpAddress()
         {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList)
+            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (IPAddress ip in host.AddressList)
             {
                 if (ip.AddressFamily == AddressFamily.InterNetwork)
                 {
