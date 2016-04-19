@@ -22,4 +22,22 @@ List of tools used:
 - IIS 10
 - Npm
 - Bower
+- NuGet
+
+---
+
+#####To run this project, follow next steps:
+```
+git clone git@github.com:BU-git/rp16_serious_game.git
+cd rp16_serious_game
+dnu restore
+cd src/WebUI
+dnx ef database update -p DAL
+cd ../..
+dnu restore
+dnu pack src/*
+cd src/WebUI
+dnx web
+```
+
 
