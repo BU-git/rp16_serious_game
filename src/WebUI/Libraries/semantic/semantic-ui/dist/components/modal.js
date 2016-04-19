@@ -1,5 +1,5 @@
 /*!
- * # Semantic UI 2.1.8 - modal
+ * # Semantic UI 2.1.8 - Modal
  * http://github.com/semantic-org/semantic-ui/
  *
  *
@@ -57,8 +57,8 @@ $.fn.modal = function(parameters) {
         $context        = $(settings.context),
         $close          = $module.find(selector.close),
 
-        $allmodals,
-        $othermodals,
+        $allModals,
+        $otherModals,
         $focusedElement,
         $dimmable,
         $dimmer,
@@ -78,7 +78,7 @@ $.fn.modal = function(parameters) {
 
           module.create.id();
           module.create.dimmer();
-          module.refreshmodals();
+          module.refreshModals();
 
           module.bind.events();
           if(settings.observeChanges) {
@@ -121,7 +121,7 @@ $.fn.modal = function(parameters) {
             module.debug('Creating dimmer with settings', dimmerSettings);
             $dimmable = $context.dimmer(dimmerSettings);
             if(settings.detachable) {
-              module.verbose('modal is detachable, moving content into dimmer');
+              module.verbose('Modal is detachable, moving content into dimmer');
               $dimmable.dimmer('add content', $module);
             }
             else {
@@ -172,9 +172,9 @@ $.fn.modal = function(parameters) {
           module.set.position();
         },
 
-        refreshmodals: function() {
-          $othermodals = $module.siblings(selector.modal);
-          $allmodals   = $othermodals.add($module);
+        refreshModals: function() {
+          $otherModals = $module.siblings(selector.modal);
+          $allModals   = $otherModals.add($module);
         },
 
         attachEvents: function(selector, event) {
@@ -238,10 +238,10 @@ $.fn.modal = function(parameters) {
           click: function(event) {
             var
               $target   = $(event.target),
-              isInmodal = ($target.closest(selector.modal).length > 0),
+              isInModal = ($target.closest(selector.modal).length > 0),
               isInDom   = $.contains(document.documentElement, event.target)
             ;
-            if(!isInmodal && isInDom) {
+            if(!isInModal && isInDom) {
               module.debug('Dimmer clicked, hiding all modals');
               if( module.is.active() ) {
                 module.remove.clickaway();
@@ -295,8 +295,8 @@ $.fn.modal = function(parameters) {
             ? callback
             : function(){}
           ;
-          module.refreshmodals();
-          module.showmodal(callback);
+          module.refreshModals();
+          module.showModal(callback);
         },
 
         hide: function(callback) {
@@ -304,11 +304,11 @@ $.fn.modal = function(parameters) {
             ? callback
             : function(){}
           ;
-          module.refreshmodals();
-          module.hidemodal(callback);
+          module.refreshModals();
+          module.hideModal(callback);
         },
 
-        showmodal: function(callback) {
+        showModal: function(callback) {
           callback = $.isFunction(callback)
             ? callback
             : function(){}
@@ -323,7 +323,7 @@ $.fn.modal = function(parameters) {
             module.set.clickaway();
 
             if( !settings.allowMultiple && module.others.active() ) {
-              module.hideOthers(module.showmodal);
+              module.hideOthers(module.showModal);
             }
             else {
               settings.onShow.call(element);
@@ -355,11 +355,11 @@ $.fn.modal = function(parameters) {
             }
           }
           else {
-            module.debug('modal is already visible');
+            module.debug('Modal is already visible');
           }
         },
 
-        hidemodal: function(callback, keepDimmed) {
+        hideModal: function(callback, keepDimmed) {
           callback = $.isFunction(callback)
             ? callback
             : function(){}
@@ -425,16 +425,16 @@ $.fn.modal = function(parameters) {
 
         hideAll: function(callback) {
           var
-            $visiblemodals = $allmodals.filter('.' + className.active + ', .' + className.animating)
+            $visibleModals = $allModals.filter('.' + className.active + ', .' + className.animating)
           ;
           callback = $.isFunction(callback)
             ? callback
             : function(){}
           ;
-          if( $visiblemodals.length > 0 ) {
+          if( $visibleModals.length > 0 ) {
             module.debug('Hiding all visible modals');
             module.hideDimmer();
-            $visiblemodals
+            $visibleModals
               .modal('hide modal', callback)
             ;
           }
@@ -442,15 +442,15 @@ $.fn.modal = function(parameters) {
 
         hideOthers: function(callback) {
           var
-            $visiblemodals = $othermodals.filter('.' + className.active + ', .' + className.animating)
+            $visibleModals = $otherModals.filter('.' + className.active + ', .' + className.animating)
           ;
           callback = $.isFunction(callback)
             ? callback
             : function(){}
           ;
-          if( $visiblemodals.length > 0 ) {
-            module.debug('Hiding other modals', $othermodals);
-            $visiblemodals
+          if( $visibleModals.length > 0 ) {
+            module.debug('Hiding other modals', $otherModals);
+            $visibleModals
               .modal('hide modal', callback, true)
             ;
           }
@@ -458,10 +458,10 @@ $.fn.modal = function(parameters) {
 
         others: {
           active: function() {
-            return ($othermodals.filter('.' + className.active).length > 0);
+            return ($otherModals.filter('.' + className.active).length > 0);
           },
           animating: function() {
-            return ($othermodals.filter('.' + className.animating).length > 0);
+            return ($otherModals.filter('.' + className.animating).length > 0);
           }
         },
 
@@ -590,7 +590,7 @@ $.fn.modal = function(parameters) {
               $body.css('height', '');
             }
             else {
-              module.debug('modal is taller than page content, resizing page height');
+              module.debug('Modal is taller than page content, resizing page height');
               $body
                 .css('height', module.cache.height + (settings.padding * 2) )
               ;
@@ -605,13 +605,13 @@ $.fn.modal = function(parameters) {
           },
           type: function() {
             if(module.can.fit()) {
-              module.verbose('modal fits on screen');
+              module.verbose('Modal fits on screen');
               if(!module.others.active() && !module.others.animating()) {
                 module.remove.scrolling();
               }
             }
             else {
-              module.verbose('modal cannot fit on screen setting to scrolling');
+              module.verbose('Modal cannot fit on screen setting to scrolling');
               module.set.scrolling();
             }
           },
@@ -817,7 +817,7 @@ $.fn.modal = function(parameters) {
 
 $.fn.modal.settings = {
 
-  name           : 'modal',
+  name           : 'Modal',
   namespace      : 'modal',
 
   debug          : false,

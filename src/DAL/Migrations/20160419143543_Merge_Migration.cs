@@ -5,10 +5,25 @@ using Microsoft.Data.Entity.Metadata;
 
 namespace DAL.Migrations
 {
-    public partial class InitMigration : Migration
+    public partial class Merge_Migration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "ApplicationTask",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Coins = table.Column<int>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Recurency = table.Column<DateTime>(nullable: false),
+                    Text = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationTask", x => x.Id);
+                });
             migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
@@ -23,7 +38,7 @@ namespace DAL.Migrations
                     Email = table.Column<string>(nullable: true),
                     Gender = table.Column<int>(nullable: false),
                     LastName = table.Column<string>(nullable: true),
-                    MidleName = table.Column<string>(nullable: true),
+                    MiddleName = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     NormalizedEmail = table.Column<string>(nullable: true),
                     NormalizedUserName = table.Column<string>(nullable: true),
@@ -93,6 +108,32 @@ namespace DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
+                name: "UserTask",
+                columns: table => new
+                {
+                    TaskId = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: false),
+                    Coins = table.Column<int>(nullable: false),
+                    ExpireDt = table.Column<DateTime>(nullable: false),
+                    Status = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTask", x => new { x.TaskId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_UserTask_ApplicationTask_TaskId",
+                        column: x => x.TaskId,
+                        principalTable: "ApplicationTask",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserTask_ApplicationUser_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -132,7 +173,7 @@ namespace DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
-                name: "ApplicationUser_UserGroup",
+                name: "ApplicationUserUserGroup",
                 columns: table => new
                 {
                     Id = table.Column<string>(nullable: false),
@@ -140,15 +181,15 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationUser_UserGroup", x => new { x.Id, x.UserGoupId });
+                    table.PrimaryKey("PK_ApplicationUserUserGroup", x => new { x.Id, x.UserGoupId });
                     table.ForeignKey(
-                        name: "FK_ApplicationUser_UserGroup_ApplicationUser_Id",
+                        name: "FK_ApplicationUserUserGroup_ApplicationUser_Id",
                         column: x => x.Id,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ApplicationUser_UserGroup_UserGroup_UserGoupId",
+                        name: "FK_ApplicationUserUserGroup_UserGroup_UserGoupId",
                         column: x => x.UserGoupId,
                         principalTable: "UserGroup",
                         principalColumn: "UserGroupId",
@@ -213,13 +254,15 @@ namespace DAL.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable("ApplicationUser_UserGroup");
+            migrationBuilder.DropTable("ApplicationUserUserGroup");
             migrationBuilder.DropTable("Customer");
+            migrationBuilder.DropTable("UserTask");
             migrationBuilder.DropTable("AspNetRoleClaims");
             migrationBuilder.DropTable("AspNetUserClaims");
             migrationBuilder.DropTable("AspNetUserLogins");
             migrationBuilder.DropTable("AspNetUserRoles");
             migrationBuilder.DropTable("UserGroup");
+            migrationBuilder.DropTable("ApplicationTask");
             migrationBuilder.DropTable("AspNetRoles");
             migrationBuilder.DropTable("AspNetUsers");
         }

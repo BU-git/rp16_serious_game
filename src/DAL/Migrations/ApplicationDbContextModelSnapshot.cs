@@ -95,7 +95,7 @@ namespace DAL.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ApplicationUser_UserGroup", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUserUserGroup", b =>
                 {
                     b.Property<string>("Id");
 
@@ -240,7 +240,7 @@ namespace DAL.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ApplicationUser_UserGroup", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUserUserGroup", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser")
                         .WithMany()

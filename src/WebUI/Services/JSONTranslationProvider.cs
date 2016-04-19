@@ -14,7 +14,7 @@ namespace WebUI.Services
     {
         public IEnumerable<string> Languages { get; private set; }
 
-        private IDictionary<Tuple<string, string>,string>  _translations;
+        private readonly IDictionary<Tuple<string, string>,string>  _translations;
         public string Translate(string key)
         {
             return _translations[Tuple.Create(key, TranslationManager.Instance.CurrentLanguage)] ?? _translations[Tuple.Create(key, "en")];

@@ -12,7 +12,7 @@ namespace WebUI.Controllers
         {
             _repository = repo;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
