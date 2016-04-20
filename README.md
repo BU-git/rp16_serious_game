@@ -5,24 +5,36 @@ Part of Rotterdam University of Applied Sciences and Bionic University 16' joint
 ---
 
 The project is intended to help people living in deprived areas of Rotterdam. <br/>
-It is implementing GrowPath concept together with gamification principles to make it suitable for both kids and adults.<br/> 
+It is implementing GrowPath concept together with gamification principles to make it suitable for both kids and adults.<br/>
+Due to the fact that such families live in constant stress, they are unable to make long-term
+plans and fight their way out of their deprived situation.<br/>
+So, the main goal of the application is to help people to improve their life by developing healthy life habits via completing simple tasks one at a time under coach supervision.<br/>
+
+---
+
+Using the application you can:
+- Assign tasks to the supervised families;
+- Control the progress of each task;
+- Personalize an approach to every family;
+- Make difficult process of getting back on track much easier.
 
 ---
 
 List of technologies and frameworks used:
+- .NET Framework 4.5.1
 - ASP.NET MVC 6
-- Semantic UI
-- ReactJS.NET
-- ES6
 - Entity Framework 7
+- ASP.NET Identity 2.0
+- ES6 (JS)
+- ReactJS.NET
+- Semantic UI
 
 List of tools used:
-- Gulp
-- Dnx451
-- IIS 10
+- Kestrel
 - Npm
 - Bower
 - NuGet
+- Gulp
 
 ---
 
