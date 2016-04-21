@@ -1,4 +1,4 @@
-﻿@model 
+﻿@model WebUI.ViewModels.Email.RegistrationMessage
 
 <!DOCTYPE html>
 <html>
@@ -6,7 +6,10 @@
     <meta charset="utf-8" />
 </head>
 <body>
-<h1>Growth pad</h1>
-<p>Your login: </p>
+    <h1>Welcome to GrowPad Serious Game!</h1>
+    <h3>You were successfully registered to the project.</h3>
+    <p>Your new login: @Model.Login</p>
+    <p>Your temporary password is: @Model.Password</p>
+    <p>Please, continue registration by clicking <a href="@(Model.Host + Model.LinkUrl)">here</a></p>
 </body>
 </html>

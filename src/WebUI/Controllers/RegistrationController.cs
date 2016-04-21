@@ -12,6 +12,7 @@ using WebUI.Infrastructure.Abstract;
 using WebUI.ViewModels.Registration;
 using Interfaces;
 using Microsoft.AspNet.Authorization;
+using WebUI.ViewModels.Email;
 using Gender = Domain.Entities.Gender;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -65,7 +66,15 @@ namespace WebUI.Controllers
                 UserName = randomUserName
             };
             await _dal.CreateParticipant(user, randomPass);
-            await _mailManager.SendRegistrationMailAsync(randomPass, regVm.HeadEmail);
+
+            var registrationMessage = new RegistrationMessage
+            {
+                Password = randomPass,
+                Name = regVm.FamilyName,
+                Login = regVm.HeadEmail,
+                LinkUrl = Url.Action("StepTwo")
+            };
+            await _mailManager.SendRegistrationMailAsync(registrationMessage, regVm.HeadEmail);
 
             return View(new MainFamilyData());
         }
@@ -126,7 +135,13 @@ namespace WebUI.Controllers
                     return View(regVm);
                 }
 
-                await _mailManager.SendRegistrationMailAsync(randomPass, u.Email);
+                var registrationMessage = new RegistrationMessage
+                {
+                    Login = u.Email,
+                    Name = u.Name,
+                    Password = randomPass
+                };
+                await _mailManager.SendRegistrationMailAsync(registrationMessage, u.Email);
             }
             
             //TODO: assign members to concrete family considering previous comment about DAL

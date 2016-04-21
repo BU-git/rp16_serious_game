@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BLL.Abstract;
 using Domain;
+using Microsoft.Extensions.Configuration;
 
 #endregion
 
@@ -14,9 +15,19 @@ namespace BLL.Concrete
 {
     public class EmailSender : IMailSender
     {
-        public async Task<bool> SendMailAsync(string subject, string body, string emailTo)
+        private readonly IConfigurationRoot _configuration;
+
+        public EmailSender(IConfigurationRoot configuration)
         {
-            EmailCredential credential = GetCredentialsFromConfig();
+            _configuration = configuration;
+        }
+
+        public async Task<bool> SendMailAsync(MailMessage message)
+        {
+            var credential = GetCredentialsFromConfig();
+
+            message.IsBodyHtml = true;
+            message.From = new MailAddress(credential.Email);
             
             try
             {
@@ -28,14 +39,8 @@ namespace BLL.Concrete
                     Credentials = new NetworkCredential(credential.Email, credential.Password),
                     Timeout = 2000
                 })
-                using (MailMessage mailToClient = new MailMessage(credential.Email, emailTo)
                 {
-                    IsBodyHtml = true,
-                    Body = body,
-                    Subject = subject
-                })
-                {
-                    await client.SendMailAsync(mailToClient);
+                    await client.SendMailAsync(message);
                 }
             }
             catch (SmtpException)
@@ -47,17 +52,16 @@ namespace BLL.Concrete
 
         private EmailCredential GetCredentialsFromConfig()
         {
-            EmailCredential credential = new EmailCredential
-            {
-                Email = "rp16.serious.games@gmail.com",
-                Password = "1qaz_@WSX_3edc",
-                Host = "smtp.gmail.com",
-                Port = 587,
-                UseSsl = true,
-                Username = "rp16.serious.games"
-            };
+            EmailCredential credentials = new EmailCredential();
 
-            return credential;
+            credentials.Email = _configuration.Get("Email:Address");
+            credentials.Password = _configuration.Get("Email:Password");
+            credentials.Username = _configuration.Get("Email:Username");
+            credentials.UseSsl = bool.Parse(_configuration.Get("Email:UseSsl"));
+            credentials.Port = int.Parse(_configuration.Get("Email:Port"));
+            credentials.Host = _configuration.Get("Email:Host");
+
+            return credentials;
         }
     }
 }

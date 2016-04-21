@@ -1,55 +1,87 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using BLL.Abstract;
+using Domain;
+using Microsoft.Extensions.Configuration;
 using WebUI.Infrastructure.Abstract;
+using WebUI.ViewModels.Email;
 
 namespace WebUI.Infrastructure.Concrete
 {
     public class EmailManager : IMailManager
     {
         private readonly IMailSender _mailSender;
+        private readonly RazorComposer _razorComposer;
+        private readonly IConfigurationRoot _configuration;
+        private readonly AbstractEmailBuilder _emailBuilder;
+
         
-        public EmailManager(IMailSender mailSender)
+        public EmailManager(IMailSender mailSender, RazorComposer razorComposer, IConfigurationRoot configuration, AbstractEmailBuilder emailBuilder)
         {
             _mailSender = mailSender;
+            _razorComposer = razorComposer;
+            _configuration = configuration;
+            _emailBuilder = emailBuilder;
         }
 
-        public async Task<bool> SendRegistrationMailAsync(string password, string address)
+        public async Task<bool> SendRegistrationMailAsync(RegistrationMessage registrationMessage, string addressTo)
         {
-            StringBuilder body = new StringBuilder();
-            //string host = Dns.GetHostName(); //TODO: get from configs
-            string subj = "You were successfully registered to Serious Games";
-            
-            body.Append("<!DOCTYPE html>\r\n<html>\r\n<head></head>\r\n<body><p>Your login: ");
-            body.Append(address);
-            body.Append("</p><p>Your password: ");
-            body.Append(password);
-            body.Append("</p><p>Continue registration by clicking <a href=\"");
-            body.Append("http://localhost:51842");
-            body.Append("/Registration/StepTwo/\">here</a></p></body>\r\n</html>");
-            
-            bool result = await _mailSender.SendMailAsync(subj, body.ToString(), address);
+            var ipConfigs = GetIpConfiguration();
+            registrationMessage.Host = $"{ipConfigs.HostName}:{ipConfigs.Port}"; 
+
+            _emailBuilder.CreateNewMessage();
+            _emailBuilder.SetSubject(GetSubjectFromConfig(MailType.Confirmation));
+            _emailBuilder.SetAddressees(null, addressTo);
+
+            var path =
+                Path.GetDirectoryName(_configuration.Get("EmailTypes:Folder") +
+                                      _configuration.Get("EmailTypes:Registration:FileName"));
+            var messageBody = _razorComposer.ComposeStringFromRazor(path, registrationMessage);
+
+            _emailBuilder.SetBody(messageBody);
+
+            bool result = await _mailSender.SendMailAsync(_emailBuilder.GetMailMessage());
 
             return result;
         }
 
-        public static string GetLocalIpAddress()
+        private HostConfiguration GetIpConfiguration()
         {
-            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (IPAddress ip in host.AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                {
-                    return ip.ToString();
-                }
-            }
-            return "localhost";
+            HostConfiguration hostConfig = new HostConfiguration();
+
+            hostConfig.Port = int.Parse(_configuration.Get("ServerConfig:Port"));
+            hostConfig.HostName = _configuration.Get("ServerConfig:HostName");
+            hostConfig.IpAddress = _configuration.Get("ServerConfig:IpAddress");
+
+            return hostConfig;
         }
+
+        private string GetSubjectFromConfig(MailType mailType)
+        {
+            switch (mailType)
+            {
+                case MailType.Registration:
+                    return _configuration.Get("EmailTypes:Registration:Subject");
+                case MailType.Confirmation:
+                    return _configuration.Get("EmailTypes:PassConfirm:Subject");
+                default:
+                    return String.Empty;
+            }
+        }
+
+        public enum MailType
+        {
+            Registration,
+            Confirmation
+        };
     }
 }

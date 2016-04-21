@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net.Mail;
+using System.Threading.Tasks;
 
 namespace BLL.Abstract
 {
     public interface IMailSender
     {
-        Task<bool> SendMailAsync(string subject, string body, string emailTo);
+        Task<bool> SendMailAsync(MailMessage message);
     }
 }
