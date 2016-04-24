@@ -240,5 +240,7 @@ namespace DAL
 
         }
 
+        public async Task<Avatar> GetUserAvatarAsync(User)
+
     }
 }
