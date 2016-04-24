@@ -41,11 +41,6 @@ namespace DAL
                 .WithOne(u => u.User)
                 .HasForeignKey(u => u.UserId);
 
-            builder.Entity<ApplicationUser>()
-                .HasOne(user => user.Avatar)
-                .WithMany(avatar => avatar.ApplicationUsers)
-                .HasForeignKey(user => user.AvatarId);
-
             builder.Entity<UserTask>()
                 .HasKey(ut => new {ut.TaskId, ut.UserId});
 
@@ -53,7 +48,12 @@ namespace DAL
                 .HasKey(media => media.Id);
 
             builder.Entity<Avatar>()
-                .HasKey(avatar => new {avatar.Type, avatar.Level});
+                .HasKey(avatar => avatar.AvatarId);
+
+            builder.Entity<Avatar>()
+                .HasMany(av => av.ApplicationUsers)
+                .WithOne(user => user.Avatar)
+                .HasForeignKey(user => user.AvatarId);
 
             builder.Entity<Media>()
                 .HasMany(media => media.Avatars)
@@ -79,6 +79,5 @@ namespace DAL
         public DbSet<UserTask> UserTasks { get; set; } 
         public DbSet<Media> Medias { get; set; }
         public DbSet<Avatar> Avatars { get; set; }  
-
     }
 }

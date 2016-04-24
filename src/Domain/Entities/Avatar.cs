@@ -4,6 +4,7 @@ namespace Domain.Entities
 {
     public class Avatar
     {
+        public int AvatarId { get; set; }
         public int Type { get; set; }
         public int Level { get; set; }
         public int MediaId { get; set; }

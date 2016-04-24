@@ -28,7 +28,7 @@ namespace Domain.Entities
 
         public string Phone { get; set; }
 
-        public int AvatarId { get; set; }
+        public int? AvatarId { get; set; }
         
         public List<ApplicationUserUserGroup> ApplicationUserUserGroups { get; set; }
         public List<Customer> Customer { get; set; }
