@@ -233,9 +233,9 @@ namespace DAL
 
         }
 
-        public List<UserTask> GetUserTasks(ApplicationUser user)
+        public async Task<List<UserTask>> GetUserTasksAsync(ApplicationUser user)
         {
-            List<UserTask> userTasks = _context.UserTasks.Where(x => x.UserId == user.Id).ToList();
+            List<UserTask> userTasks = await _context.UserTasks.Where(x => x.UserId == user.Id).ToListAsync();
             return userTasks;
         }
 
@@ -243,7 +243,7 @@ namespace DAL
         {
             try
             {
-                Avatar avatar = _context.Avatars.FirstOrDefault(av => av.User == user);
+                Avatar avatar = _userManager.Users.First(applicationUser => applicationUser == user).Avatar;
                 return avatar;
             }
             catch (NullReferenceException)
@@ -302,6 +302,48 @@ namespace DAL
             catch (Exception)
             {
                 throw new Exception($"There is no such User in the system");
+            }
+        }
+
+        public async Task<List<Avatar>> GetAllAvatarsAsync()
+        {
+            return await _context.Avatars.ToListAsync();
+        }
+
+        public async Task<List<ApplicationUser>> GetAllUsersWithAvatarsAsync()
+        {
+            return await _userManager.Users.Where(user => user.Avatar != null).ToListAsync();
+        }
+
+        public string GetAvatarPath(Avatar avatar)
+        {
+            try
+            {
+                string path = _context.Avatars.First(av => av == avatar).Media.Path;
+                return path;
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception($"There is no such Avatar in the system");
+            }
+        }
+
+        public async Task<int> UpdateAvatarPath(Avatar avatar, string path)
+        {
+            try
+            {
+                Avatar userAvatar = _context.Avatars.First(av => av == avatar);
+                userAvatar.Media.Path = path;
+                int result = await _context.SaveChangesAsync();
+                return result;
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception($"There is no such Avatar in the system");
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }
