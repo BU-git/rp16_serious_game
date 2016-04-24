@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Microsoft.Data.Entity;
 
@@ -184,11 +185,11 @@ namespace DAL
             return task;
 
         }
-        
+
         public async Task UpdateTaskAsync(ApplicationTask appTask)
         {
             ApplicationTask taskWithSameName = _context.Tasks.FirstOrDefault(x => x.Name == appTask.Name && x.Id != appTask.Id);
-            if (taskWithSameName!=null)
+            if (taskWithSameName != null)
                 throw new Exception($"Task {taskWithSameName.Id} already has this name.");
             ApplicationTask task = _context.Tasks.FirstOrDefault(x => x.Id == appTask.Id);
             if (task == null)
@@ -225,7 +226,7 @@ namespace DAL
 
             if (usertask == null)
                 throw new Exception($"User {userTask.UserId} doesn't have task {userTask.TaskId}");
-            
+
             _context.Entry(usertask).State = EntityState.Detached;
             _context.Entry(userTask).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -234,13 +235,74 @@ namespace DAL
 
         public List<UserTask> GetUserTasks(ApplicationUser user)
         {
-
             List<UserTask> userTasks = _context.UserTasks.Where(x => x.UserId == user.Id).ToList();
             return userTasks;
-
         }
 
-        public async Task<Avatar> GetUserAvatarAsync(User)
+        public Avatar GetUserAvatarFromContext(ApplicationUser user)
+        {
+            try
+            {
+                Avatar avatar = _context.Avatars.FirstOrDefault(av => av.User == user);
+                return avatar;
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception($"User {user.Name} doesn't have an avatar or such user doesn't exist!");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
 
+        public Avatar GetUserAvatarByUserId(string userId)
+        {
+            try
+            {
+                Avatar avatar = _context.Users.First(user => user.Id == userId).Avatar;
+                return avatar;
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception($"User with {userId} Id doesn't have an avatar or such user doesn't exist!");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public string GetAvatarPathByUserId(string userId)
+        {
+            try
+            {
+                string path = _context.Users.First(user => user.Id == userId).Avatar.Media.Path;
+                return path;
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception($"User with {userId} Id doesn't have an avatar or such user doesn't exist!");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IdentityResult> UpdateUserAvatar(Avatar avatar, ApplicationUser appUser)
+        {
+            try
+            {
+                ApplicationUser user = await _userManager.FindByIdAsync(appUser.Id);
+                user.Avatar = avatar;
+                IdentityResult result = await _userManager.UpdateAsync(user);
+                return result;
+            }
+            catch (Exception)
+            {
+                throw new Exception($"There is no such User in the system");
+            }
+        }
     }
 }

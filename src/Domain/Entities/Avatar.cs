@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Domain.Entities
 {
@@ -10,9 +7,8 @@ namespace Domain.Entities
         public int Type { get; set; }
         public int Level { get; set; }
         public int MediaId { get; set; }
-        public int UserId { get; set; }
 
         public Media Media { get; set; }
-        public ApplicationUser User { get; set; }
+        public List<ApplicationUser> ApplicationUsers { get; set; }
     }
 }
