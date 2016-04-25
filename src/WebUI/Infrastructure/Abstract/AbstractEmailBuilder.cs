@@ -23,6 +23,6 @@ namespace WebUI.Infrastructure.Abstract
         public abstract void SetSubject(string subject);
         public abstract void SetBody(string body);
         public abstract void AddAttachments(AttachmentCollection attachments);
-        public abstract void SetAddressees(string from, params string[] to);
+        public abstract void SetAddressees(params string[] to);
     }
 }

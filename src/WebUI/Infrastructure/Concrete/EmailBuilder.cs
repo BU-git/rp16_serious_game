@@ -27,13 +27,12 @@ namespace WebUI.Infrastructure.Concrete
             }
         }
 
-        public override void SetAddressees(string from, params string[] to)
+        public override void SetAddressees(params string[] to)
         {
             foreach (var s in to)
             {
                 MailMessage.To.Add(s);
             }
-            MailMessage.From = new MailAddress(from);
         }
     }
 }

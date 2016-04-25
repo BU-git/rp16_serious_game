@@ -24,7 +24,8 @@ namespace WebUI
             // Set up configuration sources.
             IConfigurationBuilder builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("config.json");
             
 
             if (env.IsDevelopment())
@@ -65,6 +66,7 @@ namespace WebUI
             services.AddTransient<IMailSender, EmailSender>();
             services.AddTransient<IMailManager, EmailManager>();
             services.AddSingleton<IConfigurationRoot>(conf => Configuration);
+            services.AddTransient<ICryptoServices, CryptoServices>();
 
             //Add Seed Method
             services.AddTransient<DataInitializer>();

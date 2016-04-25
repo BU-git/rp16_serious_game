@@ -54,12 +54,12 @@ namespace BLL.Concrete
         {
             EmailCredential credentials = new EmailCredential();
 
-            credentials.Email = _configuration.Get("Email:Address");
-            credentials.Password = _configuration.Get("Email:Password");
-            credentials.Username = _configuration.Get("Email:Username");
-            credentials.UseSsl = bool.Parse(_configuration.Get("Email:UseSsl"));
-            credentials.Port = int.Parse(_configuration.Get("Email:Port"));
-            credentials.Host = _configuration.Get("Email:Host");
+            credentials.Email = _configuration.Get<string>("Email:Address");
+            credentials.Password = _configuration.Get<string>("Email:Password");
+            credentials.Username = _configuration.Get<string>("Email:Username");
+            credentials.UseSsl = _configuration.Get<bool>("Email:UseSsl");
+            credentials.Port = _configuration.Get<int>("Email:Port");
+            credentials.Host = _configuration.Get<string>("Email:Host");
 
             return credentials;
         }

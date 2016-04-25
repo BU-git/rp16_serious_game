@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.UI;
 using BLL.Abstract;
 using Domain.Entities;
 using Microsoft.AspNet.Identity;
@@ -12,6 +16,15 @@ using WebUI.Infrastructure.Abstract;
 using WebUI.ViewModels.Registration;
 using Interfaces;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Http;
+using Microsoft.AspNet.Mvc.Abstractions;
+using Microsoft.AspNet.Mvc.ModelBinding;
+using Microsoft.AspNet.Mvc.Razor;
+using Microsoft.AspNet.Mvc.Rendering;
+using Microsoft.AspNet.Mvc.ViewEngines;
+using Microsoft.AspNet.Mvc.ViewFeatures;
+using Microsoft.Extensions.WebEncoders;
+using WebUI.Infrastructure.Concrete;
 using WebUI.ViewModels.Email;
 using Gender = Domain.Entities.Gender;
 
@@ -25,8 +38,8 @@ namespace WebUI.Controllers
         private readonly IMailManager _mailManager;
         private readonly ICryptoServices _cryptoServices;
         private readonly IDAL _dal;
-        private readonly SignInManager<ApplicationUser> _signInManager; 
-
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        
         public RegistrationController(IMailManager mailManager, ICryptoServices crypto, IDAL dal, SignInManager<ApplicationUser> signInManager)
         {
             _mailManager = mailManager;
@@ -65,7 +78,8 @@ namespace WebUI.Controllers
                 Email = regVm.HeadEmail,
                 UserName = randomUserName
             };
-            await _dal.CreateParticipant(user, randomPass);
+
+            //await _dal.CreateParticipant(user, randomPass); //Debug
 
             var registrationMessage = new RegistrationMessage
             {
@@ -74,11 +88,11 @@ namespace WebUI.Controllers
                 Login = regVm.HeadEmail,
                 LinkUrl = Url.Action("StepTwo")
             };
+
             await _mailManager.SendRegistrationMailAsync(registrationMessage, regVm.HeadEmail);
 
             return View(new MainFamilyData());
         }
-
 
         [HttpGet]
         public async Task<IActionResult> StepTwo(string familyName)

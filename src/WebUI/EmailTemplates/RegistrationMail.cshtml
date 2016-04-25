@@ -10,6 +10,6 @@
     <h3>You were successfully registered to the project.</h3>
     <p>Your new login: @Model.Login</p>
     <p>Your temporary password is: @Model.Password</p>
-    <p>Please, continue registration by clicking <a href="@(Model.Host + Model.LinkUrl)">here</a></p>
+    <p>Please, continue registration by clicking <a href="@("http://" + Model.Host + Model.LinkUrl)">here</a></p>
 </body>
 </html>
