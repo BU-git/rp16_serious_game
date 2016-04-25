@@ -1,13 +1,10 @@
 ﻿#region
-using System.Configuration;
+
 using System.Net;
 using System.Net.Mail;
-using System.Net.Mime;
-using System.Text;
 using System.Threading.Tasks;
 using BLL.Abstract;
 using Domain;
-using Microsoft.Extensions.Configuration;
 
 #endregion
 
@@ -15,11 +12,19 @@ namespace BLL.Concrete
 {
     public class EmailSender : IMailSender
     {
-        private readonly IConfigurationRoot _configuration;
+        private readonly IPropertyConfigurator _config;
 
-        public EmailSender(IConfigurationRoot configuration)
+        private const string Email = "Email";
+        private const string Address = "Address";
+        private const string Password = "Password";
+        private const string Username = "Username";
+        private const string UseSsl = "UseSsl";
+        private const string Port = "Port";
+        private const string Host = "Host";
+
+        public EmailSender(IPropertyConfigurator configurator)
         {
-            _configuration = configuration;
+            _config = configurator;
         }
 
         public async Task<bool> SendMailAsync(MailMessage message)
@@ -54,12 +59,12 @@ namespace BLL.Concrete
         {
             EmailCredential credentials = new EmailCredential();
 
-            credentials.Email = _configuration.Get<string>("Email:Address");
-            credentials.Password = _configuration.Get<string>("Email:Password");
-            credentials.Username = _configuration.Get<string>("Email:Username");
-            credentials.UseSsl = _configuration.Get<bool>("Email:UseSsl");
-            credentials.Port = _configuration.Get<int>("Email:Port");
-            credentials.Host = _configuration.Get<string>("Email:Host");
+            credentials.Email = _config.Get<string>(Email, Address);
+            credentials.Password = _config.Get<string>(Email, Password);
+            credentials.Username = _config.Get<string>(Email, Username);
+            credentials.UseSsl = _config.Get<bool>(Email, UseSsl);
+            credentials.Port = _config.Get<int>(Email, Port);
+            credentials.Host = _config.Get<string>(Email, Host);
 
             return credentials;
         }

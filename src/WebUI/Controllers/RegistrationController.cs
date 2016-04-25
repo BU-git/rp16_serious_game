@@ -1,30 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web.UI;
-using BLL.Abstract;
 using Domain.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
-using Newtonsoft.Json;
-using NUnit.Framework.Constraints;
 using WebUI.Infrastructure.Abstract;
 using WebUI.ViewModels.Registration;
 using Interfaces;
 using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Mvc.Abstractions;
-using Microsoft.AspNet.Mvc.ModelBinding;
-using Microsoft.AspNet.Mvc.Razor;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.AspNet.Mvc.ViewEngines;
-using Microsoft.AspNet.Mvc.ViewFeatures;
-using Microsoft.Extensions.WebEncoders;
-using WebUI.Infrastructure.Concrete;
 using WebUI.ViewModels.Email;
 using Gender = Domain.Entities.Gender;
 
@@ -78,8 +61,7 @@ namespace WebUI.Controllers
                 Email = regVm.HeadEmail,
                 UserName = randomUserName
             };
-
-            //await _dal.CreateParticipant(user, randomPass); //Debug
+            await _dal.CreateParticipant(user, randomPass); //TODO: show message
 
             var registrationMessage = new RegistrationMessage
             {

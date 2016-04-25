@@ -1,46 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Mail;
-using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using BLL.Abstract;
+using BLL.Concrete;
 using Domain;
-using Microsoft.AspNet.Http;
-using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Abstractions;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.AspNet.Mvc.ViewFeatures;
-using Microsoft.Extensions.Configuration;
 using WebUI.Infrastructure.Abstract;
 using WebUI.ViewModels.Email;
-using WebUI.ViewModels.Registration;
 
 namespace WebUI.Infrastructure.Concrete
 {
     public class EmailManager : IMailManager
     {
         private readonly IMailSender _mailSender;
-        private readonly RazorComposer _razorComposer;
-        private readonly IConfigurationRoot _configuration;
+        private readonly IViewComposer _viewComposer;
+        private readonly IPropertyConfigurator _config;
         private readonly AbstractEmailBuilder _emailBuilder;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
+        private const string EmailTypes = "EmailTypes";
+        private const string Folder = "Folder";
+        private const string Registration = "Registration";
+        private const string FileName = "FileName";
+        private const string ServerConfig = "ServerConfig";
+        private const string Port = "Port";
+        private const string HostName = "HostName";
+        private const string IpAddress = "IpAddress";
+        private const string Subject = "Subject";
+        private const string PassConfirm = "PassConfirm";
 
-        public EmailManager(IMailSender mailSender, RazorComposer razorComposer, IConfigurationRoot configuration, AbstractEmailBuilder emailBuilder, IHttpContextAccessor contextAccessor)
+        public EmailManager(IMailSender mailSender, IViewComposer viewComposer, IPropertyConfigurator configurator, AbstractEmailBuilder emailBuilder)
         {
             _mailSender = mailSender;
-            _razorComposer = razorComposer;
-            _configuration = configuration;
+            _viewComposer = viewComposer;
+            _config = configurator;
             _emailBuilder = emailBuilder;
-            _httpContextAccessor = contextAccessor;
         }
 
+        /// <summary>
+        /// Sends email for just registrated person to <see cref="addressTo"/> email with data in registrationMessage
+        /// </summary>
+        /// <param name="registrationMessage">View model to be rendered at view</param>
+        /// <param name="addressTo">Destination email address</param>
+        /// <returns>Boolean result of mail message sending</returns>
         public async Task<bool> SendRegistrationMailAsync(RegistrationMessage registrationMessage, string addressTo)
         {
             var ipConfigs = GetIpConfiguration();
@@ -50,32 +49,22 @@ namespace WebUI.Infrastructure.Concrete
             _emailBuilder.SetSubject(GetSubjectFromConfig(MailType.Registration));
             _emailBuilder.SetAddressees(addressTo);
 
-            var folder = "..\\" + _configuration.Get<string>("EmailTypes:Folder") + "\\" +
-                                      _configuration.Get<string>("EmailTypes:Registration:FileName");
-            //var path =
-               // Path.GetFullPath(folder);
-            //var messageBody = "";//_razorComposer.ComposeStringFromRazor<RegistrationMessage>(path, registrationMessage);
+            var path = $"~/{_config.Get<string>(EmailTypes, Folder)}/{_config.Get<string>(EmailTypes, Registration, FileName)}";
+            var body = await _viewComposer.RenderView(path, registrationMessage);
+            _emailBuilder.SetBody(body);
 
-            var path = "~/" + _configuration.Get<string>("EmailTypes:Folder") + "/" + _configuration.Get<string>("EmailTypes:Registration:FileName");
-            var viewDataDictionary = new ViewDataDictionary(new Microsoft.AspNet.Mvc.ModelBinding.EmptyModelMetadataProvider(), new Microsoft.AspNet.Mvc.ModelBinding.ModelStateDictionary());
-            var actionContext = new ActionContext(_httpContextAccessor.HttpContext, new Microsoft.AspNet.Routing.RouteData(), new ActionDescriptor());
-            viewDataDictionary.Model = registrationMessage;
-            var text = await _razorComposer.RenderView(path, viewDataDictionary, actionContext, _httpContextAccessor);
-
-            _emailBuilder.SetBody(text);
-
-            bool result = await _mailSender.SendMailAsync(_emailBuilder.GetMailMessage());
+            var result = await _mailSender.SendMailAsync(_emailBuilder.GetMailMessage());
             
             return result;
         }
 
         private HostConfiguration GetIpConfiguration()
         {
-            HostConfiguration hostConfig = new HostConfiguration();
+            var hostConfig = new HostConfiguration();
 
-            hostConfig.Port = _configuration.Get<int>("ServerConfig:Port");
-            hostConfig.HostName = _configuration.Get<string>("ServerConfig:HostName");
-            hostConfig.IpAddress = _configuration.Get<string>("ServerConfig:IpAddress");
+            hostConfig.Port = _config.Get<int>(ServerConfig, Port);
+            hostConfig.HostName = _config.Get<string>(ServerConfig, HostName);
+            hostConfig.IpAddress = _config.Get<string>(ServerConfig, IpAddress);
 
             return hostConfig;
         }
@@ -85,9 +74,9 @@ namespace WebUI.Infrastructure.Concrete
             switch (mailType)
             {
                 case MailType.Registration:
-                    return _configuration.Get<string>("EmailTypes:Registration:Subject");
+                    return _config.Get<string>(EmailTypes, Registration, Subject);
                 case MailType.Confirmation:
-                    return _configuration.Get<string>("EmailTypes:PassConfirm:Subject");
+                    return _config.Get<string>(EmailTypes, PassConfirm, Subject);
                 default:
                     return String.Empty;
             }

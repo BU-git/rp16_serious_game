@@ -61,12 +61,15 @@ namespace WebUI
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
-            services.AddTransient<RazorComposer>();
+
+            // Infrastructure
+            services.AddTransient<IViewComposer, RazorViewComposer>();
             services.AddTransient<AbstractEmailBuilder, EmailBuilder>();
             services.AddTransient<IMailSender, EmailSender>();
             services.AddTransient<IMailManager, EmailManager>();
             services.AddSingleton<IConfigurationRoot>(conf => Configuration);
             services.AddTransient<ICryptoServices, CryptoServices>();
+            services.AddTransient<IPropertyConfigurator, JsonPropertyConfigurator>();
 
             //Add Seed Method
             services.AddTransient<DataInitializer>();
