@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Domain.Entities;
 using Microsoft.AspNet.Identity;
@@ -79,8 +77,16 @@ namespace Interfaces
         Task UpdateTaskAsync(ApplicationTask appTask);
         Task AssignTaskAsync(UserTask userTask);
         Task UpdateUserTaskAsync(UserTask userTask);
-        List<UserTask> GetUserTasks(ApplicationUser user);
+        Task<List<UserTask>> GetUserTasksAsync(ApplicationUser user);
         ApplicationTask FindTaskbyName(string name);
         ApplicationTask FindTaskbyId(int taskId);
+        Avatar GetUserAvatarFromContext(ApplicationUser user);
+        Avatar GetUserAvatarByUserId(string userId);
+        string GetAvatarPathByUserId(string userId);
+        Task<IdentityResult> UpdateUserAvatar(Avatar avatar, ApplicationUser appUser);
+        Task<List<Avatar>> GetAllAvatarsAsync();
+        Task<List<ApplicationUser>> GetAllUsersWithAvatarsAsync();
+        string GetAvatarPath(Avatar avatar);
+        Task<int> UpdateAvatarPath(Avatar avatar, string path);
     }
 }

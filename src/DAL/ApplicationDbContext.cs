@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using Domain.Entities;
-using Microsoft.Data.Entity.Infrastructure;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL
 {
@@ -50,6 +44,22 @@ namespace DAL
             builder.Entity<UserTask>()
                 .HasKey(ut => new {ut.TaskId, ut.UserId});
 
+            builder.Entity<Media>()
+                .HasKey(media => media.Id);
+
+            builder.Entity<Avatar>()
+                .HasKey(avatar => avatar.AvatarId);
+
+            builder.Entity<Avatar>()
+                .HasMany(av => av.ApplicationUsers)
+                .WithOne(user => user.Avatar)
+                .HasForeignKey(user => user.AvatarId);
+
+            builder.Entity<Media>()
+                .HasMany(media => media.Avatars)
+                .WithOne(avatar => avatar.Media)
+                .HasForeignKey(avatar => avatar.MediaId);
+
             builder.Entity<ApplicationUser>().Ignore(x => x.AccessFailedCount);
             builder.Entity<ApplicationUser>().Ignore(x => x.EmailConfirmed);
             builder.Entity<ApplicationUser>().Ignore(x => x.AccessFailedCount);
@@ -67,7 +77,7 @@ namespace DAL
         public DbSet<UserGroup> UserGroups { get; set; }
         public DbSet<ApplicationTask> Tasks { get; set; } 
         public DbSet<UserTask> UserTasks { get; set; } 
-       
-
+        public DbSet<Media> Medias { get; set; }
+        public DbSet<Avatar> Avatars { get; set; }  
     }
 }

@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using BLL.Abstract;
 using Domain.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
-using Newtonsoft.Json;
-using NUnit.Framework.Constraints;
 using WebUI.Infrastructure.Abstract;
 using WebUI.ViewModels.Registration;
 using Interfaces;

@@ -3,14 +3,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
-using Microsoft.AspNet.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using WebUI.Services;
 using WebUI.ViewModels.Account;
 using Domain.Entities;
-using System.Linq;
 using Interfaces;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace WebUI.Controllers
 {

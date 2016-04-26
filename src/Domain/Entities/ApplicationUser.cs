@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Domain.Entities
@@ -29,10 +27,13 @@ namespace Domain.Entities
         public string BuildingNumber { get; set; }
 
         public string Phone { get; set; }
+
+        public int? AvatarId { get; set; }
         
         public List<ApplicationUserUserGroup> ApplicationUserUserGroups { get; set; }
         public List<Customer> Customer { get; set; }
         public List<UserTask> UserTasks { get; set; }
+        public Avatar Avatar { get; set; }
 
     }
 
