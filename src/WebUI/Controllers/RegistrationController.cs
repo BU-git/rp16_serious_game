@@ -8,6 +8,7 @@ using WebUI.Infrastructure.Abstract;
 using WebUI.ViewModels.Registration;
 using Interfaces;
 using Microsoft.AspNet.Authorization;
+using WebUI.ViewModels.Email;
 using Gender = Domain.Entities.Gender;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,8 +21,8 @@ namespace WebUI.Controllers
         private readonly IMailManager _mailManager;
         private readonly ICryptoServices _cryptoServices;
         private readonly IDAL _dal;
-        private readonly SignInManager<ApplicationUser> _signInManager; 
-
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        
         public RegistrationController(IMailManager mailManager, ICryptoServices crypto, IDAL dal, SignInManager<ApplicationUser> signInManager)
         {
             _mailManager = mailManager;
@@ -60,12 +61,20 @@ namespace WebUI.Controllers
                 Email = regVm.HeadEmail,
                 UserName = randomUserName
             };
-            await _dal.CreateParticipant(user, randomPass);
-            await _mailManager.SendRegistrationMailAsync(randomPass, regVm.HeadEmail);
+            await _dal.CreateParticipant(user, randomPass); //TODO: show message
+
+            var registrationMessage = new RegistrationMessage
+            {
+                Password = randomPass,
+                Name = regVm.FamilyName,
+                Login = regVm.HeadEmail,
+                LinkUrl = Url.Action("StepTwo")
+            };
+
+            await _mailManager.SendRegistrationMailAsync(registrationMessage, regVm.HeadEmail);
 
             return View(new MainFamilyData());
         }
-
 
         [HttpGet]
         public async Task<IActionResult> StepTwo(string familyName)
@@ -122,7 +131,13 @@ namespace WebUI.Controllers
                     return View(regVm);
                 }
 
-                await _mailManager.SendRegistrationMailAsync(randomPass, u.Email);
+                var registrationMessage = new RegistrationMessage
+                {
+                    Login = u.Email,
+                    Name = u.Name,
+                    Password = randomPass
+                };
+                await _mailManager.SendRegistrationMailAsync(registrationMessage, u.Email);
             }
             
             //TODO: assign members to concrete family considering previous comment about DAL

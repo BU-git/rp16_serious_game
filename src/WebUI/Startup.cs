@@ -1,4 +1,6 @@
 ﻿using System;
+using BLL.Abstract;
+using BLL.Concrete;
 using Domain.Entities;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
@@ -10,6 +12,8 @@ using Microsoft.Extensions.Logging;
 using WebUI.Services;
 using DAL;
 using Interfaces;
+using WebUI.Infrastructure.Abstract;
+using WebUI.Infrastructure.Concrete;
 
 namespace WebUI
 {
@@ -20,7 +24,8 @@ namespace WebUI
             // Set up configuration sources.
             IConfigurationBuilder builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddJsonFile("config.json");
             
 
             if (env.IsDevelopment())
@@ -56,6 +61,15 @@ namespace WebUI
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            // Infrastructure
+            services.AddTransient<IViewComposer, RazorViewComposer>();
+            services.AddTransient<AbstractEmailBuilder, EmailBuilder>();
+            services.AddTransient<IMailSender, EmailSender>();
+            services.AddTransient<IMailManager, EmailManager>();
+            services.AddSingleton<IConfigurationRoot>(conf => Configuration);
+            services.AddTransient<ICryptoServices, CryptoServices>();
+            services.AddTransient<IPropertyConfigurator, JsonPropertyConfigurator>();
 
             //Add Seed Method
             services.AddTransient<DataInitializer>();

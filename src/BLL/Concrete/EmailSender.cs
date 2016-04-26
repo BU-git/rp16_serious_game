@@ -12,9 +12,27 @@ namespace BLL.Concrete
 {
     public class EmailSender : IMailSender
     {
-        public async Task<bool> SendMailAsync(string subject, string body, string emailTo)
+        private readonly IPropertyConfigurator _config;
+
+        private const string Email = "Email";
+        private const string Address = "Address";
+        private const string Password = "Password";
+        private const string Username = "Username";
+        private const string UseSsl = "UseSsl";
+        private const string Port = "Port";
+        private const string Host = "Host";
+
+        public EmailSender(IPropertyConfigurator configurator)
         {
-            EmailCredential credential = GetCredentialsFromConfig();
+            _config = configurator;
+        }
+
+        public async Task<bool> SendMailAsync(MailMessage message)
+        {
+            var credential = GetCredentialsFromConfig();
+
+            message.IsBodyHtml = true;
+            message.From = new MailAddress(credential.Email);
             
             try
             {
@@ -26,14 +44,8 @@ namespace BLL.Concrete
                     Credentials = new NetworkCredential(credential.Email, credential.Password),
                     Timeout = 2000
                 })
-                using (MailMessage mailToClient = new MailMessage(credential.Email, emailTo)
                 {
-                    IsBodyHtml = true,
-                    Body = body,
-                    Subject = subject
-                })
-                {
-                    await client.SendMailAsync(mailToClient);
+                    await client.SendMailAsync(message);
                 }
             }
             catch (SmtpException)
@@ -45,17 +57,16 @@ namespace BLL.Concrete
 
         private EmailCredential GetCredentialsFromConfig()
         {
-            EmailCredential credential = new EmailCredential
-            {
-                Email = "rp16.serious.games@gmail.com",
-                Password = "1qaz_@WSX_3edc",
-                Host = "smtp.gmail.com",
-                Port = 587,
-                UseSsl = true,
-                Username = "rp16.serious.games"
-            };
+            EmailCredential credentials = new EmailCredential();
 
-            return credential;
+            credentials.Email = _config.Get<string>(Email, Address);
+            credentials.Password = _config.Get<string>(Email, Password);
+            credentials.Username = _config.Get<string>(Email, Username);
+            credentials.UseSsl = _config.Get<bool>(Email, UseSsl);
+            credentials.Port = _config.Get<int>(Email, Port);
+            credentials.Host = _config.Get<string>(Email, Host);
+
+            return credentials;
         }
     }
 }
