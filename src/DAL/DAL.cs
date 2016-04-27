@@ -15,7 +15,6 @@ namespace DAL
     {
         private const string CoachRole = "Coach";
         private const string ParticipantRole = "Participant";
-
         private ApplicationDbContext _context;
         private UserManager<ApplicationUser> _userManager;
         private RoleManager<IdentityRole> _roleManager;

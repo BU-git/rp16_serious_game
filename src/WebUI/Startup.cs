@@ -12,8 +12,11 @@ using Microsoft.Extensions.Logging;
 using WebUI.Services;
 using DAL;
 using Interfaces;
+using RestSharp;
 using WebUI.Infrastructure.Abstract;
 using WebUI.Infrastructure.Concrete;
+using WebUI.Services.Abstract;
+using WebUI.Services.Concrete;
 
 namespace WebUI
 {
@@ -26,7 +29,7 @@ namespace WebUI
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddJsonFile("config.json");
-            
+
 
             if (env.IsDevelopment())
             {
@@ -59,34 +62,33 @@ namespace WebUI
             services.AddScoped<IDAL, DAL.DAL>();
 
             // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<TranslationManager>();
+            services.AddTransient<ITranslationProvider, JsonTranslationProvider>(x => new JsonTranslationProvider(Configuration["Data:Resources:Path"]));
+            services.AddTransient<IMailSender, EmailSender>();
+            services.AddTransient<IMailManager, EmailManager>();
+            services.AddTransient<IRestClient, RestClient>();
+            services.AddTransient<IZipWorker, ZipWorker>();
 
             // Infrastructure
             services.AddTransient<IViewComposer, RazorViewComposer>();
             services.AddTransient<AbstractEmailBuilder, EmailBuilder>();
-            services.AddTransient<IMailSender, EmailSender>();
-            services.AddTransient<IMailManager, EmailManager>();
             services.AddSingleton<IConfigurationRoot>(conf => Configuration);
             services.AddTransient<ICryptoServices, CryptoServices>();
             services.AddTransient<IPropertyConfigurator, JsonPropertyConfigurator>();
 
             //Add Seed Method
             services.AddTransient<DataInitializer>();
-    
-            services.AddTransient<TranslationManager>();
-            services.AddTransient<ITranslationProvider, JsonTranslationProvider> ( x => new JsonTranslationProvider(Configuration["Data:Resources:Path"]));
 
             IServiceProvider sp = services.BuildServiceProvider();
             ITranslationProvider service = sp.GetService<ITranslationProvider>();
             TranslationManager.Instance.TranslationProvider = service;
-            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public async void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, DataInitializer dataInitializer, IServiceProvider serviceProvider)
         {
-            
+
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();

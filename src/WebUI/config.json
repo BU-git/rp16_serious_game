@@ -7,6 +7,13 @@
     "Username": "rp16.serious.games",
     "Address": "rp16.serious.games@gmail.com"
   },
+  "RestClient": {
+    "ZipClient": {
+      "Address": "https://api.postcode.nl/",
+      "Key": "3h51gonL82Tmer8Zis1Y2P1IHHW1ElF0sYrib9HnBzH",
+      "Secret": "ZBbh90SKOzr2R4VKnd7igVO8Cj5nZgxiEjy6TRI3C8LQdPl2Yj"
+    }
+  },
   "ServerConfig": {
     "IpAddress": "",
     "Port": 51842,

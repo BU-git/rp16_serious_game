@@ -8,6 +8,7 @@ using WebUI.Infrastructure.Abstract;
 using WebUI.ViewModels.Registration;
 using Interfaces;
 using Microsoft.AspNet.Authorization;
+using WebUI.Services.Abstract;
 using WebUI.ViewModels.Email;
 using Gender = Domain.Entities.Gender;
 
