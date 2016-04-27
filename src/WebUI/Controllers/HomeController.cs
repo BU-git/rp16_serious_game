@@ -9,13 +9,16 @@ namespace WebUI.Controllers
     public class HomeController : Controller
     {
         private IDAL _repository;
+        private IZipWorker _zipWorker;
 
-       public  HomeController(IDAL repo)
+        public HomeController(IDAL repo, IZipWorker zipWorker)
         {
             _repository = repo;
+            _zipWorker = zipWorker;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var ressult = await _zipWorker.GetAddressAsync("2012ES", 30);
             return View();
         }
 
@@ -29,7 +32,7 @@ namespace WebUI.Controllers
         public IActionResult Contact()
         {
             ViewData["Message"] = "Your contact page.";
-        
+
             return View();
         }
 

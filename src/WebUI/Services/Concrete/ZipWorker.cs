@@ -31,7 +31,7 @@ namespace WebUI.Services.Concrete
             {
                 var request = new RestRequest($"rest/addresses/{zipCode}/{houseNumber}/{houseNumberAddition}",
                     Method.GET);
-                var result = await _restClient.ExecuteTaskAsync<NlAddress>(request);
+                var result = await _restClient.ExecuteGetTaskAsync<NlAddress>(request);
                 return result.Data;
             }
             catch (Exception)
