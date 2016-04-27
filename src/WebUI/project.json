@@ -28,9 +28,9 @@
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
+    "Microsoft.Framework.ConfigurationModel.Json": "1.0.0-beta4",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final",
-    "NUnit": "3.2.0",
-    "Microsoft.Framework.ConfigurationModel.Json": "1.0.0-beta4"
+    "NUnit": "3.2.0"
   },
 
   "commands": {
@@ -44,7 +44,8 @@
       "dependencies": {
         "Moq": "4.2.1510.2205",
         "Ninject": "3.2.2",
-        "React.AspNet": "2.2.1"
+        "React.AspNet": "2.2.1",
+        "RestSharp": "105.2.3"
       },
       "frameworkAssemblies": {
         "System.Web": "4.0.0.0"

@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json.Linq;
+using WebUI.Services.Abstract;
 
-namespace WebUI.Services
+namespace WebUI.Services.Concrete
 {
     class JsonTranslationProvider : ITranslationProvider
     {

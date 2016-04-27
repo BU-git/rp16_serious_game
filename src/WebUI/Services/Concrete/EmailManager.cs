@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using BLL.Abstract;
-using BLL.Concrete;
 using Domain;
 using WebUI.Infrastructure.Abstract;
+using WebUI.Services.Abstract;
 using WebUI.ViewModels.Email;
 
-namespace WebUI.Infrastructure.Concrete
+namespace WebUI.Services.Concrete
 {
     public class EmailManager : IMailManager
     {

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using WebUI.Services;
 using WebUI.ViewModels.Manage;
 using Domain.Entities;
+using WebUI.Services.Abstract;
 
 namespace WebUI.Controllers
 {
@@ -15,21 +16,15 @@ namespace WebUI.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;
-        private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
         public ManageController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
-        IEmailSender emailSender,
-        ISmsSender smsSender,
         ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;
-            _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<ManageController>();
         }
 

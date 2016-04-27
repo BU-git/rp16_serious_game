@@ -8,6 +8,7 @@ using WebUI.Services;
 using WebUI.ViewModels.Account;
 using Domain.Entities;
 using Interfaces;
+using WebUI.Services.Abstract;
 
 namespace WebUI.Controllers
 {
@@ -16,23 +17,17 @@ namespace WebUI.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;
-        private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
         private readonly IDAL _DAL;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender,
-            ISmsSender smsSender,
             ILoggerFactory loggerFactory,
             IDAL DAL)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;
-            _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _DAL = DAL;
         }
