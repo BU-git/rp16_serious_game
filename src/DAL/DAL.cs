@@ -1,28 +1,29 @@
 ﻿using System;
 using Domain.Entities;
+using Interfaces;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Interfaces;
+using System.Linq;
 using Microsoft.Data.Entity;
 
 namespace DAL
 {
-    public class Dal : IDal
+    public class Dal : IDAL
     {
         private const string CoachRole = "Coach";
         private const string ParticipantRole = "Participant";
 
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext context;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly RoleManager<IdentityRole> roleManager;
 
         public Dal(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            this._context = context;
-            this._userManager = userManager;
-            this._roleManager = roleManager;
+            this.context = context;
+            this.userManager = userManager;
+            this.roleManager = roleManager;
         }
 
         /// <summary>
@@ -33,16 +34,16 @@ namespace DAL
         /// <returns></returns>
         public async Task CreateCoach(ApplicationUser coach, string password)
         {
-            var coachRole = await _roleManager.FindByNameAsync(CoachRole);
+            var coachRole = await roleManager.FindByNameAsync(CoachRole);
             if (coachRole == null)
                 throw new Exception("Coach Role is missing.");
 
-            var user = await _userManager.FindByEmailAsync(coach.Email);
+            var user = await userManager.FindByEmailAsync(coach.Email);
             if (user != null)
                 throw new Exception("User already exists.");
 
-            await _userManager.CreateAsync(coach, password);
-            await _userManager.AddToRoleAsync(coach, CoachRole);
+            await userManager.CreateAsync(coach, password);
+            await userManager.AddToRoleAsync(coach, CoachRole);
         }
 
         /// <summary>
@@ -53,16 +54,16 @@ namespace DAL
         /// <returns></returns>
         public async Task CreateParticipant(ApplicationUser participant, string password)
         {
-            var participantRole = await _roleManager.FindByNameAsync(ParticipantRole);
+            var participantRole = await roleManager.FindByNameAsync(ParticipantRole);
             if (participantRole == null)
                 throw new Exception("Participant Role is missing.");
 
-            var user = await _userManager.FindByEmailAsync(participant.Email);
+            var user = await userManager.FindByEmailAsync(participant.Email);
             if (user != null)
                 throw new Exception("User already exists.");
 
-            await _userManager.CreateAsync(participant, password);
-            await _userManager.AddToRoleAsync(participant, ParticipantRole);
+            await userManager.CreateAsync(participant, password);
+            await userManager.AddToRoleAsync(participant, ParticipantRole);
         }
 
         /// <summary>
@@ -72,8 +73,8 @@ namespace DAL
         /// <returns></returns>
         public async Task CreateUserGroup(UserGroup userGroup)
         {
-            _context.UserGroups.Add(userGroup);
-            await _context.SaveChangesAsync();
+            context.UserGroups.Add(userGroup);
+            await context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -90,8 +91,8 @@ namespace DAL
                 UserGroup = group
             };
 
-            _context.Add(userToGroup);
-            await _context.SaveChangesAsync();
+            context.Add(userToGroup);
+            await context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -101,7 +102,7 @@ namespace DAL
         /// <returns></returns>
         public async Task<ApplicationUser> GetUserById(string id)
         {
-            return await _userManager.FindByIdAsync(id);
+            return await userManager.FindByIdAsync(id);
         }
 
         /// <summary>
@@ -111,7 +112,7 @@ namespace DAL
         /// <returns></returns>
         public async Task<ApplicationUser> GetUserByEmail(string email)
         {
-            return await _userManager.FindByEmailAsync(email);
+            return await userManager.FindByEmailAsync(email);
         }
 
         /// <summary>
@@ -121,7 +122,7 @@ namespace DAL
         /// <returns></returns>
         public async Task<UserGroup> GetUserGroupById(int id)
         {
-            return await _context.UserGroups.FirstOrDefaultAsync(g => g.UserGroupId == id);
+            return await context.UserGroups.FirstOrDefaultAsync(g => g.UserGroupId == id);
         }
 
         /// <summary>
@@ -131,7 +132,7 @@ namespace DAL
         /// <returns></returns>
         public async Task<IList<string>> GetUserRoles(ApplicationUser user)
         {
-            return await _userManager.GetRolesAsync(user);
+            return await userManager.GetRolesAsync(user);
         }
 
         /// <summary>
@@ -141,8 +142,8 @@ namespace DAL
         /// <returns></returns>
         public async Task EditUser(ApplicationUser user)
         {
-            _context.Update(user);
-            await _context.SaveChangesAsync();
+            context.Update(user);
+            await context.SaveChangesAsync();
         }
 
         /// <summary>
@@ -152,8 +153,123 @@ namespace DAL
         /// <returns></returns>
         public async Task EditUserGroup(UserGroup userGroup)
         {
-            _context.Update(userGroup);
-            await _context.SaveChangesAsync();
+            context.Update(userGroup);
+            await context.SaveChangesAsync();
         }
+
+        public async Task AddTaskAsync(ApplicationTask appTask)
+        {
+            var task = context.Tasks.FirstOrDefault(x => x.Name == appTask.Name);
+            if (task != null)
+                throw new Exception($"Task {appTask.Name} already exists in database.Task Id: {task.Id}");
+
+            context.Tasks.Add(appTask);
+            await context.SaveChangesAsync();
+
+
+        }
+
+        public ApplicationTask FindTaskbyName(string name)
+        {
+            var task = context.Tasks.FirstOrDefault(x => x.Name == name);
+            return task;
+
+        }
+
+        public ApplicationTask FindTaskbyId(int taskId)
+        {
+
+            var task = context.Tasks.FirstOrDefault(x => x.Id == taskId);
+            return task;
+
+        }
+        
+        public async Task UpdateTaskAsync(ApplicationTask appTask)
+        {
+            var taskWithSameName = context.Tasks.FirstOrDefault(x => x.Name == appTask.Name && x.Id != appTask.Id);
+            if (taskWithSameName!=null)
+                throw new Exception($"Task {taskWithSameName.Id} already has this name.");
+            var task = context.Tasks.FirstOrDefault(x => x.Id == appTask.Id);
+            if (task == null)
+                throw new Exception($"There is no task: {appTask.Name} in database.");
+
+            context.Entry(task).State = EntityState.Detached;
+            context.Entry(appTask).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+
+
+        }
+
+        public async Task AssignTaskAsync(UserTask userTask)
+        {
+            var user = await userManager.FindByIdAsync(userTask.UserId);
+            var task = context.Tasks.FirstOrDefault(x => x.Id == userTask.TaskId);
+            if (user == null || task == null)
+                throw new Exception("There is no such User or Task");
+
+            var usertask =
+                context.UserTasks.FirstOrDefault(x => x.UserId == userTask.UserId && x.TaskId == userTask.TaskId);
+
+            if (usertask != null)
+                throw new Exception($"User {usertask.UserId} already has task {usertask.TaskId}");
+            context.UserTasks.Add(userTask);
+            await context.SaveChangesAsync();
+
+        }
+
+        public async Task UpdateUserTaskAsync(UserTask userTask)
+        {
+            var usertask =
+                context.UserTasks.FirstOrDefault(x => x.UserId == userTask.UserId && x.TaskId == userTask.TaskId);
+
+            if (usertask == null)
+                throw new Exception($"User {userTask.UserId} doesn't have task {userTask.TaskId}");
+            
+            context.Entry(usertask).State = EntityState.Detached;
+            context.Entry(userTask).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+
+        }
+
+        public List<UserTask> GetUserTasks(ApplicationUser user)
+        {
+
+            var userTasks = context.UserTasks.Where(x => x.UserId == user.Id).Include(x=>x.ApplicationTask).ToList();
+            return userTasks;
+
+        }
+
+        public List<UserTask> GetUserGroupTasks(UserGroup group)
+        {
+            var users = context.Users.SelectMany(x =>x.ApplicationUserUserGroups.Where(e=>e.UserGroupId == group.UserGroupId).Select(s=>s.ApplicationUser)).Distinct();
+            
+            List<UserTask>tasks = new List<UserTask>();
+            foreach (ApplicationUser user in users)
+            {
+                var t = GetUserTasks(user);
+                if(t.Count>0)
+                    tasks.AddRange(t);
+            }
+            return tasks;
+        }
+
+        public List<UserGroup> GetUsersUserGroups(string userId)
+        {
+            var userGroups =
+                context.UserGroups.SelectMany(
+                    x => x.ApplicationUserUserGroups.Where(e => e.ApplicationUser.Id == userId)
+                            .Select(e => e.UserGroup)).Distinct().ToList();
+            return userGroups;
+        } 
+
+        public UserTask FindUserTaskById(int taskId, string userId)
+        {
+            var userTask =
+                context.UserTasks.Where(x => x.UserId == userId && x.TaskId == taskId)
+                    .Include(x => x.ApplicationTask).Include(x=>x.User)
+                    .FirstOrDefault();
+            return userTask;
+        }
+
     }
 }

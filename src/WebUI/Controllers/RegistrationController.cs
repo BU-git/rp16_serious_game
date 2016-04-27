@@ -21,9 +21,9 @@ namespace WebUI.Controllers
     {
         private readonly IMailManager _mailManager;
         private readonly ICryptoServices _cryptoServices;
-        private readonly IDal _dal;
+        private readonly IDAL _dal;
 
-        public RegistrationController(IMailManager mailManager, ICryptoServices crypto, IDal dal)
+        public RegistrationController(IMailManager mailManager, ICryptoServices crypto, IDAL dal)
         {
             _mailManager = mailManager;
             _cryptoServices = crypto;

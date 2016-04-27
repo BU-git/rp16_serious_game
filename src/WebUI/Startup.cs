@@ -25,7 +25,7 @@ namespace WebUI
             var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true);
-
+            
             if (env.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
@@ -54,17 +54,22 @@ namespace WebUI
             services.AddMvc();
 
             //Add DAL
-            services.AddScoped<IDal, DAL.Dal>();
+            services.AddScoped<IDAL, DAL.Dal>();
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
-            services.AddTransient<IMailSender, EmailSender>();
-            services.AddTransient<IMailManager, EmailManager>();
-            services.AddTransient<ICryptoServices, CryptoServices>();
 
             //Add Seed Method
             services.AddTransient<DataInitializer>();
+    
+            services.AddTransient<TranslationManager>();
+            services.AddTransient<ITranslationProvider, JsonTranslationProvider> ( x => new JsonTranslationProvider(Configuration["Data:Resources:Path"]));
+
+            var sp = services.BuildServiceProvider();
+            var service = sp.GetService<ITranslationProvider>();
+            TranslationManager.Instance.TranslationProvider = service;
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -109,9 +114,9 @@ namespace WebUI
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
 
-            //Seed DataBase TODO
+            //Seed DataBase
             await dataInitializer.InitializeDataAsync();
-
+            
 
         }
 

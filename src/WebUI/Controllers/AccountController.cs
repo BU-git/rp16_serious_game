@@ -57,10 +57,16 @@ namespace WebUI.Controllers
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+                // Get current user 
+                ApplicationUser user = await _userManager.FindByEmailAsync(model.Email);
+                //
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
+                    if (string.IsNullOrEmpty(returnUrl))
+                        return RedirectToAction("TaskList", "Task");
                     return RedirectToLocal(returnUrl);
                 }
                 else

@@ -5,12 +5,13 @@
   "tags": [ "" ],
   "projectUrl": "",
   "licenseUrl": "",
-
   "frameworks": {
     "dnx451": {
       "dependencies": {
-        "Domain": "1.0.0-*"
       }
     }
+  },
+  "dependencies": {
+    "Domain": "1.0.0-*"
   }
 }

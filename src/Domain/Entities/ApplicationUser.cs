@@ -32,6 +32,7 @@ namespace Domain.Entities
         
         public List<ApplicationUser_UserGroup> ApplicationUserUserGroups { get; set; }
         public List<Customer> Customer { get; set; }
+        public List<UserTask> UserTasks { get; set; }
 
     }
 

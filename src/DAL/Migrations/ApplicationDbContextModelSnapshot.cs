@@ -16,6 +16,22 @@ namespace DAL.Migrations
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Domain.Entities.ApplicationTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Coins");
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("Recurency");
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+                });
+
             modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -61,6 +77,8 @@ namespace DAL.Migrations
 
                     b.Property<string>("Region");
 
+                    b.Property<string>("SecurityStamp");
+
                     b.Property<string>("Street");
 
                     b.Property<string>("UserName")
@@ -83,9 +101,9 @@ namespace DAL.Migrations
                 {
                     b.Property<string>("Id");
 
-                    b.Property<int>("UserGoupId");
+                    b.Property<int>("UserGroupId");
 
-                    b.HasKey("Id", "UserGoupId");
+                    b.HasKey("Id", "UserGroupId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customer", b =>
@@ -125,6 +143,23 @@ namespace DAL.Migrations
                     b.Property<int>("Type");
 
                     b.HasKey("UserGroupId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserTask", b =>
+                {
+                    b.Property<int>("TaskId");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<int>("Coins");
+
+                    b.Property<DateTime>("ExpireDt");
+
+                    b.Property<int>("Status");
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("TaskId", "UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>
@@ -217,7 +252,7 @@ namespace DAL.Migrations
 
                     b.HasOne("Domain.Entities.UserGroup")
                         .WithMany()
-                        .HasForeignKey("UserGoupId");
+                        .HasForeignKey("UserGroupId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customer", b =>
@@ -225,6 +260,17 @@ namespace DAL.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("Id");
+                });
+
+            modelBuilder.Entity("Domain.Entities.UserTask", b =>
+                {
+                    b.HasOne("Domain.Entities.ApplicationTask")
+                        .WithMany()
+                        .HasForeignKey("TaskId");
+
+                    b.HasOne("Domain.Entities.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRoleClaim<string>", b =>

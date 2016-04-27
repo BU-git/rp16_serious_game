@@ -6,7 +6,7 @@ using Domain.Entities;
 
 namespace Interfaces
 {
-    public interface IDal
+    public interface IDAL
     {
         /// <summary>
         /// Create Coach user
@@ -73,5 +73,16 @@ namespace Interfaces
         /// <param name="userGroup">User Group</param>
         /// <returns></returns>
         Task EditUserGroup(UserGroup userGroup);
+
+        List<UserTask> GetUserGroupTasks(UserGroup group);
+        List<UserGroup> GetUsersUserGroups(string userId);
+        Task AddTaskAsync(ApplicationTask appTask);
+        Task UpdateTaskAsync(ApplicationTask appTask);
+        Task AssignTaskAsync(UserTask userTask);
+        Task UpdateUserTaskAsync(UserTask userTask);
+        List<UserTask> GetUserTasks(ApplicationUser user);
+        ApplicationTask FindTaskbyName(string name);
+        ApplicationTask FindTaskbyId(int taskId);
+        UserTask FindUserTaskById(int taskId, string userId);
     }
 }

@@ -17,7 +17,7 @@ namespace DAL
             base.OnModelCreating(builder);
 
             builder.Entity<ApplicationUser_UserGroup>()
-              .HasKey(t => new { t.Id, t.UserGoupId });
+              .HasKey(t => new { t.Id, t.UserGroupId });
 
             builder.Entity<ApplicationUser>()
                 .Property(p => p.Id).ValueGeneratedOnAdd();
@@ -30,13 +30,28 @@ namespace DAL
             builder.Entity<ApplicationUser_UserGroup>()
                 .HasOne(ug => ug.UserGroup)
                 .WithMany(u => u.ApplicationUserUserGroups)
-                .HasForeignKey(ug => ug.UserGoupId);
-
+                .HasForeignKey(ug => ug.UserGroupId);
 
             builder.Entity<Customer>()
                 .HasOne(a => a.ApplicationUser)
                 .WithMany(c => c.Customer)
                 .HasForeignKey(x => x.Id);
+
+            builder.Entity<ApplicationTask>()
+                .HasMany(ut => ut.UserTasks)
+                .WithOne(t => t.ApplicationTask)
+                .HasForeignKey(t => t.TaskId);
+
+            builder.Entity<ApplicationTask>()
+                .Property(x => x.Id).ValueGeneratedOnAdd();
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(ut => ut.UserTasks)
+                .WithOne(u => u.User)
+                .HasForeignKey(u => u.UserId);
+
+            builder.Entity<UserTask>()
+                .HasKey(ut => new {ut.TaskId, ut.UserId});
 
             builder.Entity<ApplicationUser>().Ignore(x => x.AccessFailedCount);
             builder.Entity<ApplicationUser>().Ignore(x => x.EmailConfirmed);
@@ -45,7 +60,7 @@ namespace DAL
             builder.Entity<ApplicationUser>().Ignore(x => x.LockoutEnabled);
             builder.Entity<ApplicationUser>().Ignore(x => x.LockoutEnd);
             builder.Entity<ApplicationUser>().Ignore(x => x.TwoFactorEnabled);
-            builder.Entity<ApplicationUser>().Ignore(x => x.SecurityStamp);
+
 
             
         }
@@ -53,7 +68,10 @@ namespace DAL
 
         public DbSet<Customer> Customers {get;set;}
         public DbSet<UserGroup> UserGroups { get; set; }
-       
+        public DbSet<ApplicationTask> Tasks { get; set; } 
+        public DbSet<UserTask> UserTasks { get; set; }
 
-    }
+
+
+}
 }
