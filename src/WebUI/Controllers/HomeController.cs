@@ -9,12 +9,10 @@ namespace WebUI.Controllers
     public class HomeController : Controller
     {
         private IDAL _repository;
-        private IZipWorker _zipWorker;
 
-        public HomeController(IDAL repo, IZipWorker zipWorker)
+        public HomeController(IDAL repo)
         {
             _repository = repo;
-            _zipWorker = zipWorker;
         }
         public async Task<IActionResult> Index()
         {
