@@ -52,12 +52,18 @@ namespace WebUI.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                ApplicationUser user = await _DAL.GetUserByEmail(model.Email);
-                user.SecurityStamp = ""; //The next method throws exception if the field is not set ?\_(?)_/?
-                SignInResult result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
+                // This doesn't count login failures towards account lockout
+                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
+
+                // Get current user 
+                ApplicationUser user = await _userManager.FindByEmailAsync(model.Email);
+                //
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
+                    if (string.IsNullOrEmpty(returnUrl))
+                        return RedirectToAction("TaskList", "Task");
                     return RedirectToLocal(returnUrl);
                 }
                 else

@@ -48,7 +48,7 @@ namespace WebUI.Controllers
             }
 
             string randomPass = _cryptoServices.GenerateRandomPassword();
-            string randomUserName = _cryptoServices.GenerateRandomAlphanumericString(6);
+
             UserGroup group = new UserGroup
             {
                 GroupName = regVm.FamilyName,
@@ -59,8 +59,7 @@ namespace WebUI.Controllers
             ApplicationUser user = new ApplicationUser
             {
                 LastName = regVm.FamilyName,
-                Email = regVm.HeadEmail,
-                UserName = randomUserName
+                Email = regVm.HeadEmail
             };
             await _dal.CreateParticipant(user, randomPass); //TODO: show message
 

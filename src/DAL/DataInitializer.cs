@@ -1,8 +1,11 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Interfaces;
 
 namespace DAL
 {
@@ -11,134 +14,175 @@ namespace DAL
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IDAL _dal;
 
-        public DataInitializer(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public DataInitializer(ApplicationDbContext _context, UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager , IDAL dal)
         {
-            this._context = context;
+            this._context = _context;
             this._userManager = userManager;
             this._roleManager = roleManager;
+            this._dal = dal;
         }
 
         public async Task InitializeDataAsync()
         {
-           
+
             await CreatRoles();
             await CreateUsersAsync();
             await CreateUserGroup();
+            await CreateTasks();
         }
 
         private async Task CreatRoles()
         {
-            IdentityRole role1 = await _roleManager.FindByNameAsync("Admin");
+            var role1 = await _roleManager.FindByNameAsync("Admin");
             if (role1 == null)
             {
-                IdentityRole adminRole = new IdentityRole { Name = "Admin" };
+                var adminRole = new IdentityRole {Name = "Admin"};
                 await _roleManager.CreateAsync(adminRole);
             }
 
-            IdentityRole role2 = await _roleManager.FindByNameAsync("Participant");
+            var role2 = await _roleManager.FindByNameAsync("Participant");
             if (role2 == null)
             {
-                IdentityRole participant = new IdentityRole { Name = "Participant" };
+                var participant = new IdentityRole {Name = "Participant"};
                 await _roleManager.CreateAsync(participant);
             }
 
-            IdentityRole role3 = await _roleManager.FindByNameAsync("Coach");
-            if(role3== null)
+            var role3 = await _roleManager.FindByNameAsync("Coach");
+            if (role3 == null)
             {
-                IdentityRole coach = new IdentityRole { Name = "Coach" };
+                var coach = new IdentityRole {Name = "Coach"};
                 await _roleManager.CreateAsync(coach);
             }
 
-            IdentityRole role4 = await _roleManager.FindByNameAsync("Governor");
+            var role4 = await _roleManager.FindByNameAsync("Governor");
             if (role4 == null)
             {
-                IdentityRole governor = new IdentityRole { Name = "Governor" };
+                var governor = new IdentityRole {Name = "Governor"};
                 await _roleManager.CreateAsync(governor);
             }
 
-         
+
         }
 
         private async Task CreateUsersAsync()
         {
-            ApplicationUser user1 = await _userManager.FindByEmailAsync("Admin@admin.com");
+            var user1 = await _userManager.FindByEmailAsync("Admin@admin.com");
             if (user1 == null)
             {
-                ApplicationUser admin = new ApplicationUser() { UserName = "Admin@admin.com", Name = "Admin1", Email = "Admin@admin.com", Gender = Gender.Male };
+                ApplicationUser admin = new ApplicationUser()
+                {
+                    UserName = "Admin@admin.com",
+                    Name = "Admin1",
+                    Email = "Admin@admin.com",
+                    Gender = Gender.Male
+                };
                 await _userManager.CreateAsync(admin, "User2016!");
                 await _userManager.AddToRoleAsync(admin, "Admin");
-  
+
             }
 
-            ApplicationUser user2 = await _userManager.FindByEmailAsync("Admin2@admin.com");
+            var user2 = await _userManager.FindByEmailAsync("Admin2@admin.com");
             if (user2 == null)
             {
-                ApplicationUser admin2 = new ApplicationUser() { UserName = "Admin2@admin.com", Name = "Admin2", Email = "Admin2@admin.com" };
+                ApplicationUser admin2 = new ApplicationUser()
+                {
+                    UserName = "Admin2@admin.com",
+                    Name = "Admin2",
+                    Email = "Admin2@admin.com"
+                };
                 await _userManager.CreateAsync(admin2, "User2016!");
                 await _userManager.AddToRoleAsync(admin2, "Admin");
+
             }
 
-            ApplicationUser user3 = await _userManager.FindByEmailAsync("FirstCoach@coach.com");
+            var user3 = await _userManager.FindByEmailAsync("FirstCoach@coach.com");
             if (user3 == null)
             {
-                ApplicationUser firstCoach = new ApplicationUser() { UserName = "FirstCoach@coach.com", Name = "Mentor1", Email = "FirstCoach@coach.com" };
+                ApplicationUser firstCoach = new ApplicationUser()
+                {
+                    UserName = "FirstCoach@coach.com",
+                    Name = "Mentor1",
+                    Email = "FirstCoach@coach.com"
+                };
                 await _userManager.CreateAsync(firstCoach, "User2016!");
                 await _userManager.AddToRoleAsync(firstCoach, "Coach");
-               
-                
+
+
             }
 
-            ApplicationUser user4 = await _userManager.FindByEmailAsync("SecondCoach@coach.com");
+            var user4 = await _userManager.FindByEmailAsync("SecondCoach@coach.com");
             if (user4 == null)
             {
-                ApplicationUser secondCoach = new ApplicationUser() { UserName = "SecondCoach@coach.com", Name = "Mentor2" , Email = "SecondCoach@coach.com" };              
+                ApplicationUser secondCoach = new ApplicationUser()
+                {
+                    UserName = "SecondCoach@coach.com",
+                    Name = "Mentor2",
+                    Email = "SecondCoach@coach.com"
+                };
                 await _userManager.CreateAsync(secondCoach, "User2016!");
                 await _userManager.AddToRoleAsync(secondCoach, "Coach");
 
             }
 
-            ApplicationUser user5 = await _userManager.FindByEmailAsync("FirstParticipant@participant.com");
+            var user5 = await _userManager.FindByEmailAsync("FirstParticipant@participant.com");
             if (user5 == null)
             {
-                ApplicationUser participant = new ApplicationUser() { UserName = "FirstParticipant@participant.com", Name = "Participant1", Email= "FirstParticipant@participant.com" };
+                ApplicationUser participant = new ApplicationUser()
+                {
+                    UserName = "FirstParticipant@participant.com",
+                    Name = "Participant1",
+                    Email = "FirstParticipant@participant.com"
+                };
                 await _userManager.CreateAsync(participant, "User2016!");
                 await _userManager.AddToRoleAsync(participant, "Participant");
             }
 
-            ApplicationUser user6 = await _userManager.FindByEmailAsync("SecondParticipant@participant.com");
+            var user6 = await _userManager.FindByEmailAsync("SecondParticipant@participant.com");
             if (user6 == null)
             {
-                ApplicationUser secondParticipant = new ApplicationUser() { UserName = "SecondParticipant@participant.com", Name = "Participant2", Email = "SecondParticipant@participant.com" };
+                ApplicationUser secondParticipant = new ApplicationUser()
+                {
+                    UserName = "SecondParticipant@participant.com",
+                    Name = "Participant2",
+                    Email = "SecondParticipant@participant.com"
+                };
                 await _userManager.CreateAsync(secondParticipant, "User2016!");
                 await _userManager.AddToRoleAsync(secondParticipant, "Participant");
             }
 
-            ApplicationUser user7 = await _userManager.FindByEmailAsync("Governor@governor.com");
+            var user7 = await _userManager.FindByEmailAsync("Governor@governor.com");
             if (user7 == null)
             {
-                ApplicationUser governor = new ApplicationUser() { UserName = "Governor@governor.com", Name = "Governor", Email = "Governor@governor.com" };
+                ApplicationUser governor = new ApplicationUser()
+                {
+                    UserName = "Governor@governor.com",
+                    Name = "Governor",
+                    Email = "Governor@governor.com"
+                };
                 await _userManager.CreateAsync(governor, "User2016!");
                 await _userManager.AddToRoleAsync(governor, "Governor");
             }
-            
+
         }
 
         private async Task CreateUserGroup()
         {
             if (!_context.UserGroups.Any())
             {
-                UserGroup userGroup = new UserGroup();
-                ApplicationUser user1 = await _userManager.FindByEmailAsync("FirstParticipant@participant.com");
-                ApplicationUser user2 = await _userManager.FindByEmailAsync("SecondParticipant@participant.com");
-                ApplicationUser coach = await _userManager.FindByEmailAsync("FirstCoach@coach.com");
-                
+                var userGroup = new UserGroup();
+                var user1 = await _userManager.FindByEmailAsync("FirstParticipant@participant.com");
+                var user2 = await _userManager.FindByEmailAsync("SecondParticipant@participant.com");
+                var coach = await _userManager.FindByEmailAsync("FirstCoach@coach.com");
 
-                if (user1!=null && user2!=null && coach!=null)
+
+                if (user1 != null && user2 != null && coach != null)
                 {
-                    ApplicationUserUserGroup uug1 = new ApplicationUserUserGroup();
-                    ApplicationUserUserGroup uug2 = new ApplicationUserUserGroup();
-                    ApplicationUserUserGroup uug3 = new ApplicationUserUserGroup();
+                    ApplicationUser_UserGroup uug1 = new ApplicationUser_UserGroup();
+                    ApplicationUser_UserGroup uug2 = new ApplicationUser_UserGroup();
+                    ApplicationUser_UserGroup uug3 = new ApplicationUser_UserGroup();
 
                     uug1.ApplicationUser = user1;
                     uug1.UserGroup = userGroup;
@@ -161,6 +205,126 @@ namespace DAL
                 }
             }
         }
+
+        private async Task CreateTasks()
+        {
+
+            if (!_context.Tasks.Any())
+            {
+                var task1 = new ApplicationTask()
+                {
+                    Coins = 1,
+                    Name = "First-Task",
+                    Recurency = new DateTime(2016, 3, 4),
+                    Text = "Please complete first task in order to start participation in program"
+                };
+
+                var task2 = new ApplicationTask()
+                {
+                    Coins = 10,
+                    Name = "Second-Task",
+                    Recurency = new DateTime(2016, 3, 4),
+                    Text = "Please complete Second task in order to continue participation in program"
+                };
+
+                var task3 = new ApplicationTask()
+                {
+                    Coins = 40,
+                    Name = "Third-Task",
+                    Recurency = new DateTime(2016, 3, 4),
+                    Text = "Please complete Third task in order to further participate in program"
+                };
+
+                var task4 = new ApplicationTask()
+                {
+                    Coins = 100,
+                    Name = "Fourth-Task",
+                    Recurency = new DateTime(2016, 3, 4),
+                    Text = "Please complete Third task in order to further participate in program"
+                };
+
+                _context.Tasks.Add(task1);
+                _context.Tasks.Add(task2);
+                _context.Tasks.Add(task3);
+                _context.Tasks.Add(task4);
+
+                _context.SaveChanges();
+            }
+
+            if (!_context.UserTasks.Any())
+            {
+                var firstTask = _context.Tasks.FirstOrDefault(x => x.Name == "First-Task");
+                var secondTask = _context.Tasks.FirstOrDefault(x => x.Name == "Second-Task");
+                var thirdTask = _context.Tasks.FirstOrDefault(x => x.Name == "Third-Task");
+                var fourthTask = _context.Tasks.FirstOrDefault(x => x.Name == "Fourth-Task");
+
+                var user = await _dal.GetUserByEmail("FirstParticipant@participant.com");
+
+                if (firstTask != null)
+                {
+                    var userTask1 = new UserTask()
+                    {
+
+                        Coins = firstTask.Coins,
+                        ExpireDt = new DateTime(2016, 08, 08),
+                        Status = Status.OPEN,
+                        TaskId = firstTask.Id,
+                        Text =   firstTask.Text,
+                        UserId = user.Id
+                    };
+                    _context.Add(userTask1);
+                }
+
+                if (secondTask != null)
+                {
+                    var userTask2 = new UserTask()
+                    {
+
+                        Coins = secondTask.Coins,
+                        ExpireDt = new DateTime(2016, 08, 08),
+                        Status = Status.OPEN,
+                        TaskId = secondTask.Id,
+                        Text = secondTask.Text,
+                        UserId = user.Id
+                    };
+                    _context.Add(userTask2);
+                }
+
+                if (thirdTask != null)
+                {
+                    var userTask3 = new UserTask()
+                    {
+
+                        Coins = thirdTask.Coins,
+                        ExpireDt = new DateTime(2016, 08, 08),
+                        Status = Status.REOPENED,
+                        TaskId = thirdTask.Id,
+                        Text = thirdTask.Text,
+                        UserId = user.Id
+                    };
+                    _context.Add(userTask3);
+                }
+
+                if (fourthTask != null)
+                {
+                    var userTask4 = new UserTask()
+                    {
+                        Coins = fourthTask.Coins,
+                        ExpireDt = new DateTime(2015, 08, 08),
+                        Status = Status.EXPIRED,
+                        TaskId = fourthTask.Id,
+                        UserId = user.Id
+                    };
+                    _context.Add(userTask4);
+                }
+
+
+                _context.SaveChanges();
+
+            }
+        }
     }
+
 }
+
 

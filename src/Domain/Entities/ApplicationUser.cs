@@ -30,7 +30,7 @@ namespace Domain.Entities
 
         public int? AvatarId { get; set; }
         
-        public List<ApplicationUserUserGroup> ApplicationUserUserGroups { get; set; }
+        public List<ApplicationUser_UserGroup> ApplicationUser_UserGroups { get; set; }
         public List<Customer> Customer { get; set; }
         public List<UserTask> UserTasks { get; set; }
         public Avatar Avatar { get; set; }

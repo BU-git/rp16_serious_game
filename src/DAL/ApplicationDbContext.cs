@@ -10,21 +10,21 @@ namespace DAL
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<ApplicationUserUserGroup>()
-              .HasKey(t => new { t.Id, t.UserGoupId });
+            builder.Entity<ApplicationUser_UserGroup>()
+              .HasKey(t => new { t.Id, t.UserGroupId });
 
             builder.Entity<ApplicationUser>()
                 .Property(p => p.Id).ValueGeneratedOnAdd();
 
-            builder.Entity<ApplicationUserUserGroup>()
+            builder.Entity<ApplicationUser_UserGroup>()
                 .HasOne(u => u.ApplicationUser)
-                .WithMany(ug => ug.ApplicationUserUserGroups)
+                .WithMany(ug => ug.ApplicationUser_UserGroups)
                 .HasForeignKey(u => u.Id);
 
-            builder.Entity<ApplicationUserUserGroup>()
+            builder.Entity<ApplicationUser_UserGroup>()
                 .HasOne(ug => ug.UserGroup)
-                .WithMany(u => u.ApplicationUserUserGroups)
-                .HasForeignKey(ug => ug.UserGoupId);
+                .WithMany(u => u.ApplicationUser_UserGroups)
+                .HasForeignKey(ug => ug.UserGroupId);
 
             builder.Entity<Customer>()
                 .HasOne(a => a.ApplicationUser)
@@ -67,7 +67,7 @@ namespace DAL
             builder.Entity<ApplicationUser>().Ignore(x => x.LockoutEnabled);
             builder.Entity<ApplicationUser>().Ignore(x => x.LockoutEnd);
             builder.Entity<ApplicationUser>().Ignore(x => x.TwoFactorEnabled);
-            builder.Entity<ApplicationUser>().Ignore(x => x.SecurityStamp);
+
 
             
         }

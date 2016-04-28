@@ -79,6 +79,8 @@ namespace DAL.Migrations
 
                     b.Property<string>("Region");
 
+                    b.Property<string>("SecurityStamp");
+
                     b.Property<string>("Street");
 
                     b.Property<string>("UserName")
@@ -101,9 +103,9 @@ namespace DAL.Migrations
                 {
                     b.Property<string>("Id");
 
-                    b.Property<int>("UserGoupId");
+                    b.Property<int>("UserGroupId");
 
-                    b.HasKey("Id", "UserGoupId");
+                    b.HasKey("Id", "UserGroupId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Avatar", b =>
@@ -283,7 +285,7 @@ namespace DAL.Migrations
 
                     b.HasOne("Domain.Entities.UserGroup")
                         .WithMany()
-                        .HasForeignKey("UserGoupId");
+                        .HasForeignKey("UserGroupId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Avatar", b =>

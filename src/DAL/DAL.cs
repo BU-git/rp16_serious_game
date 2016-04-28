@@ -5,7 +5,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using Microsoft.Data.Entity;
 
@@ -52,7 +51,7 @@ namespace DAL
         /// <param name="participant">User model</param>
         /// <param name="password">Password</param>
         /// <returns></returns>
-        public async Task<IdentityResult> CreateParticipant(ApplicationUser participant, string password)
+        public async Task CreateParticipant(ApplicationUser participant, string password)
         {
             IdentityRole participantRole = await _roleManager.FindByNameAsync(ParticipantRole);
             if (participantRole == null)
@@ -62,9 +61,8 @@ namespace DAL
             if (user != null)
                 throw new Exception("User already exists.");
 
-            var result = await _userManager.CreateAsync(participant, password);
+            await _userManager.CreateAsync(participant, password);
             await _userManager.AddToRoleAsync(participant, ParticipantRole);
-            return result;
         }
 
         /// <summary>
@@ -86,7 +84,7 @@ namespace DAL
         /// <returns></returns>
         public async Task AddUserToGroup(ApplicationUser user, UserGroup group)
         {
-            var userToGroup = new ApplicationUserUserGroup()
+            var userToGroup = new ApplicationUser_UserGroup()
             {
                 ApplicationUser = user,
                 UserGroup = group
@@ -160,7 +158,7 @@ namespace DAL
 
         public async Task AddTaskAsync(ApplicationTask appTask)
         {
-            ApplicationTask task = _context.Tasks.FirstOrDefault(x => x.Name == appTask.Name);
+            var task = _context.Tasks.FirstOrDefault(x => x.Name == appTask.Name);
             if (task != null)
                 throw new Exception($"Task {appTask.Name} already exists in database.Task Id: {task.Id}");
 
@@ -172,7 +170,7 @@ namespace DAL
 
         public ApplicationTask FindTaskbyName(string name)
         {
-            ApplicationTask task = _context.Tasks.FirstOrDefault(x => x.Name == name);
+            var task = _context.Tasks.FirstOrDefault(x => x.Name == name);
             return task;
 
         }
@@ -180,17 +178,17 @@ namespace DAL
         public ApplicationTask FindTaskbyId(int taskId)
         {
 
-            ApplicationTask task = _context.Tasks.FirstOrDefault(x => x.Id == taskId);
+            var task = _context.Tasks.FirstOrDefault(x => x.Id == taskId);
             return task;
 
         }
-
+        
         public async Task UpdateTaskAsync(ApplicationTask appTask)
         {
-            ApplicationTask taskWithSameName = _context.Tasks.FirstOrDefault(x => x.Name == appTask.Name && x.Id != appTask.Id);
-            if (taskWithSameName != null)
+            var taskWithSameName = _context.Tasks.FirstOrDefault(x => x.Name == appTask.Name && x.Id != appTask.Id);
+            if (taskWithSameName!=null)
                 throw new Exception($"Task {taskWithSameName.Id} already has this name.");
-            ApplicationTask task = _context.Tasks.FirstOrDefault(x => x.Id == appTask.Id);
+            var task = _context.Tasks.FirstOrDefault(x => x.Id == appTask.Id);
             if (task == null)
                 throw new Exception($"There is no task: {appTask.Name} in database.");
 
@@ -203,12 +201,12 @@ namespace DAL
 
         public async Task AssignTaskAsync(UserTask userTask)
         {
-            ApplicationUser user = await _userManager.FindByIdAsync(userTask.UserId);
-            ApplicationTask task = _context.Tasks.FirstOrDefault(x => x.Id == userTask.TaskId);
+            var user = await _userManager.FindByIdAsync(userTask.UserId);
+            var task = _context.Tasks.FirstOrDefault(x => x.Id == userTask.TaskId);
             if (user == null || task == null)
                 throw new Exception("There is no such User or Task");
 
-            UserTask usertask =
+            var usertask =
                 _context.UserTasks.FirstOrDefault(x => x.UserId == userTask.UserId && x.TaskId == userTask.TaskId);
 
             if (usertask != null)
@@ -220,16 +218,56 @@ namespace DAL
 
         public async Task UpdateUserTaskAsync(UserTask userTask)
         {
-            UserTask usertask =
+            var usertask =
                 _context.UserTasks.FirstOrDefault(x => x.UserId == userTask.UserId && x.TaskId == userTask.TaskId);
 
             if (usertask == null)
                 throw new Exception($"User {userTask.UserId} doesn't have task {userTask.TaskId}");
-
+            
             _context.Entry(usertask).State = EntityState.Detached;
             _context.Entry(userTask).State = EntityState.Modified;
             await _context.SaveChangesAsync();
 
+        }
+
+        public List<UserTask> GetUserTasks(ApplicationUser user)
+        {
+
+            var userTasks = _context.UserTasks.Where(x => x.UserId == user.Id).Include(x=>x.ApplicationTask).ToList();
+            return userTasks;
+
+        }
+
+        public List<UserTask> GetUserGroupTasks(UserGroup group)
+        {
+            var users = _context.Users.SelectMany(x =>x.ApplicationUser_UserGroups.Where(e=>e.UserGroupId == group.UserGroupId).Select(s=>s.ApplicationUser)).Distinct();
+            
+            List<UserTask>tasks = new List<UserTask>();
+            foreach (ApplicationUser user in users)
+            {
+                var t = GetUserTasks(user);
+                if(t.Count>0)
+                    tasks.AddRange(t);
+            }
+            return tasks;
+        }
+
+        public List<UserGroup> GetUsersUserGroups(string userId)
+        {
+            var userGroups =
+                _context.UserGroups.SelectMany(
+                    x => x.ApplicationUser_UserGroups.Where(e => e.ApplicationUser.Id == userId)
+                            .Select(e => e.UserGroup)).Distinct().ToList();
+            return userGroups;
+        } 
+
+        public UserTask FindUserTaskById(int taskId, string userId)
+        {
+            var userTask =
+                _context.UserTasks.Where(x => x.UserId == userId && x.TaskId == taskId)
+                    .Include(x => x.ApplicationTask).Include(x=>x.User)
+                    .FirstOrDefault();
+            return userTask;
         }
 
         public async Task<List<UserTask>> GetUserTasksAsync(ApplicationUser user)
