@@ -63,7 +63,7 @@
     "**.vspscc"
   ],
   "scripts": {
-    "prebuild": [ "npm install", "npm prune", "gulp clean", "gulp copy", "gulp min", "bower install" ],
+    "prebuild": [ "npm install", "npm prune", "gulp copy", "gulp min", "bower install" ],
     "prepublish": [ "npm install", "npm prune", "gulp copy", "gulp min", "bower install" ]
   }
 }

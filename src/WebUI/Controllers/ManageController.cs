@@ -4,10 +4,8 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
-using WebUI.Services;
 using WebUI.ViewModels.Manage;
 using Domain.Entities;
-using WebUI.Services.Abstract;
 
 namespace WebUI.Controllers
 {

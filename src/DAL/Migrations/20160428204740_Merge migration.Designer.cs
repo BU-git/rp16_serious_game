@@ -8,8 +8,8 @@ using DAL;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160424182725_Avatars Added Migration")]
-    partial class AvatarsAddedMigration
+    [Migration("20160428204740_Merge migration")]
+    partial class Mergemigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -80,6 +80,8 @@ namespace DAL.Migrations
 
                     b.Property<string>("Region");
 
+                    b.Property<string>("SecurityStamp");
+
                     b.Property<string>("Street");
 
                     b.Property<string>("UserName")
@@ -98,13 +100,13 @@ namespace DAL.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ApplicationUserUserGroup", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUser_UserGroup", b =>
                 {
                     b.Property<string>("Id");
 
-                    b.Property<int>("UserGoupId");
+                    b.Property<int>("UserGroupId");
 
-                    b.HasKey("Id", "UserGoupId");
+                    b.HasKey("Id", "UserGroupId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Avatar", b =>
@@ -183,6 +185,8 @@ namespace DAL.Migrations
                     b.Property<DateTime>("ExpireDt");
 
                     b.Property<int>("Status");
+
+                    b.Property<string>("Text");
 
                     b.HasKey("TaskId", "UserId");
                 });
@@ -276,7 +280,7 @@ namespace DAL.Migrations
                         .HasForeignKey("AvatarId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ApplicationUserUserGroup", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUser_UserGroup", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser")
                         .WithMany()
@@ -284,7 +288,7 @@ namespace DAL.Migrations
 
                     b.HasOne("Domain.Entities.UserGroup")
                         .WithMany()
-                        .HasForeignKey("UserGoupId");
+                        .HasForeignKey("UserGroupId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Avatar", b =>

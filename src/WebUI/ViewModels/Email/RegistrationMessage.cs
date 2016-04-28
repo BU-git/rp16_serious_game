@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WebUI.ViewModels.Email
+﻿namespace WebUI.ViewModels.Email
 {
     public class RegistrationMessage
     {

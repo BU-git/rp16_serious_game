@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using BLL.Abstract;
 using Domain;
-using Microsoft.Framework.ConfigurationModel;
 using RestSharp;
 using RestSharp.Authenticators;
 using WebUI.Services.Abstract;

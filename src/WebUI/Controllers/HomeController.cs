@@ -1,8 +1,5 @@
-﻿using System.Threading.Tasks;
-using Interfaces;
+﻿using Interfaces;
 using Microsoft.AspNet.Mvc;
-using WebUI.Services.Abstract;
-using WebUI.Services.Concrete;
 
 namespace WebUI.Controllers
 {

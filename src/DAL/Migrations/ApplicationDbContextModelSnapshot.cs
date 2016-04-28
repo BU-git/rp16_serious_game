@@ -2,8 +2,6 @@ using System;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
-using Microsoft.Data.Entity.Migrations;
-using DAL;
 
 namespace DAL.Migrations
 {
@@ -99,7 +97,7 @@ namespace DAL.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ApplicationUserUserGroup", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUser_UserGroup", b =>
                 {
                     b.Property<string>("Id");
 
@@ -184,6 +182,8 @@ namespace DAL.Migrations
                     b.Property<DateTime>("ExpireDt");
 
                     b.Property<int>("Status");
+
+                    b.Property<string>("Text");
 
                     b.HasKey("TaskId", "UserId");
                 });
@@ -277,7 +277,7 @@ namespace DAL.Migrations
                         .HasForeignKey("AvatarId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ApplicationUserUserGroup", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUser_UserGroup", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser")
                         .WithMany()

@@ -4,11 +4,9 @@ using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
-using WebUI.Services;
 using WebUI.ViewModels.Account;
 using Domain.Entities;
 using Interfaces;
-using WebUI.Services.Abstract;
 
 namespace WebUI.Controllers
 {
@@ -51,13 +49,8 @@ namespace WebUI.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
-            {
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-
-                // Get current user 
+            { 
                 ApplicationUser user = await _userManager.FindByEmailAsync(model.Email);
-                //
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {

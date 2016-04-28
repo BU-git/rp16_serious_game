@@ -4,7 +4,7 @@ using Microsoft.Data.Entity.Metadata;
 
 namespace DAL.Migrations
 {
-    public partial class Merge_Migration : Migration
+    public partial class Mergemigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -24,35 +24,17 @@ namespace DAL.Migrations
                     table.PrimaryKey("PK_ApplicationTask", x => x.Id);
                 });
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
+                name: "Media",
                 columns: table => new
                 {
-                    Id = table.Column<string>(nullable: false),
-                    BirthDate = table.Column<DateTime>(nullable: false),
-                    Bsn = table.Column<int>(nullable: false),
-                    BuildingNumber = table.Column<string>(nullable: true),
-                    City = table.Column<string>(nullable: true),
-                    ConcurrencyStamp = table.Column<string>(nullable: true),
-                    Country = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Gender = table.Column<int>(nullable: false),
-                    LastName = table.Column<string>(nullable: true),
-                    MiddleName = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    NormalizedEmail = table.Column<string>(nullable: true),
-                    NormalizedUserName = table.Column<string>(nullable: true),
-                    Passport = table.Column<string>(nullable: true),
-                    PasswordHash = table.Column<string>(nullable: true),
-                    Phone = table.Column<string>(nullable: true),
-                    PhoneNumber = table.Column<string>(nullable: true),
-                    Region = table.Column<string>(nullable: true),
-                    Street = table.Column<string>(nullable: true),
-                    UserName = table.Column<string>(nullable: true),
-                    ZipCode = table.Column<string>(nullable: true)
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Path = table.Column<string>(nullable: true),
+                    Type = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationUser", x => x.Id);
+                    table.PrimaryKey("PK_Media", x => x.Id);
                 });
             migrationBuilder.CreateTable(
                 name: "UserGroup",
@@ -79,6 +61,108 @@ namespace DAL.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityRole", x => x.Id);
+                });
+            migrationBuilder.CreateTable(
+                name: "Avatar",
+                columns: table => new
+                {
+                    AvatarId = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Level = table.Column<int>(nullable: false),
+                    MediaId = table.Column<int>(nullable: false),
+                    Type = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Avatar", x => x.AvatarId);
+                    table.ForeignKey(
+                        name: "FK_Avatar_Media_MediaId",
+                        column: x => x.MediaId,
+                        principalTable: "Media",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+            migrationBuilder.CreateTable(
+                name: "AspNetRoleClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    ClaimType = table.Column<string>(nullable: true),
+                    ClaimValue = table.Column<string>(nullable: true),
+                    RoleId = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentityRoleClaim<string>", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    AvatarId = table.Column<int>(nullable: true),
+                    BirthDate = table.Column<DateTime>(nullable: false),
+                    Bsn = table.Column<int>(nullable: false),
+                    BuildingNumber = table.Column<string>(nullable: true),
+                    City = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    Country = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    Gender = table.Column<int>(nullable: false),
+                    LastName = table.Column<string>(nullable: true),
+                    MiddleName = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    NormalizedEmail = table.Column<string>(nullable: true),
+                    NormalizedUserName = table.Column<string>(nullable: true),
+                    Passport = table.Column<string>(nullable: true),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    Phone = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    Region = table.Column<string>(nullable: true),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    Street = table.Column<string>(nullable: true),
+                    UserName = table.Column<string>(nullable: true),
+                    ZipCode = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUser", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUser_Avatar_AvatarId",
+                        column: x => x.AvatarId,
+                        principalTable: "Avatar",
+                        principalColumn: "AvatarId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+            migrationBuilder.CreateTable(
+                name: "ApplicationUser_UserGroup",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    UserGroupId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUser_UserGroup", x => new { x.Id, x.UserGroupId });
+                    table.ForeignKey(
+                        name: "FK_ApplicationUser_UserGroup_ApplicationUser_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUser_UserGroup_UserGroup_UserGroupId",
+                        column: x => x.UserGroupId,
+                        principalTable: "UserGroup",
+                        principalColumn: "UserGroupId",
+                        onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
                 name: "Customer",
@@ -114,7 +198,8 @@ namespace DAL.Migrations
                     UserId = table.Column<string>(nullable: false),
                     Coins = table.Column<int>(nullable: false),
                     ExpireDt = table.Column<DateTime>(nullable: false),
-                    Status = table.Column<int>(nullable: false)
+                    Status = table.Column<int>(nullable: false),
+                    Text = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -172,49 +257,6 @@ namespace DAL.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
             migrationBuilder.CreateTable(
-                name: "ApplicationUserUserGroup",
-                columns: table => new
-                {
-                    Id = table.Column<string>(nullable: false),
-                    UserGoupId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ApplicationUserUserGroup", x => new { x.Id, x.UserGoupId });
-                    table.ForeignKey(
-                        name: "FK_ApplicationUserUserGroup_ApplicationUser_Id",
-                        column: x => x.Id,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ApplicationUserUserGroup_UserGroup_UserGoupId",
-                        column: x => x.UserGoupId,
-                        principalTable: "UserGroup",
-                        principalColumn: "UserGroupId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-            migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    ClaimType = table.Column<string>(nullable: true),
-                    ClaimValue = table.Column<string>(nullable: true),
-                    RoleId = table.Column<string>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IdentityRoleClaim<string>", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_IdentityRoleClaim<string>_IdentityRole_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-            migrationBuilder.CreateTable(
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
@@ -253,7 +295,7 @@ namespace DAL.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable("ApplicationUserUserGroup");
+            migrationBuilder.DropTable("ApplicationUser_UserGroup");
             migrationBuilder.DropTable("Customer");
             migrationBuilder.DropTable("UserTask");
             migrationBuilder.DropTable("AspNetRoleClaims");
@@ -264,6 +306,8 @@ namespace DAL.Migrations
             migrationBuilder.DropTable("ApplicationTask");
             migrationBuilder.DropTable("AspNetRoles");
             migrationBuilder.DropTable("AspNetUsers");
+            migrationBuilder.DropTable("Avatar");
+            migrationBuilder.DropTable("Media");
         }
     }
 }

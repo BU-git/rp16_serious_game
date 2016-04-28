@@ -7,7 +7,6 @@ using Microsoft.AspNet.Mvc;
 using Interfaces;
 using WebUI.ViewModels.Task;
 using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Identity;
 
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860

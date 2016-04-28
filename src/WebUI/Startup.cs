@@ -9,7 +9,6 @@ using Microsoft.Data.Entity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using WebUI.Services;
 using DAL;
 using Interfaces;
 using RestSharp;
