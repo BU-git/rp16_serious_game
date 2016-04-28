@@ -1,11 +1,8 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using WebUI.Services.Abstract;
 
-namespace WebUI.Services
+namespace WebUI.Services.Concrete
 {
     class TranslationManager
     {

@@ -1,0 +1,100 @@
+﻿@model WebUI.ViewModels.Registration.UserViewModel
+
+<h2 class="ui top attached center aligned header">Information about user</h2>
+<div class="userForm ui attached segment">
+    <div class="fields">
+        <div class="field eight wide">
+            <label asp-for="Name"></label>
+            <div class="ui corner labeled input">
+                <input asp-for="Name" placeholder="First name"/>
+                <div class="ui corner label">
+                    <i class="asterisk icon red"></i>
+                </div>
+            </div>
+            <span asp-validation-for="Name"></span>
+        </div>
+        <div class="field eight wide">
+            <label asp-for="MiddleName"></label>
+            <div class="ui corner labeled input">
+                <input asp-for="MiddleName" placeholder="Middle name"/>
+            </div>
+        </div>
+    </div>
+    <div class="fields">
+        <div class="field eight wide">
+            <label asp-for="LastName"></label>
+            <div class="ui corner labeled input">
+                <input asp-for="LastName" placeholder="Last name"/>
+                <div class="ui corner label">
+                    <i class="asterisk icon red"></i>
+                </div>
+            </div>
+            <span asp-validation-for="LastName"></span>
+        </div>
+        <div class="field eight wide">
+            <label asp-for="Gender"></label>
+            <select asp-for="Gender" class="ui dropdown">
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+                <option value="UNKNOWN">Unknown</option>
+                <option value="OTHER">Other</option>
+                <option value="NONE">None</option>
+            </select>
+            <span asp-validation-for="Gender"></span>
+        </div>
+    </div>
+    <div class="fields">
+        <div class="field five wide">
+            <label asp-for="Day"></label>
+            <div class="ui corner labeled input">
+                <input asp-for="Day" placeholder="1" type="number" min="1" max="31"/>
+                <div class="ui corner label">
+                    <i class="asterisk icon red"></i>
+                </div>
+            </div>
+            <span asp-validation-for="Day"></span>
+        </div>
+        <div class="field five wide">
+            <label asp-for="Month"></label>
+            <div class="ui corner labeled input">
+                <input asp-for="Month" placeholder="1"/>
+                <div class="ui corner label">
+                    <i class="asterisk icon red"></i>
+                </div>
+            </div>
+            <span asp-validation-for="Month"></span>
+        </div>
+        <div class="field six wide">
+            <label asp-for="Year"></label>
+            <div class="ui corner labeled input">
+                <input asp-for="Year" placeholder="1991" type="number" min="1900" max="2020"/>
+                <div class="ui corner label">
+                    <i class="asterisk icon red"></i>
+                </div>
+            </div>
+            <span asp-validation-for="Year"></span>
+        </div>
+    </div>
+    <div class="fields">
+        <div class="field eight wide">
+            <label asp-for="Phone"></label>
+            <div class="ui corner labeled input">
+                <input asp-for="Phone" placeholder="Phone number" class="modelName" />
+                <div class="ui corner label">
+                    <i class="asterisk icon red"></i>
+                </div>
+            </div>
+            <span asp-validation-for="Phone"></span>
+        </div>
+        <div class="field eight wide">
+            <label asp-for="Email"></label>
+            <div class="ui corner labeled input">
+                <input asp-for="Email" placeholder="your@mail.com" type="email" />
+                <div class="ui corner label">
+                    <i class="asterisk icon red"></i>
+                </div>
+            </div>
+            <span asp-validation-for="Email"></span>
+        </div>
+    </div>
+</div>

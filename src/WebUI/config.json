@@ -1,0 +1,33 @@
+﻿{
+  "Email": {
+    "Host": "smtp.gmail.com",
+    "Password": "1qaz_@WSX_3edc",
+    "Port": 587,
+    "UseSsl": true,
+    "Username": "rp16.serious.games",
+    "Address": "rp16.serious.games@gmail.com"
+  },
+  "RestClient": {
+    "ZipClient": {
+      "Address": "https://api.postcode.nl/",
+      "Key": "3h51gonL82Tmer8Zis1Y2P1IHHW1ElF0sYrib9HnBzH",
+      "Secret": "ZBbh90SKOzr2R4VKnd7igVO8Cj5nZgxiEjy6TRI3C8LQdPl2Yj"
+    }
+  },
+  "ServerConfig": {
+    "IpAddress": "",
+    "Port": 51842,
+    "HostName": "localhost"
+  },
+  "EmailTypes": { //maybe it's better to move this somwhere else?
+    "Registration": {
+      "Subject": "You were successfully registered to the serious games project",
+      "FileName": "RegistrationMail.cshtml"
+    },
+    "PassConfirm": {
+      "Subject": "You have changed your password",
+      "FileName": "ConfirmationMail.cshtml"
+    },
+    "Folder": "EmailTemplates"
+  }
+}

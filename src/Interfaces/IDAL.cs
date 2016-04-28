@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Domain.Entities;
+using Microsoft.AspNet.Identity;
 
 namespace Interfaces
 {
@@ -21,7 +20,7 @@ namespace Interfaces
         /// <param name="participant">User model</param>
         /// <param name="password">Password</param>
         /// <returns></returns>
-        Task CreateParticipant(ApplicationUser participant, string password);
+        Task<IdentityResult> CreateParticipant(ApplicationUser participant, string password);
         /// <summary>
         /// Create UserGroup
         /// </summary>
@@ -74,15 +73,20 @@ namespace Interfaces
         /// <returns></returns>
         Task EditUserGroup(UserGroup userGroup);
 
-        List<UserTask> GetUserGroupTasks(UserGroup group);
-        List<UserGroup> GetUsersUserGroups(string userId);
         Task AddTaskAsync(ApplicationTask appTask);
         Task UpdateTaskAsync(ApplicationTask appTask);
         Task AssignTaskAsync(UserTask userTask);
         Task UpdateUserTaskAsync(UserTask userTask);
-        List<UserTask> GetUserTasks(ApplicationUser user);
+        Task<List<UserTask>> GetUserTasksAsync(ApplicationUser user);
         ApplicationTask FindTaskbyName(string name);
         ApplicationTask FindTaskbyId(int taskId);
-        UserTask FindUserTaskById(int taskId, string userId);
+        Avatar GetUserAvatarFromContext(ApplicationUser user);
+        Avatar GetUserAvatarByUserId(string userId);
+        string GetAvatarPathByUserId(string userId);
+        Task<IdentityResult> UpdateUserAvatar(Avatar avatar, ApplicationUser appUser);
+        Task<List<Avatar>> GetAllAvatarsAsync();
+        Task<List<ApplicationUser>> GetAllUsersWithAvatarsAsync();
+        string GetAvatarPath(Avatar avatar);
+        Task<int> UpdateAvatarPath(Avatar avatar, string path);
     }
 }

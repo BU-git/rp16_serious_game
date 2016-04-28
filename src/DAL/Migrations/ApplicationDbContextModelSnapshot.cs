@@ -37,6 +37,8 @@ namespace DAL.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<int?>("AvatarId");
+
                     b.Property<DateTime>("BirthDate");
 
                     b.Property<int>("Bsn");
@@ -57,7 +59,7 @@ namespace DAL.Migrations
 
                     b.Property<string>("LastName");
 
-                    b.Property<string>("MidleName");
+                    b.Property<string>("MiddleName");
 
                     b.Property<string>("Name");
 
@@ -97,13 +99,27 @@ namespace DAL.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ApplicationUser_UserGroup", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUserUserGroup", b =>
                 {
                     b.Property<string>("Id");
 
                     b.Property<int>("UserGroupId");
 
                     b.HasKey("Id", "UserGroupId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Avatar", b =>
+                {
+                    b.Property<int>("AvatarId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Level");
+
+                    b.Property<int>("MediaId");
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("AvatarId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customer", b =>
@@ -133,6 +149,18 @@ namespace DAL.Migrations
                     b.HasKey("Id");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Media", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Path");
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("Id");
+                });
+
             modelBuilder.Entity("Domain.Entities.UserGroup", b =>
                 {
                     b.Property<int>("UserGroupId")
@@ -156,8 +184,6 @@ namespace DAL.Migrations
                     b.Property<DateTime>("ExpireDt");
 
                     b.Property<int>("Status");
-
-                    b.Property<string>("Text");
 
                     b.HasKey("TaskId", "UserId");
                 });
@@ -244,7 +270,14 @@ namespace DAL.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ApplicationUser_UserGroup", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUser", b =>
+                {
+                    b.HasOne("Domain.Entities.Avatar")
+                        .WithMany()
+                        .HasForeignKey("AvatarId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.ApplicationUserUserGroup", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser")
                         .WithMany()
@@ -253,6 +286,13 @@ namespace DAL.Migrations
                     b.HasOne("Domain.Entities.UserGroup")
                         .WithMany()
                         .HasForeignKey("UserGroupId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Avatar", b =>
+                {
+                    b.HasOne("Domain.Entities.Media")
+                        .WithMany()
+                        .HasForeignKey("MediaId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customer", b =>

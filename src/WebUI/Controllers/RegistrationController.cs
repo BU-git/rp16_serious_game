@@ -1,41 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using BLL.Abstract;
 using Domain.Entities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
-using Newtonsoft.Json;
-using NUnit.Framework.Constraints;
 using WebUI.Infrastructure.Abstract;
 using WebUI.ViewModels.Registration;
 using Interfaces;
+using Microsoft.AspNet.Authorization;
+using WebUI.Services.Abstract;
+using WebUI.ViewModels.Email;
 using Gender = Domain.Entities.Gender;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebUI.Controllers
 {
+    [Authorize]
     public class RegistrationController : Controller
     {
         private readonly IMailManager _mailManager;
         private readonly ICryptoServices _cryptoServices;
         private readonly IDAL _dal;
-
-        public RegistrationController(IMailManager mailManager, ICryptoServices crypto, IDAL dal)
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        
+        public RegistrationController(IMailManager mailManager, ICryptoServices crypto, IDAL dal, SignInManager<ApplicationUser> signInManager)
         {
             _mailManager = mailManager;
             _cryptoServices = crypto;
             _dal = dal;
+            _signInManager = signInManager;
         }
 
+        [HttpGet]
         public IActionResult StepOne()
         {
             return View(new MainFamilyData());
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> StepOne([FromForm]MainFamilyData regVm)
         {
             if (!ModelState.IsValid)
@@ -57,24 +61,34 @@ namespace WebUI.Controllers
                 LastName = regVm.FamilyName,
                 Email = regVm.HeadEmail
             };
-            await _dal.CreateParticipant(user, randomPass);
-            
-            await _mailManager.SendRegistrationMailAsync(randomPass, regVm.HeadEmail);
+            await _dal.CreateParticipant(user, randomPass); //TODO: show message
+
+            var registrationMessage = new RegistrationMessage
+            {
+                Password = randomPass,
+                Name = regVm.FamilyName,
+                Login = regVm.HeadEmail,
+                LinkUrl = Url.Action("StepTwo")
+            };
+
+            await _mailManager.SendRegistrationMailAsync(registrationMessage, regVm.HeadEmail);
 
             return View(new MainFamilyData());
         }
 
+        [HttpGet]
         public async Task<IActionResult> StepTwo(string familyName)
         {
             //TODO: get main data 'bout family 
             //Can't get information about family because dal doesn't contain methods like GetFamilyByName(string familyName)
 
-            var familyInfo = new FamilyViewModel
+            FamilyViewModel familyInfo = new FamilyViewModel
             {
                 Users = new List<UserViewModel>
                 {
                     new UserViewModel()
-                }
+                },
+                FamilyName = "Doe"
                 //Here must be users
             };
 
@@ -82,19 +96,20 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> StepTwo([FromForm]FamilyViewModel regVm)
+        //[ValidateAntiForgeryToken]
+        public async Task<IActionResult> StepTwo(FamilyViewModel regVm)
         {
-            foreach (var u in regVm.Users)
+            foreach (UserViewModel u in regVm.Users)
             {
-                var randomPass = _cryptoServices.GenerateRandomPassword();
+                string randomPass = _cryptoServices.GenerateRandomPassword();
                 Gender gender;
                 Enum.TryParse(u.Gender.ToString(), out gender);
                 DateTime dateTime;
                 DateTime.TryParse($"{u.Day}/{u.Month}/{u.Year}", out dateTime);
 
-                var user = new ApplicationUser();
+                ApplicationUser user = new ApplicationUser();
                 user.Name = u.Name;
-                user.MidleName = u.MidleName;
+                user.MiddleName = u.MiddleName;
                 user.LastName = regVm.FamilyName;
                 user.BirthDate = dateTime;
                 user.Email = u.Email;
@@ -116,7 +131,13 @@ namespace WebUI.Controllers
                     return View(regVm);
                 }
 
-                await _mailManager.SendRegistrationMailAsync(randomPass, u.Email);
+                var registrationMessage = new RegistrationMessage
+                {
+                    Login = u.Email,
+                    Name = u.Name,
+                    Password = randomPass
+                };
+                await _mailManager.SendRegistrationMailAsync(registrationMessage, u.Email);
             }
             
             //TODO: assign members to concrete family considering previous comment about DAL
@@ -126,9 +147,9 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult RegistrationForm(int index)
+        public PartialViewResult RegistrationForm()
         {
-            return PartialView("_StepTwoForm", new UserViewModel { Index = index });
+            return PartialView("_UserDetails", new UserViewModel());
         }
     }
 }

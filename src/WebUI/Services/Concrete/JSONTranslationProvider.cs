@@ -1,20 +1,18 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
+using WebUI.Services.Abstract;
 
-namespace WebUI.Services
+namespace WebUI.Services.Concrete
 {
     class JsonTranslationProvider : ITranslationProvider
     {
         public IEnumerable<string> Languages { get; private set; }
 
-        private IDictionary<Tuple<string, string>,string>  _translations;
+        private readonly IDictionary<Tuple<string, string>,string>  _translations;
         public string Translate(string key)
         {
             return _translations[Tuple.Create(key, TranslationManager.Instance.CurrentLanguage)] ?? _translations[Tuple.Create(key, "en")];
@@ -23,7 +21,7 @@ namespace WebUI.Services
         public JsonTranslationProvider(string fileName)
         {
 
-            using (var strm = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
+            using (StreamReader strm = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
             {
                 JObject obj = JObject.Parse(strm.ReadToEnd());
                 
@@ -33,12 +31,12 @@ namespace WebUI.Services
                     foreach (KeyValuePair<string, JToken> item in obj)
                     {
                         
-                        var dictionary = obj[item.Key].ToObject<Dictionary<string, string>>();
+                        Dictionary<string, string> dictionary = obj[item.Key].ToObject<Dictionary<string, string>>();
                         
                         
-                        foreach (var lang in dictionary)
+                        foreach (KeyValuePair<string, string> lang in dictionary)
                         {
-                            var rec = new KeyValuePair<Tuple<string, string>, string>(Tuple.Create(item.Key, lang.Key), lang.Value);
+                            KeyValuePair<Tuple<string, string>, string> rec = new KeyValuePair<Tuple<string, string>, string>(Tuple.Create(item.Key, lang.Key), lang.Value);
                             _translations.Add(rec);
                         }
 

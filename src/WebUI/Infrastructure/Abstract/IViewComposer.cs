@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace WebUI.Infrastructure.Abstract
 {
-    public interface IMailManager
+    public interface IViewComposer
     {
-        Task<bool> SendRegistrationMailAsync(string password, string address);
+        Task<string> RenderView(string path, object model);
     }
 }

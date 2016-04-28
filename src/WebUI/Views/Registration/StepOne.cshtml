@@ -1,8 +1,31 @@
-﻿@using System.Collections.Specialized
-@model WebUI.ViewModels.Registration.MainFamilyData
+﻿@model WebUI.ViewModels.Registration.MainFamilyData
 @{
     ViewBag.Title = "Registration | Step One";
 }
+
+<style>
+    .field-validation-error {
+        color: #f00;
+    }
+
+    .field-validation-valid {
+        display: none;
+    }
+
+    .input-validation-error {
+        border: 1px solid #f00;
+        background-color: #fee;
+    }
+
+    .validation-summary-errors {
+        font-weight: bold;
+        color: #f00;
+    }
+
+    .validation-summary-valid {
+        display: none;
+    }
+</style>
 
 <div class="ui text container">
     <div class="ui steps top attached center aligned">
@@ -30,42 +53,44 @@
             <h2 class="ui center aligned header">New family</h2>
 
             <form asp-controller="Registration" asp-action="StepOne" class="ui form segment" id="stepOneForm">
-
+                <div asp-validation-summary="ValidationSummary.ModelOnly"></div>
                 <div class="field">
-                    <label asp-for="FamilyName">Family Name</label>
+                    <label asp-for="FamilyName"></label>
                     <div class="ui corner labeled input">
-                        <input asp-for="FamilyName"/>
+                        <input asp-for="FamilyName" />
                         <div class="ui corner label">
                             <i class="asterisk icon"></i>
                         </div>
                     </div>
+                    <span asp-validation-for="FamilyName"></span>
                 </div>
                 <div class="field">
-                    <label asp-for="HeadEmail">Head Email</label>
+                    <label asp-for="HeadEmail"></label>
                     <div class="ui corner labeled input">
-                        <input asp-for="HeadEmail"/>
+                        <input asp-for="HeadEmail" type="email"/>
                         <div class="ui corner label">
                             <i class="asterisk icon"></i>
                         </div>
                     </div>
+                    <span asp-validation-for="HeadEmail"></span>
                 </div>
                 <div class="field">
-                    <label asp-for="FamilyType">Family Type</label>
+                    <label asp-for="FamilyType"></label>
                     <select asp-for="FamilyType" class="ui dropdown">
                         <option value="">Family type</option>
                         <option value="MARRIED">Married</option>
                         <option value="UNMARRIED">Unmarried</option>
                         <option value="DIVORCED">Divorced</option>
                     </select>
+                    <span asp-validation-for="FamilyType"></span>
                 </div>
-
+                <div class="ui error message"></div>
                 <div class="field" id="buttons">
                     <div>
-                        <input type="submit" value="Submit" class="ui button blue fluid"/>
+                        <input type="submit" value="Submit" class="ui button blue fluid" id="submitButton" />
                     </div>
                 </div>
             </form>
-
             <div class="ui page dimmer" id="page-dimmer">
                 <div class="ui text loader">Loading</div>
             </div>
@@ -74,14 +99,16 @@
 </div>
 
 @section Scripts{
-    <script>
-        $('form').submit(
-            function() {
-                $('#page-dimmer').addClass('active');
-            });
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-        $('body').load(function() {
-            $('#stepOneForm')[0].reset();
+    <script>
+        $('#submitButton').click(function () {
+            if (!$("form").valid()) {
+                return false;
+            } else {
+                $('form').submit();
+                $('#page-dimmer').addClass('active');
+            }
         });
     </script>
 }

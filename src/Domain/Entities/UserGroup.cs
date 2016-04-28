@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Domain.Entities
 {
@@ -11,7 +8,7 @@ namespace Domain.Entities
         public string GroupName { get; set; }
         public UserGroupType Type { get; set; }
 
-        public List<ApplicationUser_UserGroup> ApplicationUserUserGroups { get; set; }
+        public List<ApplicationUserUserGroup> ApplicationUserUserGroups { get; set; }
     }
 
     public enum UserGroupType { Married, Unmarried, Divorced}

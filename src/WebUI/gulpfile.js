@@ -15,14 +15,17 @@ var paths = {
 
 paths.js = "./Assets/js/**/*.js";
 paths.css = "./Assets/css/**/*.css";
+paths.json = "./Assets/json/**/*.json";
 paths.libs = "./Libraries/**/*";
-paths.images = "./Assets/images/**/*";
+paths.images = "./images/**/*";
 paths.minJs = paths.webroot + "js/**/*.min.js";
 paths.minCss = paths.webroot + "css/**/*.min.css";
-paths.concatJsDest = paths.webroot + "js/site.min.js";
-paths.concatCssDest = paths.webroot + "css/site.min.css";
+paths.concatJsDest = paths.webroot + "assets/js/site.min.js";
+paths.concatCssDest = paths.webroot + "assets/css/site.min.css";
 paths.libsDest = paths.webroot + "lib";
-paths.imagesDest = paths.webroot + "images";
+paths.imagesDest = paths.webroot + "assets/images";
+paths.jsonDest = paths.webroot + "assets/json";
+paths.assets = paths.webroot + "assets/";
 
 gulp.task("clean:js", function (cb) {
     rimraf(paths.concatJsDest, cb);
@@ -36,7 +39,7 @@ gulp.task("clean:libs", function (cb) {
     rimraf(paths.libsDest, cb);
 });
 
-gulp.task("clean:all", function (cb) {
+gulp.task("clean:assets", function (cb) {
     rimraf(paths.webroot, cb);
 })
 
@@ -66,8 +69,13 @@ gulp.task("copy:images", function () {
       .pipe(gulp.dest(paths.imagesDest));
 });
 
+gulp.task("copy:json", function () {
+    return gulp.src(paths.json)
+      .pipe(gulp.dest(paths.jsonDest));
+});
 
-gulp.task("clean", ["clean:js", "clean:css", "clean:libs", "clean:all"]);
+
+gulp.task("clean", ["clean:js", "clean:css", "clean:assets"]);
 gulp.task("min", ["min:js", "min:css"]);
-gulp.task("copy", ["copy:libraries", "copy:images"]);
+gulp.task("copy", ["copy:libraries", "copy:images", "copy:json"]);
 gulp.task("default", ["clean", "min", "copy"]);

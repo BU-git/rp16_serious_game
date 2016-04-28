@@ -10,16 +10,15 @@ using Microsoft.Data.Entity;
 
 namespace DAL
 {
-    public class Dal : IDAL
+    public class DAL : IDAL
     {
         private const string CoachRole = "Coach";
         private const string ParticipantRole = "Participant";
+        private ApplicationDbContext _context;
+        private UserManager<ApplicationUser> _userManager;
+        private RoleManager<IdentityRole> _roleManager;
 
-        private readonly ApplicationDbContext context;
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly RoleManager<IdentityRole> roleManager;
-
-        public Dal(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public DAL(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             this.context = context;
             this.userManager = userManager;
@@ -34,11 +33,11 @@ namespace DAL
         /// <returns></returns>
         public async Task CreateCoach(ApplicationUser coach, string password)
         {
-            var coachRole = await roleManager.FindByNameAsync(CoachRole);
+            IdentityRole coachRole = await _roleManager.FindByNameAsync(CoachRole);
             if (coachRole == null)
                 throw new Exception("Coach Role is missing.");
 
-            var user = await userManager.FindByEmailAsync(coach.Email);
+            ApplicationUser user = await _userManager.FindByEmailAsync(coach.Email);
             if (user != null)
                 throw new Exception("User already exists.");
 
@@ -52,13 +51,13 @@ namespace DAL
         /// <param name="participant">User model</param>
         /// <param name="password">Password</param>
         /// <returns></returns>
-        public async Task CreateParticipant(ApplicationUser participant, string password)
+        public async Task<IdentityResult> CreateParticipant(ApplicationUser participant, string password)
         {
-            var participantRole = await roleManager.FindByNameAsync(ParticipantRole);
+            IdentityRole participantRole = await _roleManager.FindByNameAsync(ParticipantRole);
             if (participantRole == null)
                 throw new Exception("Participant Role is missing.");
 
-            var user = await userManager.FindByEmailAsync(participant.Email);
+            ApplicationUser user = await _userManager.FindByEmailAsync(participant.Email);
             if (user != null)
                 throw new Exception("User already exists.");
 
@@ -85,7 +84,7 @@ namespace DAL
         /// <returns></returns>
         public async Task AddUserToGroup(ApplicationUser user, UserGroup group)
         {
-            var userToGroup = new ApplicationUser_UserGroup()
+            var userToGroup = new ApplicationUserUserGroup()
             {
                 ApplicationUser = user,
                 UserGroup = group
@@ -271,5 +270,192 @@ namespace DAL
             return userTask;
         }
 
+        public async Task AddTaskAsync(ApplicationTask appTask)
+        {
+            ApplicationTask task = _context.Tasks.FirstOrDefault(x => x.Name == appTask.Name);
+            if (task != null)
+                throw new Exception($"Task {appTask.Name} already exists in database.Task Id: {task.Id}");
+
+            _context.Tasks.Add(appTask);
+            await _context.SaveChangesAsync();
+
+
+        }
+
+        public ApplicationTask FindTaskbyName(string name)
+        {
+            ApplicationTask task = _context.Tasks.FirstOrDefault(x => x.Name == name);
+            return task;
+
+        }
+
+        public ApplicationTask FindTaskbyId(int taskId)
+        {
+
+            ApplicationTask task = _context.Tasks.FirstOrDefault(x => x.Id == taskId);
+            return task;
+
+        }
+
+        public async Task UpdateTaskAsync(ApplicationTask appTask)
+        {
+            ApplicationTask taskWithSameName = _context.Tasks.FirstOrDefault(x => x.Name == appTask.Name && x.Id != appTask.Id);
+            if (taskWithSameName != null)
+                throw new Exception($"Task {taskWithSameName.Id} already has this name.");
+            ApplicationTask task = _context.Tasks.FirstOrDefault(x => x.Id == appTask.Id);
+            if (task == null)
+                throw new Exception($"There is no task: {appTask.Name} in database.");
+
+            _context.Entry(task).State = EntityState.Detached;
+            _context.Entry(appTask).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+
+        }
+
+        public async Task AssignTaskAsync(UserTask userTask)
+        {
+            ApplicationUser user = await _userManager.FindByIdAsync(userTask.UserId);
+            ApplicationTask task = _context.Tasks.FirstOrDefault(x => x.Id == userTask.TaskId);
+            if (user == null || task == null)
+                throw new Exception("There is no such User or Task");
+
+            UserTask usertask =
+                _context.UserTasks.FirstOrDefault(x => x.UserId == userTask.UserId && x.TaskId == userTask.TaskId);
+
+            if (usertask != null)
+                throw new Exception($"User {usertask.UserId} already has task {usertask.TaskId}");
+            _context.UserTasks.Add(userTask);
+            await _context.SaveChangesAsync();
+
+        }
+
+        public async Task UpdateUserTaskAsync(UserTask userTask)
+        {
+            UserTask usertask =
+                _context.UserTasks.FirstOrDefault(x => x.UserId == userTask.UserId && x.TaskId == userTask.TaskId);
+
+            if (usertask == null)
+                throw new Exception($"User {userTask.UserId} doesn't have task {userTask.TaskId}");
+
+            _context.Entry(usertask).State = EntityState.Detached;
+            _context.Entry(userTask).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+        }
+
+        public async Task<List<UserTask>> GetUserTasksAsync(ApplicationUser user)
+        {
+            List<UserTask> userTasks = await _context.UserTasks.Where(x => x.UserId == user.Id).ToListAsync();
+            return userTasks;
+        }
+
+        public Avatar GetUserAvatarFromContext(ApplicationUser user)
+        {
+            try
+            {
+                Avatar avatar = _userManager.Users.First(applicationUser => applicationUser == user).Avatar;
+                return avatar;
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception($"User {user.Name} doesn't have an avatar or such user doesn't exist!");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public Avatar GetUserAvatarByUserId(string userId)
+        {
+            try
+            {
+                Avatar avatar = _context.Users.First(user => user.Id == userId).Avatar;
+                return avatar;
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception($"User with {userId} Id doesn't have an avatar or such user doesn't exist!");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public string GetAvatarPathByUserId(string userId)
+        {
+            try
+            {
+                string path = _context.Users.First(user => user.Id == userId).Avatar.Media.Path;
+                return path;
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception($"User with {userId} Id doesn't have an avatar or such user doesn't exist!");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<IdentityResult> UpdateUserAvatar(Avatar avatar, ApplicationUser appUser)
+        {
+            try
+            {
+                ApplicationUser user = await _userManager.FindByIdAsync(appUser.Id);
+                user.Avatar = avatar;
+                IdentityResult result = await _userManager.UpdateAsync(user);
+                return result;
+            }
+            catch (Exception)
+            {
+                throw new Exception($"There is no such User in the system");
+            }
+        }
+
+        public async Task<List<Avatar>> GetAllAvatarsAsync()
+        {
+            return await _context.Avatars.ToListAsync();
+        }
+
+        public async Task<List<ApplicationUser>> GetAllUsersWithAvatarsAsync()
+        {
+            return await _userManager.Users.Where(user => user.Avatar != null).ToListAsync();
+        }
+
+        public string GetAvatarPath(Avatar avatar)
+        {
+            try
+            {
+                string path = _context.Avatars.First(av => av == avatar).Media.Path;
+                return path;
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception($"There is no such Avatar in the system");
+            }
+        }
+
+        public async Task<int> UpdateAvatarPath(Avatar avatar, string path)
+        {
+            try
+            {
+                Avatar userAvatar = _context.Avatars.First(av => av == avatar);
+                userAvatar.Media.Path = path;
+                int result = await _context.SaveChangesAsync();
+                return result;
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception($"There is no such Avatar in the system");
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

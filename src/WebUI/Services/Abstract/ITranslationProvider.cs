@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 
-namespace WebUI.Services
+namespace WebUI.Services.Abstract
 {
     interface ITranslationProvider
     {

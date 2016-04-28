@@ -8,7 +8,8 @@
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/semantic/dist/semantic.css"/>
         <link rel="stylesheet" href="~/lib/bootstrap/bootstrap.css"/>
-        <link rel="stylesheet" href="~/css/site.min.css" />
+        <link rel="stylesheet" href="~/assets/css/site.min.css" />
+       @* <link href="~/assets/css/main.css" rel="stylesheet" />*@
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css"
@@ -42,9 +43,12 @@
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation/dist/additional-methods.js"></script>
         <script src="~/lib/semantic/semantic-ui/dist/semantic.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/assets/js/site.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.3.min.js"
