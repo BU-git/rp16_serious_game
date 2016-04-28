@@ -1,0 +1,100 @@
+@using Domain.Entities
+@model WebUI.ViewModels.Task.TaskViewModel
+
+@{string color = "";}
+@switch (Model.Status)
+            {
+                case Status.OPEN:
+                    color = "green";
+                    break;
+                case Status.EXPIRED:
+                    color = "red";
+                    break;
+                case Status.REOPENED:
+                    color = "yellow";
+                    break;
+                default:
+                    color = "green";
+                    break;
+            }
+
+<div class="ui centered card">
+
+    <div class="content">
+        <span class="right floated">
+            <span class="ui small header">@Html.DisplayNameFor(model => model.Coins)</span>
+            <a class="ui yellow circular label">@Html.DisplayFor(m => Model.Coins)</a>
+
+        </span>
+
+
+
+        <a class="header">@Html.DisplayFor(model => Model.Name)</a>
+
+
+    </div>
+    <div class="content">
+       
+            <div class="description">@Html.DisplayFor(model => model.Text)</div>
+        
+    </div>
+   
+    
+        <div class="content">
+
+            <div class="left floated">
+                <span class="ui @color horizontal label">
+                    @Html.DisplayFor(x => Model.Status)
+                </span>
+            </div>
+            <div class="right floated meta">
+                <span class="date">
+                    @Html.DisplayFor(model => model.TimeLeft) Days
+                </span>
+            </div>
+        </div>
+
+   
+        <div class="extra conten">
+            @*<div class="fluid ui green button">Send Task*@
+            <a class="fluid ui green button" href="@Url.Action("SubmitTask", "Task", new {taskId = Model.TaskId, userId = Model.UserId})">
+                Submit
+            </a>
+            @*</div>*@
+
+
+        </div>
+
+    
+
+    <div class="extra content">
+        <div class="ui comments">
+            <div class="comment">
+
+                <div class="content">
+                    <a class="author">Steve Jobes</a>
+                    <div class="metadata">
+                        <div class="date">2 days ago</div>
+                    </div>
+                    <div class="text">
+                        Revolutionary!
+                    </div>
+                    <div class="actions">
+                        <a class="reply active">Reply</a>
+                    </div>
+                    <form class="ui reply form">
+                        <div class="field">
+                            <div class="ui medium icon input">
+                                <input type="text" placeholder="Comment...">
+
+                            </div>
+                        </div>
+                        <div class="ui primary submit labeled icon button">
+                            <i class="icon edit"></i> Add Reply
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

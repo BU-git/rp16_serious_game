@@ -1,0 +1,91 @@
+@using Domain.Entities
+@using WebUI.ViewModels.Task
+@model WebUI.ViewModels.Task.TaskListViewModel
+
+@{
+    ViewData["Title"] = "Task List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br/>
+<br/>
+@{ bool isCoach = Context.User.IsInRole("Coach");}
+<div class="ui one column stackable center aligned page grid">
+    <div class="ui tree stackable cards">
+
+        @foreach (var item in Model.UserTasks)
+        {
+            string color = "";
+
+            switch (item.Status)
+            {
+                case Status.OPEN:
+                    color = "green";
+                    break;
+                case Status.EXPIRED:
+                    color = "red";
+                    break;
+                case Status.REOPENED:
+                    color = "yellow";
+                    break;
+                default:
+                    color = "green";
+                    break;
+            }
+
+            string size = "";
+            if (item.Coins < 2) { size = "tiny"; }
+            else if (item.Coins <= 10) { size = "small"; }
+            else if (item.Coins <= 50) { size = ""; }
+            else if (item.Coins > 50) { size = "large"; }
+
+            using (Html.BeginForm("ViewUserTask", "Task", new { taskId = item.TaskId, userId = item.UserId }, FormMethod.Post, new {@class= color + " card"}))
+            {
+
+              
+                    <div class="content">
+                        <span class="right floated star">
+                        <i class="active star @size icon"></i>
+                        <a class="floating ui yellow circular label">@Html.DisplayFor(m => item.Coins)</a>
+                    </span>
+                        <div class="header">
+                            @Html.DisplayFor(m => item.Name)
+                        </div>
+                        @if (isCoach)
+                        {
+                            <div class="meta">
+                                @Html.DisplayFor(x=>item.UserName)
+                            </div>
+                        }
+
+                    </div>
+                    <div class="content">
+
+                        <div class="ui small feed">
+                            <div class="event">
+                                <div class="content">
+                                    <span class="right floated time">
+                                    @Html.DisplayFor(x => item.ExpireDt)
+                                </span>
+                                    <div class="ui @color horizontal label">
+                                        @Html.DisplayFor(x => item.Status)
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                   
+
+                    <button type="submit" class="ui bottom attached button" >
+                        
+                        <i class="zoom icon"></i>
+                        View
+                    </button>
+
+               
+                    }
+
+        }
+    </div>
+</div>
