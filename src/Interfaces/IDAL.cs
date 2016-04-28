@@ -20,7 +20,7 @@ namespace Interfaces
         /// <param name="participant">User model</param>
         /// <param name="password">Password</param>
         /// <returns></returns>
-        Task<IdentityResult> CreateParticipant(ApplicationUser participant, string password);
+        Task CreateParticipant(ApplicationUser participant, string password);
         /// <summary>
         /// Create UserGroup
         /// </summary>
@@ -34,7 +34,6 @@ namespace Interfaces
         /// <param name="group">User Group</param>
         /// <returns></returns>
         Task AddUserToGroup(ApplicationUser user, UserGroup group);
-
         /// <summary>
         /// Finds and returns user with specified id
         /// </summary>
@@ -59,7 +58,6 @@ namespace Interfaces
         /// <param name="user">User</param>
         /// <returns></returns>
         Task<IList<string>> GetUserRoles(ApplicationUser user);
-
         /// <summary>
         /// Applies changes made to user
         /// </summary>
@@ -72,7 +70,7 @@ namespace Interfaces
         /// <param name="userGroup">User Group</param>
         /// <returns></returns>
         Task EditUserGroup(UserGroup userGroup);
-
+        List<UserTask> GetUserTasks(ApplicationUser user);
         Task AddTaskAsync(ApplicationTask appTask);
         Task UpdateTaskAsync(ApplicationTask appTask);
         Task AssignTaskAsync(UserTask userTask);
@@ -80,6 +78,7 @@ namespace Interfaces
         Task<List<UserTask>> GetUserTasksAsync(ApplicationUser user);
         ApplicationTask FindTaskbyName(string name);
         ApplicationTask FindTaskbyId(int taskId);
+        UserTask FindUserTaskById(int taskId, string userId);
         Avatar GetUserAvatarFromContext(ApplicationUser user);
         Avatar GetUserAvatarByUserId(string userId);
         string GetAvatarPathByUserId(string userId);
@@ -88,5 +87,7 @@ namespace Interfaces
         Task<List<ApplicationUser>> GetAllUsersWithAvatarsAsync();
         string GetAvatarPath(Avatar avatar);
         Task<int> UpdateAvatarPath(Avatar avatar, string path);
+        List<UserTask> GetUserGroupTasks(UserGroup group);
+        List<UserGroup> GetUsersUserGroups(string userId);
     }
 }

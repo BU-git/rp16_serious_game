@@ -16,10 +16,10 @@ namespace DAL
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IDAL _dal;
 
-        public DataInitializer(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
+        public DataInitializer(ApplicationDbContext _context, UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager , IDAL dal)
         {
-            this._context = context;
+            this._context = _context;
             this._userManager = userManager;
             this._roleManager = roleManager;
             this._dal = dal;

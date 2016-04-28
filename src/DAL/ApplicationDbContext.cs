@@ -18,12 +18,12 @@ namespace DAL
 
             builder.Entity<ApplicationUser_UserGroup>()
                 .HasOne(u => u.ApplicationUser)
-                .WithMany(ug => ug.ApplicationUserUserGroups)
+                .WithMany(ug => ug.ApplicationUser_UserGroups)
                 .HasForeignKey(u => u.Id);
 
             builder.Entity<ApplicationUser_UserGroup>()
                 .HasOne(ug => ug.UserGroup)
-                .WithMany(u => u.ApplicationUserUserGroups)
+                .WithMany(u => u.ApplicationUser_UserGroups)
                 .HasForeignKey(ug => ug.UserGroupId);
 
             builder.Entity<Customer>()

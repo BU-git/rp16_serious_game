@@ -14,6 +14,7 @@ using Microsoft.AspNet.Identity;
 
 namespace WebUI.Controllers
 {
+    [Authorize]
     public class TaskController : Controller
     {
         private readonly IDAL _dal;
@@ -22,7 +23,9 @@ namespace WebUI.Controllers
         {
             _dal = dal;
         }
+
         // GET: /<controller>/
+        [HttpGet]
         public async Task<IActionResult> TaskList()
         {
             ApplicationUser user = await GetCurrentUserAsync();
@@ -61,8 +64,6 @@ namespace WebUI.Controllers
             return View(model);
         }
 
-        
-
         [ActionName("ViewAppTask")]
         public IActionResult ViewTask(int taskId)
         {
@@ -85,6 +86,7 @@ namespace WebUI.Controllers
             return View("ViewTask", taskModel);
         }
 
+        [HttpPost]
         public async Task<IActionResult> SubmitTask(int taskId, string userId)
         {
             UserTask task = _dal.FindUserTaskById(taskId, userId);

@@ -14,9 +14,8 @@ namespace WebUI.Controllers
         {
             _repository = repo;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var ressult = await _zipWorker.GetAddressAsync("2012ES", 30);
             return View();
         }
 
