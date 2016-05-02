@@ -85,7 +85,7 @@ namespace WebUI.Controllers
             return View("ViewTask", taskModel);
         }
 
-        [HttpPost]
+       // [HttpPost]
         public async Task<IActionResult> SubmitTask(int taskId, string userId)
         {
             UserTask task = _dal.FindUserTaskById(taskId, userId);
