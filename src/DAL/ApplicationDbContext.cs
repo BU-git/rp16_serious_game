@@ -10,6 +10,9 @@ namespace DAL
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<Appointment_User>()
+              .HasKey(t => new { t.AppointmentId, t.UserId });
+
             builder.Entity<ApplicationUser_UserGroup>()
               .HasKey(t => new { t.Id, t.UserGroupId });
 
@@ -25,6 +28,16 @@ namespace DAL
                 .HasOne(ug => ug.UserGroup)
                 .WithMany(u => u.ApplicationUser_UserGroups)
                 .HasForeignKey(ug => ug.UserGroupId);
+
+            builder.Entity<Appointment_User>()
+                .HasOne(au => au.User)
+                .WithMany(u => u.User_Appointments)
+                .HasForeignKey(au => au.UserId);
+
+            builder.Entity<Appointment_User>()
+                .HasOne(au => au.Appointment)
+                .WithMany(a => a.Appointment_Users)
+                .HasForeignKey(au => au.AppointmentId);
 
             builder.Entity<Customer>()
                 .HasOne(a => a.ApplicationUser)
@@ -76,7 +89,7 @@ namespace DAL
         public DbSet<Customer> Customers {get;set;}
         public DbSet<UserGroup> UserGroups { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
-
+        public DbSet<Appointment_User> Appointment_Users { get; set; }
         public DbSet<ApplicationTask> Tasks { get; set; } 
         public DbSet<UserTask> UserTasks { get; set; } 
         public DbSet<Media> Medias { get; set; }

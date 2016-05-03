@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,14 +13,6 @@ namespace Domain.Entities
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
 
-        private List<Appointment_User> Appointment_Users { get; set; }
-
-        public IEnumerable<ApplicationUser> Users
-        {
-            get
-            {
-                return Appointment_Users.Select(a => a.User);
-            }
-        }
+        public virtual ICollection<Appointment_User> Appointment_Users { get; set; }
     }
 }

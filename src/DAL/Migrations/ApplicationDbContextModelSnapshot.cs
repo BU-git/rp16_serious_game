@@ -3,7 +3,7 @@ using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
 
-namespace DAL.Migrations
+namespace WebUI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -118,6 +118,31 @@ namespace DAL.Migrations
                     b.Property<int>("Type");
 
                     b.HasKey("AvatarId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Appointment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description");
+
+                    b.Property<DateTime>("End");
+
+                    b.Property<DateTime>("Start");
+
+                    b.HasKey("Id");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Appointment_User", b =>
+                {
+                    b.Property<int>("AppointmentId");
+
+                    b.Property<string>("UserId");
+
+                    b.Property<bool>("IsOwner");
+
+                    b.HasKey("AppointmentId", "UserId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customer", b =>
@@ -293,6 +318,17 @@ namespace DAL.Migrations
                     b.HasOne("Domain.Entities.Media")
                         .WithMany()
                         .HasForeignKey("MediaId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Appointment_User", b =>
+                {
+                    b.HasOne("Domain.Entities.Appointment")
+                        .WithMany()
+                        .HasForeignKey("AppointmentId");
+
+                    b.HasOne("Domain.Entities.ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customer", b =>

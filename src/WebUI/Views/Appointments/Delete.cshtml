@@ -1,0 +1,72 @@
+@using Domain.Entities
+@model WebUI.ViewModels.Appointments.AppointmentViewModel
+
+@{
+    ViewBag.Title = "Delete Appointment";
+}
+
+<div class="ui text container">
+    <div class="ui red message">
+        <div class="header">
+            Are you sure you want to delete this?
+        </div>
+    </div>
+    <div class="ui form" id="appointmentsForm">
+        <form asp-controller="Appointments" asp-action="Delete" class="ui form segment">
+            <input type="hidden" asp-for="Id" />
+            <div class="field">
+                <label asp-for="Description"></label>
+
+                <input asp-for="Description" readonly="" />
+
+            </div>
+            <div class="field">
+                <label>Attendees</label>
+                <div class="ui horizontal list">
+                    @foreach (ApplicationUser u in Model.Users)
+                    {
+                        <div class="item">
+                            <i class="user icon"></i>
+                            <div class="content">@u.Name</div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="field">
+
+                <div class="two fields">
+                    <div class="field">
+                        <label asp-for="Start"></label>
+
+                        <div class="ui left icon input">
+                            <input type="text" readonly="" value="@Model.Start">
+                            <i class="calendar icon"></i>
+                        </div>
+
+                    </div>
+                    <div class="field">
+                        <label asp-for="End"></label>
+
+                        <div class="ui left icon input">
+                            <input type="text" readonly="" value="@Model.End.ToLongTimeString()">
+                            <i class="calendar icon"></i>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <button class="ui primary button fluid" type="submit" value="Delete">Delete</button>
+        </form>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+
+
+
+    @section Scripts{
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+
+    }

@@ -1,0 +1,68 @@
+@using Domain.Entities
+@model WebUI.ViewModels.Appointments.AppointmentViewModel
+
+@{
+    ViewBag.Title = "Appointment details";
+}
+
+<div class="ui text container">
+    <div class="ui form" id="appointmentsForm">
+        <h2 class="ui center aligned header">Appointment details</h2>
+        <form class="ui form segment">
+            <input type="hidden" asp-for="Id" />
+            <div class="field">
+                <label asp-for="Description"></label>
+
+                <input asp-for="Description" readonly="" />
+
+            </div>
+            <div class="field">
+                <label>Attendees</label>
+                <div class="ui horizontal list">
+                    @foreach (ApplicationUser u in Model.Users)
+                    {
+                        <div class="item">
+                            <i class="user icon"></i>
+                            <div class="content">@u.Name</div>
+                        </div>
+                    }
+                </div>
+             </div>
+
+                    <div class="field">
+
+                        <div class="two fields">
+                            <div class="field">
+                                <label asp-for="Start"></label>
+
+                                <div class="ui left icon input">
+                                    <input type="text" readonly="" value="@Model.Start">
+                                    <i class="calendar icon"></i>
+                                </div>
+
+                            </div>
+                            <div class="field">
+                                <label asp-for="End"></label>
+
+                                <div class="ui left icon input">
+                                    <input type="text" readonly="" value="@Model.End.ToLongTimeString()">
+                                    <i class="calendar icon"></i>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+</form>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+
+
+
+    @section Scripts{
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+
+    }

@@ -1,0 +1,114 @@
+@using Domain.Entities
+@model WebUI.ViewModels.Appointments.AppointmentViewModel
+
+@{
+    ViewBag.Title = "Create appointment";
+}
+<style>
+    .field-validation-error {
+        color: #f00;
+    }
+
+    .field-validation-valid {
+        display: none;
+    }
+
+    .input-validation-error {
+        border: 1px solid #f00;
+        background-color: #fee;
+    }
+
+    .validation-summary-errors {
+        font-weight: bold;
+        color: #f00;
+    }
+
+    .validation-summary-valid {
+        display: none;
+    }
+</style>
+
+<div class="ui text container">
+    <div class="ui form" id="appointmentsForm">
+        <h2 class="ui center aligned header">Create appointment</h2>
+        <form asp-controller="Appointments" asp-action="Create" class="ui form segment">
+            <div class="field">
+                <div asp-validation-summary="ValidationSummary.ModelOnly"></div>
+                </div>
+                <div class="field">
+                    <label asp-for="Description"></label>
+
+                    <input asp-for="Description" />
+                    <span asp-validation-for="Description" />
+
+                </div>
+                <div class="field">
+                    <label>Attendees</label>
+                    <div class="ui multiple selection dropdown">
+                        <input name="users" type="hidden" value="@ViewBag.Creator">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">Add users to appointment</div>
+                        <div class="menu">
+                            @foreach (ApplicationUser u in ViewBag.Users)
+                            {
+                                <div class="item" data-value="@u.Id">@u.Name</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+
+                    <div class="two fields">
+                        <div class="field">
+                            <label>Start</label>
+                            <div class="ui calendar" id="rangestart">
+                                <div class="ui input left icon">
+                                    <i class="calendar icon"></i>
+                                    <input asp-for="Start" placeholder="Start">
+                                </div>
+                                <span asp-validation-for="Start"></span>
+                            </div>
+
+                        </div>
+                        <div class="field">
+                            <label>End</label>
+                            <div class="ui calendar" id="rangeend">
+                                <div class="ui input left icon">
+                                    <i class="calendar icon"></i>
+                                    <input asp-for="End" placeholder="End">
+
+                                </div>
+                            </div>
+                            <span asp-validation-for="End" color #f00></span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="ui primary button fluid" type="submit" value="Create">Create</button>
+
+
+
+</form>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
+    </div>
+
+
+
+    @section Scripts{
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+        <script>
+            $('.ui.dropdown').dropdown();
+            $('#rangestart').calendar({
+                endCalendar: $('#rangeend')
+            });
+            $('#rangeend').calendar({
+                type: 'time',
+                startCalendar: $('#rangestart')
+            });
+        </script>
+
+    }

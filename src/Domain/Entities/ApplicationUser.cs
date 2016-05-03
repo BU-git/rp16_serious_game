@@ -35,16 +35,7 @@ namespace Domain.Entities
         public List<UserTask> UserTasks { get; set; }
         public Avatar Avatar { get; set; }
 
-        private List<Appointment_User> User_Appointments { get; set; }
-
-        public IEnumerable<Appointment> Appointments
-        {
-            get
-            {
-                return User_Appointments.Select(u => u.Appointment);
-            }
-        }
-
+        public virtual ICollection<Appointment_User> User_Appointments { get; set; }
     }
 
     public enum Gender
