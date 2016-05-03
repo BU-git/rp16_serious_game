@@ -17,9 +17,9 @@ namespace WebUI.Controllers
     [Authorize]
     public class AppointmentsController : Controller
     {
-        private IDal _dal;
+        private IDAL _dal;
 
-        public AppointmentsController(IDal dal)
+        public AppointmentsController(IDAL dal)
         {
             _dal = dal;
         }

@@ -9,10 +9,8 @@
     <h2 class="ui center aligned header">Appointments List</h2>
     @if (User.IsInRole("Coach"))
     {
-        <a asp-action="Create">
-            <div class="ui labeled icon blue button">
-                <i class="add icon"></i> Create New
-            </div>
+        <a asp-action="Create" class="ui labeled icon blue button">
+            <i class="add icon"></i> Create New
         </a>
     }
     <p></p>
@@ -36,10 +34,8 @@
                 </a>
                 @if (User.IsInRole("Coach"))
                 {
-                    <a asp-action="Delete" asp-route-id="@item.Id">
-                        <div class="ui bottom attached button">
-                            <i class="delete icon"></i> Delete
-                        </div>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="ui bottom attached button">
+                        <i class="delete icon"></i> Delete
                     </a>
                 }
             </div>

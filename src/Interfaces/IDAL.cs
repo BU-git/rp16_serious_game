@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Domain.Entities;
 using Microsoft.AspNet.Identity;
+using System;
 
 namespace Interfaces
 {
