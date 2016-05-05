@@ -1,16 +1,23 @@
-﻿using Interfaces;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Interfaces;
 using Microsoft.AspNet.Mvc;
+using WebUI.Services.Abstract;
+using WebUI.Services.Concrete;
 
 namespace WebUI.Controllers
 {
     public class HomeController : Controller
     {
         private IDAL _repository;
+        private readonly ITranslationProvider _translationProvider;
 
         public HomeController(IDAL repo)
         {
             _repository = repo;
+            _translationProvider = new JsonTranslationProvider(@".\Assets\json\translation.json");
         }
+
         public IActionResult Index()
         {
             return View();
@@ -33,6 +40,15 @@ namespace WebUI.Controllers
         public IActionResult Error()
         {
             return View();
+        }
+
+        [HttpPost]
+        public JsonResult Translate(string[] keys)
+        {
+            //var language = Request.Cookies.ContainsKey("language") ? Request.Cookies["language"][0] : "en";
+
+            var dictionary = keys.ToDictionary(key => key, key => _translationProvider.Translate(key));
+            return Json(dictionary);
         }
     }
 }
