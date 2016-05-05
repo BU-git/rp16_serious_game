@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Domain.Entities;
 using Microsoft.AspNet.Identity;
+using System;
 
 namespace Interfaces
 {
@@ -47,6 +48,11 @@ namespace Interfaces
         /// <returns></returns>
         Task<ApplicationUser> GetUserByEmail(string email);
         /// <summary>
+        /// Get all users
+        /// </summary>
+        /// <returns></returns>
+        Task<List<ApplicationUser>> GetUsers();
+        /// <summary>
         /// Finds and returns UserGroup with specified id
         /// </summary>
         /// <param name="id">Id</param>
@@ -89,5 +95,41 @@ namespace Interfaces
         Task<int> UpdateAvatarPath(Avatar avatar, string path);
         List<UserTask> GetUserGroupTasks(UserGroup group);
         List<UserGroup> GetUsersUserGroups(string userId);
+
+        /// <summary>
+        /// Create Appointment and assign it's owner
+        /// </summary>
+        /// <param name="appointment">Appointment</param>
+        /// <param name="creatorId">Creator which automatically assigned as owner</param>
+        /// <param name="attendeesIds">List of participants UserIds</param>
+        /// <returns></returns>
+        Task CreateAppointment(Appointment appointment, string creatorId, IEnumerable<string> attendeesIds);
+        /// <summary>
+        /// Edit appointment
+        /// </summary>
+        /// <param name="appointment">Appointment</param>
+        /// <param name="attendeesIds">List of participants UserIds</param>
+        /// <returns></returns>
+        Task EditAppointment(Appointment appointment, IEnumerable<string> attendeesIds);
+        /// <summary>
+        /// Delete appointment
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns></returns>
+        Task DeleteAppointment(int id);
+        /// <summary>
+        /// Get all future appointments where specified user participates
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <returns></returns>
+        Task<List<Appointment>> GetUserAppointments(string userId);
+        /// <summary>
+        /// Get appointment by id
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns></returns>
+        Task<Appointment> GetAppointmentById(int id);
+
+        Task<Appointment_User> ValidateAppointment(DateTime start, DateTime end, IEnumerable<string> users);
     }
 }

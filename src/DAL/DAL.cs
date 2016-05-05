@@ -115,6 +115,15 @@ namespace DAL
         }
 
         /// <summary>
+        /// Get all users
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<ApplicationUser>> GetUsers()
+        {
+            return await _userManager.Users.ToListAsync();
+        }
+
+        /// <summary>
         /// Finds and returns UserGroup with specified id
         /// </summary>
         /// <param name="id">Id</param>
@@ -154,6 +163,101 @@ namespace DAL
         {
             _context.Update(userGroup);
             await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Create Appointment and assign it's owner
+        /// </summary>
+        /// <param name="appointment">Appointment</param>
+        /// <param name="creatorId">Creator which automatically assigned as owner</param>
+        /// <param name="attendeesIds">List of participants UserIds</param>
+        /// <returns></returns>
+        public async Task CreateAppointment(Appointment appointment, string creatorId, IEnumerable<string> attendeesIds)
+        {
+            _context.Appointments.Add(appointment);
+
+            foreach (var userId in attendeesIds)
+            {
+                var appointment_User = new Appointment_User()
+                {
+                    AppointmentId = appointment.Id,
+                    UserId = userId,
+                    IsOwner = (creatorId == userId)
+                };
+                _context.Add(appointment_User);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Edit appointment
+        /// </summary>
+        /// <param name="appointment">Appointment</param>
+        /// <param name="attendeesIds">List of participants UserIds</param>
+        /// <returns></returns>
+        public async Task EditAppointment(Appointment appointment, IEnumerable<string> attendeesIds)
+        {
+            //Remove users
+            foreach(var appointment_User in appointment.Appointment_Users)
+            {
+                if (!attendeesIds.Contains(appointment_User.UserId))
+                    _context.Remove(appointment_User);
+            }
+            
+            //Add users
+            foreach (var userId in attendeesIds)
+            {
+                if (!appointment.Appointment_Users.Select(a => a.UserId).Contains(userId))
+                {
+                    var appointment_User = new Appointment_User()
+                    {
+                        AppointmentId = appointment.Id,
+                        UserId = userId
+                    };
+                    _context.Add(appointment_User);
+                }
+            }
+
+            _context.Update(appointment);
+            await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Delete appointment
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns></returns>
+        public async Task DeleteAppointment(int id)
+        {
+            Appointment appointment = await _context.Appointments.SingleAsync(m => m.Id == id);
+            _context.Appointments.Remove(appointment);
+            await _context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Get all future appointments where specified user participates
+        /// </summary>
+        /// <param name="userId">UserId</param>
+        /// <returns></returns>
+        public async Task<List<Appointment>> GetUserAppointments(string userId)
+        {
+            return await _context.Appointments.Where(a => a.Appointment_Users.Any(au => au.UserId == userId)).ToListAsync();
+        }
+
+        /// <summary>
+        /// Get appointment by id
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns></returns>
+        public async Task<Appointment> GetAppointmentById(int id)
+        {
+            return await _context.Appointments.Include(a => a.Appointment_Users).ThenInclude(au => au.User).SingleAsync(a => a.Id == id);
+        }
+
+        public async Task<Appointment_User> ValidateAppointment(DateTime start, DateTime end, IEnumerable<string> users)
+        {
+            return await _context.Appointment_Users.Include(a => a.Appointment).Include(a => a.User).FirstOrDefaultAsync(a => (a.Appointment.Start < end && a.Appointment.End > start) && users.Contains(a.UserId));
         }
 
         public async Task AddTaskAsync(ApplicationTask appTask)

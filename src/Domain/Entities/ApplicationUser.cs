@@ -35,6 +35,7 @@ namespace Domain.Entities
         public List<UserTask> UserTasks { get; set; }
         public Avatar Avatar { get; set; }
 
+        public virtual ICollection<Appointment_User> User_Appointments { get; set; }
     }
 
     public enum Gender

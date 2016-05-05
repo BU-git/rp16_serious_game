@@ -8,9 +8,10 @@ using DAL;
 namespace DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160503195311_Appointments")]
+    partial class Appointments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -108,20 +109,6 @@ namespace DAL.Migrations
                     b.HasKey("Id", "UserGroupId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Avatar", b =>
-                {
-                    b.Property<int>("AvatarId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("Level");
-
-                    b.Property<int>("MediaId");
-
-                    b.Property<int>("Type");
-
-                    b.HasKey("AvatarId");
-                });
-
             modelBuilder.Entity("Domain.Entities.Appointment", b =>
                 {
                     b.Property<int>("Id")
@@ -145,6 +132,20 @@ namespace DAL.Migrations
                     b.Property<bool>("IsOwner");
 
                     b.HasKey("AppointmentId", "UserId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Avatar", b =>
+                {
+                    b.Property<int>("AvatarId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Level");
+
+                    b.Property<int>("MediaId");
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("AvatarId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customer", b =>
@@ -315,13 +316,6 @@ namespace DAL.Migrations
                         .HasForeignKey("UserGroupId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Avatar", b =>
-                {
-                    b.HasOne("Domain.Entities.Media")
-                        .WithMany()
-                        .HasForeignKey("MediaId");
-                });
-
             modelBuilder.Entity("Domain.Entities.Appointment_User", b =>
                 {
                     b.HasOne("Domain.Entities.Appointment")
@@ -331,6 +325,13 @@ namespace DAL.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Avatar", b =>
+                {
+                    b.HasOne("Domain.Entities.Media")
+                        .WithMany()
+                        .HasForeignKey("MediaId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customer", b =>
