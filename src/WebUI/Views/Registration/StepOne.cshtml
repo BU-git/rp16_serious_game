@@ -51,7 +51,11 @@
     <div class="ui attached segment" id="content">
         <div class="ui form" id="regForm">
             <h2 class="ui center aligned header">New family</h2>
-
+            <hr/>
+            here is <translation trl-key="Key"></translation>
+            <br/>
+            here is runtime tag <span data-trl-key="Key1"></span> <span data-trl-key="Key2"></span> <span data-trl-key="Key3"></span>
+            <hr/>
             <form asp-controller="Registration" asp-action="StepOne" class="ui form segment" id="stepOneForm">
                 <div asp-validation-summary="ValidationSummary.ModelOnly"></div>
                 <div class="field">
@@ -102,13 +106,37 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
     <script>
-        $('#submitButton').click(function () {
-            if (!$("form").valid()) {
-                return false;
-            } else {
-                $('form').submit();
-                $('#page-dimmer').addClass('active');
-            }
-        });
+        translate();
+
+        $('#submitButton')
+            .click(function() {
+                if (!$("form").valid()) {
+                    return false;
+                } else {
+                    $('form').submit();
+                    $('#page-dimmer').addClass('active');
+                }
+            });
+
+        function translate() {
+            var dat = {
+                keys: []
+            };
+            $("span[data-trl-key]")
+                .each(function() {
+                    dat.keys.push($(this).attr("data-trl-key"));
+                });
+
+            $.post({
+                url: "/Home/Translate",
+                data: dat,
+                success: function(data) {
+                    $("span[data-trl-key]")
+                        .each(function() {
+                            $(this).text(data[$(this).attr("data-trl-key")]);
+                        });
+                }
+            });
+        }
     </script>
 }
