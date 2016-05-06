@@ -15,13 +15,13 @@ namespace DAL
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IDAL _dal;
 
-        public DataInitializer(ApplicationDbContext _context, UserManager<ApplicationUser> userManager,
+        public DataInitializer(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager , IDAL dal)
         {
-            this._context = _context;
-            this._userManager = userManager;
-            this._roleManager = roleManager;
-            this._dal = dal;
+            this._context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
+            _dal = dal;
         }
 
         public async Task InitializeDataAsync()
@@ -71,7 +71,7 @@ namespace DAL
             var user1 = await _userManager.FindByEmailAsync("Admin@admin.com");
             if (user1 == null)
             {
-                ApplicationUser admin = new ApplicationUser()
+                var admin = new ApplicationUser()
                 {
                     UserName = "Admin@admin.com",
                     Name = "Admin1",
@@ -86,7 +86,7 @@ namespace DAL
             var user2 = await _userManager.FindByEmailAsync("Admin2@admin.com");
             if (user2 == null)
             {
-                ApplicationUser admin2 = new ApplicationUser()
+                var admin2 = new ApplicationUser()
                 {
                     UserName = "Admin2@admin.com",
                     Name = "Admin2",
@@ -100,7 +100,7 @@ namespace DAL
             var user3 = await _userManager.FindByEmailAsync("FirstCoach@coach.com");
             if (user3 == null)
             {
-                ApplicationUser firstCoach = new ApplicationUser()
+                var firstCoach = new ApplicationUser()
                 {
                     UserName = "FirstCoach@coach.com",
                     Name = "Mentor1",
@@ -115,7 +115,7 @@ namespace DAL
             var user4 = await _userManager.FindByEmailAsync("SecondCoach@coach.com");
             if (user4 == null)
             {
-                ApplicationUser secondCoach = new ApplicationUser()
+                var secondCoach = new ApplicationUser()
                 {
                     UserName = "SecondCoach@coach.com",
                     Name = "Mentor2",
@@ -129,7 +129,7 @@ namespace DAL
             var user5 = await _userManager.FindByEmailAsync("FirstParticipant@participant.com");
             if (user5 == null)
             {
-                ApplicationUser participant = new ApplicationUser()
+                var participant = new ApplicationUser()
                 {
                     UserName = "FirstParticipant@participant.com",
                     Name = "Participant1",
@@ -142,7 +142,7 @@ namespace DAL
             var user6 = await _userManager.FindByEmailAsync("SecondParticipant@participant.com");
             if (user6 == null)
             {
-                ApplicationUser secondParticipant = new ApplicationUser()
+                var secondParticipant = new ApplicationUser()
                 {
                     UserName = "SecondParticipant@participant.com",
                     Name = "Participant2",
@@ -155,7 +155,7 @@ namespace DAL
             var user7 = await _userManager.FindByEmailAsync("Governor@governor.com");
             if (user7 == null)
             {
-                ApplicationUser governor = new ApplicationUser()
+                var governor = new ApplicationUser()
                 {
                     UserName = "Governor@governor.com",
                     Name = "Governor",
@@ -179,9 +179,9 @@ namespace DAL
 
                 if (user1 != null && user2 != null && coach != null)
                 {
-                    ApplicationUser_UserGroup uug1 = new ApplicationUser_UserGroup();
-                    ApplicationUser_UserGroup uug2 = new ApplicationUser_UserGroup();
-                    ApplicationUser_UserGroup uug3 = new ApplicationUser_UserGroup();
+                    var uug1 = new ApplicationUserUserGroup();
+                    var uug2 = new ApplicationUserUserGroup();
+                    var uug3 = new ApplicationUserUserGroup();
 
                     uug1.ApplicationUser = user1;
                     uug1.UserGroup = userGroup;
@@ -266,7 +266,7 @@ namespace DAL
 
                         Coins = firstTask.Coins,
                         ExpireDt = new DateTime(2016, 08, 08),
-                        Status = Status.OPEN,
+                        Status = Status.Open,
                         TaskId = firstTask.Id,
                         Text =   firstTask.Text,
                         UserId = user.Id
@@ -281,7 +281,7 @@ namespace DAL
 
                         Coins = secondTask.Coins,
                         ExpireDt = new DateTime(2016, 08, 08),
-                        Status = Status.OPEN,
+                        Status = Status.Open,
                         TaskId = secondTask.Id,
                         Text = secondTask.Text,
                         UserId = user.Id
@@ -296,7 +296,7 @@ namespace DAL
 
                         Coins = thirdTask.Coins,
                         ExpireDt = new DateTime(2016, 08, 08),
-                        Status = Status.REOPENED,
+                        Status = Status.Reopened,
                         TaskId = thirdTask.Id,
                         Text = thirdTask.Text,
                         UserId = user.Id
@@ -310,7 +310,7 @@ namespace DAL
                     {
                         Coins = fourthTask.Coins,
                         ExpireDt = new DateTime(2015, 08, 08),
-                        Status = Status.EXPIRED,
+                        Status = Status.Expired,
                         TaskId = fourthTask.Id,
                         UserId = user.Id
                     };

@@ -21,22 +21,22 @@ namespace WebUI.Services.Concrete
         public JsonTranslationProvider(string fileName)
         {
 
-            using (StreamReader strm = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
+            using (var strm = new StreamReader(File.OpenRead(fileName), Encoding.UTF8))
             {
-                JObject obj = JObject.Parse(strm.ReadToEnd());
+                var obj = JObject.Parse(strm.ReadToEnd());
                 
                 if (obj.Count > 0)
                 {                   
                     _translations = new Dictionary<Tuple<string, string>, string>();
-                    foreach (KeyValuePair<string, JToken> item in obj)
+                    foreach (var item in obj)
                     {
                         
-                        Dictionary<string, string> dictionary = obj[item.Key].ToObject<Dictionary<string, string>>();
+                        var dictionary = obj[item.Key].ToObject<Dictionary<string, string>>();
                         
                         
-                        foreach (KeyValuePair<string, string> lang in dictionary)
+                        foreach (var lang in dictionary)
                         {
-                            KeyValuePair<Tuple<string, string>, string> rec = new KeyValuePair<Tuple<string, string>, string>(Tuple.Create(item.Key, lang.Key), lang.Value);
+                            var rec = new KeyValuePair<Tuple<string, string>, string>(Tuple.Create(item.Key, lang.Key), lang.Value);
                             _translations.Add(rec);
                         }
 

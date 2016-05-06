@@ -27,8 +27,8 @@ namespace WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> TaskList()
         {
-            ApplicationUser user = await GetCurrentUserAsync();
-            List<UserTask> userTasks = new List<UserTask>();
+            var user = await GetCurrentUserAsync();
+            var userTasks = new List<UserTask>();
             var role = await _dal.GetUserRoles(user);
             if (role.Contains("Participant"))
             {
@@ -37,37 +37,37 @@ namespace WebUI.Controllers
                 {
                     userTasks =
                        userTasks.Where(
-                           x => x.Status == Status.OPEN || x.Status == Status.EXPIRED || x.Status == Status.REOPENED).ToList();
+                           x => x.Status == Status.Open || x.Status == Status.Expired || x.Status == Status.Reopened).ToList();
 
                 }
             }
             else if (role.Contains("Coach"))
             {
-                List<UserGroup> groups = _dal.GetUsersUserGroups(user.Id);
+                var groups = _dal.GetUsersUserGroups(user.Id);
                 userTasks = new List<UserTask>();
                 foreach (var group in groups)
                 {
-                    List<UserTask> t = _dal.GetUserGroupTasks(group);
+                    var t = _dal.GetUserGroupTasks(group);
                     if (t.Count > 0)
                         userTasks.AddRange(t);
                 }
                 if (userTasks.Count > 0)
                 {
                     userTasks =  userTasks.Where(
-                            x => x.Status == Status.RESOLVED ).ToList();
+                            x => x.Status == Status.Resolved ).ToList();
 
                 }
             }
 
-            TaskListViewModel model = new TaskListViewModel(userTasks);
+            var model = new TaskListViewModel(userTasks);
             return View(model);
         }
 
         [ActionName("ViewAppTask")]
         public IActionResult ViewTask(int taskId)
         {
-            ApplicationTask task = _dal.FindTaskbyId(taskId);
-            TaskViewModel taskModel = new TaskViewModel(task);
+            var task = _dal.FindTaskbyId(taskId);
+            var taskModel = new TaskViewModel(task);
             return View(taskModel);
         }
 
@@ -76,20 +76,20 @@ namespace WebUI.Controllers
         {
             if (String.IsNullOrEmpty(userId))
             {
-                ApplicationUser user = await GetCurrentUserAsync();
+                var user = await GetCurrentUserAsync();
                 userId = user.Id;
             }
                 
-            UserTask task = _dal.FindUserTaskById(taskId, userId);
-            TaskViewModel taskModel = new TaskViewModel(task);
+            var task = _dal.FindUserTaskById(taskId, userId);
+            var taskModel = new TaskViewModel(task);
             return View("ViewTask", taskModel);
         }
 
        // [HttpPost]
         public async Task<IActionResult> SubmitTask(int taskId, string userId)
         {
-            UserTask task = _dal.FindUserTaskById(taskId, userId);
-            task.Status = Status.RESOLVED;
+            var task = _dal.FindUserTaskById(taskId, userId);
+            task.Status = Status.Resolved;
             await _dal.UpdateUserTaskAsync(task);
             return RedirectToAction("TaskList");
         }
@@ -97,16 +97,16 @@ namespace WebUI.Controllers
         [HttpPost]
         public IActionResult EditTask(string text,int coins, string command,int taskid, string userId)
         {
-            UserTask usertask = _dal.FindUserTaskById(taskid, userId);
+            var usertask = _dal.FindUserTaskById(taskid, userId);
             usertask.Text = text;
             usertask.Coins = coins;
             if (command.Contains("Resent"))
             {
-                usertask.Status = Status.REOPENED;
+                usertask.Status = Status.Reopened;
             }
             else if (command.Contains("Aprove"))
             {
-                usertask.Status = Status.COMPLETED;
+                usertask.Status = Status.Completed;
             }
 
             _dal.UpdateUserTaskAsync(usertask);

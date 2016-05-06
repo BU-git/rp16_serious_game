@@ -11,15 +11,14 @@ namespace WebUI.Services.Concrete
     public class ZipWorker : IZipWorker
     {
         private readonly IRestClient _restClient;
-        private readonly IPropertyConfigurator _config;
 
         public ZipWorker(IRestClient restClient, IPropertyConfigurator config)
         {
-            this._config = config;
-            this._restClient = restClient;
-            _restClient.BaseUrl = new Uri(_config.Get<string>("RestClient", "ZipClient", "Address"));
-            _restClient.Authenticator = new HttpBasicAuthenticator(_config.Get<string>("RestClient", "ZipClient", "Key"),
-                _config.Get<string>("RestClient", "ZipClient", "Secret"));
+            var configurator = config;
+            _restClient = restClient;
+            _restClient.BaseUrl = new Uri(configurator.Get<string>("RestClient", "ZipClient", "Address"));
+            _restClient.Authenticator = new HttpBasicAuthenticator(configurator.Get<string>("RestClient", "ZipClient", "Key"),
+                configurator.Get<string>("RestClient", "ZipClient", "Secret"));
         }
 
         public async Task<NlAddress> GetAddressAsync(string zipCode, int houseNumber, string houseNumberAddition = "")

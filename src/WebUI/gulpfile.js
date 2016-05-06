@@ -39,9 +39,9 @@ gulp.task("clean:libs", function (cb) {
     rimraf(paths.libsDest, cb);
 });
 
-gulp.task("clean:assets", function (cb) {
+gulp.task("clean:assets", function(cb) {
     rimraf(paths.webroot, cb);
-})
+});
 
 gulp.task("min:js", function () {
     return gulp.src([paths.js, "!" + paths.minJs], {

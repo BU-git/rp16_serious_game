@@ -11,7 +11,7 @@ namespace WebUI.Services.Concrete
         {
         }
 
-        public static TranslationManager Instance { get { return Nested.instance; } }
+        public static TranslationManager Instance => Nested.Instance;
 
         private class Nested
         {
@@ -19,20 +19,14 @@ namespace WebUI.Services.Concrete
             {
             }
 
-            internal static readonly TranslationManager instance = new TranslationManager();
+             internal static readonly TranslationManager Instance = new TranslationManager();
         }
 
 
         public ITranslationProvider TranslationProvider { get; set; }
        
 
-        public IEnumerable<string> Languages
-        {
-            get
-            {
-                return TranslationProvider?.Languages ?? Enumerable.Empty<string>();
-            }
-        }
+        public IEnumerable<string> Languages => TranslationProvider?.Languages ?? Enumerable.Empty<string>();
 
         private string _currentLanguage;
         public string CurrentLanguage
@@ -43,7 +37,7 @@ namespace WebUI.Services.Concrete
             }
             set
             {
-                if (value != _currentLanguage)
+                if (_currentLanguage != null && value != _currentLanguage)
                 {
                     _currentLanguage = value;
 
@@ -53,7 +47,7 @@ namespace WebUI.Services.Concrete
 
         public string Translate(string key)
         {
-            return TranslationProvider?.Translate(key) ?? string.Format("!{0}!", key);
+            return TranslationProvider?.Translate(key) ?? $"!{key}!";
         }
 
     }

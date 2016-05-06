@@ -24,7 +24,7 @@ namespace WebUI
         public Startup(IHostingEnvironment env)
         {
             // Set up configuration sources.
-            IConfigurationBuilder builder = new ConfigurationBuilder()
+            var builder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddJsonFile("config.json");
@@ -58,7 +58,7 @@ namespace WebUI
             services.AddMvc();
 
             //Add DAL
-            services.AddScoped<IDAL, DAL.DAL>();
+            services.AddScoped<IDAL, Dal>();
 
             // Add application services.
             services.AddTransient<TranslationManager>();
@@ -71,15 +71,15 @@ namespace WebUI
             // Infrastructure
             services.AddTransient<IViewComposer, RazorViewComposer>();
             services.AddTransient<AbstractEmailBuilder, EmailBuilder>();
-            services.AddSingleton<IConfigurationRoot>(conf => Configuration);
+            services.AddSingleton(conf => Configuration);
             services.AddTransient<ICryptoServices, CryptoServices>();
             services.AddTransient<IPropertyConfigurator, JsonPropertyConfigurator>();
 
             //Add Seed Method
             services.AddTransient<DataInitializer>();
 
-            IServiceProvider sp = services.BuildServiceProvider();
-            ITranslationProvider service = sp.GetService<ITranslationProvider>();
+            var sp = services.BuildServiceProvider();
+            var service = sp.GetService<ITranslationProvider>();
             TranslationManager.Instance.TranslationProvider = service;
 
         }
@@ -105,7 +105,7 @@ namespace WebUI
                 // For more details on creating database during deployment see http://go.microsoft.com/fwlink/?LinkID=615859
                 try
                 {
-                    using (IServiceScope serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+                    using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
                         .CreateScope())
                     {
                         serviceScope.ServiceProvider.GetService<ApplicationDbContext>()

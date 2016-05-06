@@ -30,29 +30,29 @@ namespace WebUI.ViewModels.Task
 
         public TaskViewModel(ApplicationTask appTask)
         {
-            this.UserName = "";
-            this.Name = appTask.Name;
-            this.Text = appTask.Text;
-            this.Recurency = appTask.Recurency;
-            this.Coins = Coins;
-            this.TaskId = appTask.Id;
+            UserName = "";
+            Name = appTask.Name;
+            Text = appTask.Text;
+            Recurency = appTask.Recurency;
+            Coins = Coins;
+            TaskId = appTask.Id;
         }
 
         public TaskViewModel(UserTask userTask)
         {
             if (userTask.ApplicationTask != null)
             {
-                this.Name = userTask.ApplicationTask.Name;
+                Name = userTask.ApplicationTask.Name;
                 
             }
 
-            if (userTask.User != null) this.UserName = userTask.User.UserName;
-            this.Text = userTask.Text;
-            this.UserId = userTask.UserId;
-            this.TaskId = userTask.TaskId;
-            this.Status = userTask.Status;
-            this.Coins = userTask.Coins;
-            this.ExpireDt = userTask.ExpireDt;
+            if (userTask.User != null) UserName = userTask.User.UserName;
+            Text = userTask.Text;
+            UserId = userTask.UserId;
+            TaskId = userTask.TaskId;
+            Status = userTask.Status;
+            Coins = userTask.Coins;
+            ExpireDt = userTask.ExpireDt;
         }
     }
 }

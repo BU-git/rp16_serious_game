@@ -10,19 +10,19 @@ using Microsoft.Data.Entity;
 
 namespace DAL
 {
-    public class DAL : IDAL
+    public class Dal : IDAL
     {
         private const string CoachRole = "Coach";
         private const string ParticipantRole = "Participant";
-        private ApplicationDbContext _context;
-        private UserManager<ApplicationUser> _userManager;
-        private RoleManager<IdentityRole> _roleManager;
+        private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public DAL(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public Dal(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            this._context = context;
-            this._userManager = userManager;
-            this._roleManager = roleManager;
+            _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -33,11 +33,11 @@ namespace DAL
         /// <returns></returns>
         public async Task CreateCoach(ApplicationUser coach, string password)
         {
-            IdentityRole coachRole = await _roleManager.FindByNameAsync(CoachRole);
+            var coachRole = await _roleManager.FindByNameAsync(CoachRole);
             if (coachRole == null)
                 throw new Exception("Coach Role is missing.");
 
-            ApplicationUser user = await _userManager.FindByEmailAsync(coach.Email);
+            var user = await _userManager.FindByEmailAsync(coach.Email);
             if (user != null)
                 throw new Exception("User already exists.");
 
@@ -53,11 +53,11 @@ namespace DAL
         /// <returns></returns>
         public async Task CreateParticipant(ApplicationUser participant, string password)
         {
-            IdentityRole participantRole = await _roleManager.FindByNameAsync(ParticipantRole);
+            var participantRole = await _roleManager.FindByNameAsync(ParticipantRole);
             if (participantRole == null)
                 throw new Exception("Participant Role is missing.");
 
-            ApplicationUser user = await _userManager.FindByEmailAsync(participant.Email);
+            var user = await _userManager.FindByEmailAsync(participant.Email);
             if (user != null)
                 throw new Exception("User already exists.");
 
@@ -84,7 +84,7 @@ namespace DAL
         /// <returns></returns>
         public async Task AddUserToGroup(ApplicationUser user, UserGroup group)
         {
-            var userToGroup = new ApplicationUser_UserGroup()
+            var userToGroup = new ApplicationUserUserGroup()
             {
                 ApplicationUser = user,
                 UserGroup = group
@@ -178,13 +178,13 @@ namespace DAL
 
             foreach (var userId in attendeesIds)
             {
-                var appointment_User = new Appointment_User()
+                var appointmentUser = new AppointmentUser()
                 {
                     AppointmentId = appointment.Id,
                     UserId = userId,
-                    IsOwner = (creatorId == userId)
+                    IsOwner = creatorId == userId
                 };
-                _context.Add(appointment_User);
+                _context.Add(appointmentUser);
             }
 
             await _context.SaveChangesAsync();
@@ -199,24 +199,22 @@ namespace DAL
         public async Task EditAppointment(Appointment appointment, IEnumerable<string> attendeesIds)
         {
             //Remove users
-            foreach(var appointment_User in appointment.Appointment_Users)
+            var userIds = attendeesIds as IList<string> ?? attendeesIds.ToList();
+            foreach (var appointmentUser in appointment.AppointmentUsers.Where(appointmentUser => !userIds.Contains(appointmentUser.UserId)))
             {
-                if (!attendeesIds.Contains(appointment_User.UserId))
-                    _context.Remove(appointment_User);
+                _context.Remove(appointmentUser);
             }
-            
+
             //Add users
-            foreach (var userId in attendeesIds)
+            foreach (var appointmentUser in from userId in userIds
+                                            where !appointment.AppointmentUsers.Select(a => a.UserId).Contains(userId)
+                                            select new AppointmentUser()
+                                            {
+                                                AppointmentId = appointment.Id,
+                                                UserId = userId
+                                            })
             {
-                if (!appointment.Appointment_Users.Select(a => a.UserId).Contains(userId))
-                {
-                    var appointment_User = new Appointment_User()
-                    {
-                        AppointmentId = appointment.Id,
-                        UserId = userId
-                    };
-                    _context.Add(appointment_User);
-                }
+                _context.Add(appointmentUser);
             }
 
             _context.Update(appointment);
@@ -230,7 +228,7 @@ namespace DAL
         /// <returns></returns>
         public async Task DeleteAppointment(int id)
         {
-            Appointment appointment = await _context.Appointments.SingleAsync(m => m.Id == id);
+            var appointment = await _context.Appointments.SingleAsync(m => m.Id == id);
             _context.Appointments.Remove(appointment);
             await _context.SaveChangesAsync();
         }
@@ -242,7 +240,7 @@ namespace DAL
         /// <returns></returns>
         public async Task<List<Appointment>> GetUserAppointments(string userId)
         {
-            return await _context.Appointments.Where(a => a.Appointment_Users.Any(au => au.UserId == userId)).ToListAsync();
+            return await _context.Appointments.Where(a => a.AppointmentUsers.Any(au => au.UserId == userId)).ToListAsync();
         }
 
         /// <summary>
@@ -252,12 +250,12 @@ namespace DAL
         /// <returns></returns>
         public async Task<Appointment> GetAppointmentById(int id)
         {
-            return await _context.Appointments.Include(a => a.Appointment_Users).ThenInclude(au => au.User).SingleAsync(a => a.Id == id);
+            return await _context.Appointments.Include(a => a.AppointmentUsers).ThenInclude(au => au.User).SingleAsync(a => a.Id == id);
         }
 
-        public async Task<Appointment_User> ValidateAppointment(DateTime start, DateTime end, IEnumerable<string> users)
+        public async Task<AppointmentUser> ValidateAppointment(DateTime start, DateTime end, IEnumerable<string> users)
         {
-            return await _context.Appointment_Users.Include(a => a.Appointment).Include(a => a.User).FirstOrDefaultAsync(a => (a.Appointment.Start < end && a.Appointment.End > start) && users.Contains(a.UserId));
+            return await _context.Appointment_Users.Include(a => a.Appointment).Include(a => a.User).FirstOrDefaultAsync(a => a.Appointment.Start < end && a.Appointment.End > start && users.Contains(a.UserId));
         }
 
         public async Task AddTaskAsync(ApplicationTask appTask)
@@ -286,11 +284,11 @@ namespace DAL
             return task;
 
         }
-        
+
         public async Task UpdateTaskAsync(ApplicationTask appTask)
         {
             var taskWithSameName = _context.Tasks.FirstOrDefault(x => x.Name == appTask.Name && x.Id != appTask.Id);
-            if (taskWithSameName!=null)
+            if (taskWithSameName != null)
                 throw new Exception($"Task {taskWithSameName.Id} already has this name.");
             var task = _context.Tasks.FirstOrDefault(x => x.Id == appTask.Id);
             if (task == null)
@@ -327,7 +325,7 @@ namespace DAL
 
             if (usertask == null)
                 throw new Exception($"User {userTask.UserId} doesn't have task {userTask.TaskId}");
-            
+
             _context.Entry(usertask).State = EntityState.Detached;
             _context.Entry(userTask).State = EntityState.Modified;
             await _context.SaveChangesAsync();
@@ -337,20 +335,20 @@ namespace DAL
         public List<UserTask> GetUserTasks(ApplicationUser user)
         {
 
-            var userTasks = _context.UserTasks.Where(x => x.UserId == user.Id).Include(x=>x.ApplicationTask).ToList();
+            var userTasks = _context.UserTasks.Where(x => x.UserId == user.Id).Include(x => x.ApplicationTask).ToList();
             return userTasks;
 
         }
 
         public List<UserTask> GetUserGroupTasks(UserGroup group)
         {
-            var users = _context.Users.SelectMany(x =>x.ApplicationUser_UserGroups.Where(e=>e.UserGroupId == group.UserGroupId).Select(s=>s.ApplicationUser)).Distinct();
-            
-            List<UserTask>tasks = new List<UserTask>();
-            foreach (ApplicationUser user in users)
+            var users = _context.Users.SelectMany(x => x.ApplicationUserUserGroups.Where(e => e.UserGroupId == group.UserGroupId).Select(s => s.ApplicationUser)).Distinct();
+
+            var tasks = new List<UserTask>();
+            foreach (var user in users)
             {
                 var t = GetUserTasks(user);
-                if(t.Count>0)
+                if (t.Count > 0)
                     tasks.AddRange(t);
             }
             return tasks;
@@ -360,23 +358,23 @@ namespace DAL
         {
             var userGroups =
                 _context.UserGroups.SelectMany(
-                    x => x.ApplicationUser_UserGroups.Where(e => e.ApplicationUser.Id == userId)
+                    x => x.ApplicationUserUserGroups.Where(e => e.ApplicationUser.Id == userId)
                             .Select(e => e.UserGroup)).Distinct().ToList();
             return userGroups;
-        } 
+        }
 
         public UserTask FindUserTaskById(int taskId, string userId)
         {
             var userTask =
                 _context.UserTasks.Where(x => x.UserId == userId && x.TaskId == taskId)
-                    .Include(x => x.ApplicationTask).Include(x=>x.User)
+                    .Include(x => x.ApplicationTask).Include(x => x.User)
                     .FirstOrDefault();
             return userTask;
         }
 
         public async Task<List<UserTask>> GetUserTasksAsync(ApplicationUser user)
         {
-            List<UserTask> userTasks = await _context.UserTasks.Where(x => x.UserId == user.Id).ToListAsync();
+            var userTasks = await _context.UserTasks.Where(x => x.UserId == user.Id).ToListAsync();
             return userTasks;
         }
 
@@ -384,16 +382,16 @@ namespace DAL
         {
             try
             {
-                Avatar avatar = _userManager.Users.First(applicationUser => applicationUser == user).Avatar;
+                var avatar = _userManager.Users.First(applicationUser => applicationUser == user).Avatar;
                 return avatar;
             }
             catch (NullReferenceException)
             {
                 throw new Exception($"User {user.Name} doesn't have an avatar or such user doesn't exist!");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception($"Something went wrong:{ex.Message} ");
             }
         }
 
@@ -401,16 +399,16 @@ namespace DAL
         {
             try
             {
-                Avatar avatar = _context.Users.First(user => user.Id == userId).Avatar;
+                var avatar = _context.Users.First(user => user.Id == userId).Avatar;
                 return avatar;
             }
             catch (NullReferenceException)
             {
                 throw new Exception($"User with {userId} Id doesn't have an avatar or such user doesn't exist!");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception($"Something went wrong:{ex.Message} ");
             }
         }
 
@@ -418,16 +416,16 @@ namespace DAL
         {
             try
             {
-                string path = _context.Users.First(user => user.Id == userId).Avatar.Media.Path;
+                var path = _context.Users.First(user => user.Id == userId).Avatar.Media.Path;
                 return path;
             }
             catch (NullReferenceException)
             {
                 throw new Exception($"User with {userId} Id doesn't have an avatar or such user doesn't exist!");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception($"Something went wrong:{ex.Message} "); 
             }
         }
 
@@ -435,14 +433,14 @@ namespace DAL
         {
             try
             {
-                ApplicationUser user = await _userManager.FindByIdAsync(appUser.Id);
+                var user = await _userManager.FindByIdAsync(appUser.Id);
                 user.Avatar = avatar;
-                IdentityResult result = await _userManager.UpdateAsync(user);
+                var result = await _userManager.UpdateAsync(user);
                 return result;
             }
             catch (Exception)
             {
-                throw new Exception($"There is no such User in the system");
+                throw new Exception("There is no such User in the system");
             }
         }
 
@@ -460,12 +458,12 @@ namespace DAL
         {
             try
             {
-                string path = _context.Avatars.First(av => av == avatar).Media.Path;
+                var path = _context.Avatars.First(av => av == avatar).Media.Path;
                 return path;
             }
             catch (NullReferenceException)
             {
-                throw new Exception($"There is no such Avatar in the system");
+                throw new Exception("There is no such Avatar in the system");
             }
         }
 
@@ -473,18 +471,18 @@ namespace DAL
         {
             try
             {
-                Avatar userAvatar = _context.Avatars.First(av => av == avatar);
+                var userAvatar = _context.Avatars.First(av => av == avatar);
                 userAvatar.Media.Path = path;
-                int result = await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync();
                 return result;
             }
             catch (NullReferenceException)
             {
-                throw new Exception($"There is no such Avatar in the system");
+                throw new Exception("There is no such Avatar in the system");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception($"Something went wrong:{ex.Message} ");
             }
         }
     }

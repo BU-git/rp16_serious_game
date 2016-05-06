@@ -41,8 +41,8 @@ namespace WebUI.Controllers
                 : message == ManageMessageId.UpdateUserSuccess ? "User details have been changed"
                 : "";
 
-            ApplicationUser user = await GetCurrentUserAsync();
-            IndexViewModel model = new IndexViewModel
+            var user = await GetCurrentUserAsync();
+            var model = new IndexViewModel
             {
                 HasPassword = await _userManager.HasPasswordAsync(user),
                 PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
@@ -71,10 +71,10 @@ namespace WebUI.Controllers
             {
                 return View(model);
             }
-            ApplicationUser user = await GetCurrentUserAsync();
+            var user = await GetCurrentUserAsync();
             if (user != null)
             {
-                IdentityResult result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
@@ -106,10 +106,10 @@ namespace WebUI.Controllers
                 return View(model);
             }
 
-            ApplicationUser user = await GetCurrentUserAsync();
+            var user = await GetCurrentUserAsync();
             if (user != null)
             {
-                IdentityResult result = await _userManager.AddPasswordAsync(user, model.NewPassword);
+                var result = await _userManager.AddPasswordAsync(user, model.NewPassword);
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
@@ -124,10 +124,10 @@ namespace WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> EditPersonalInformation()
         {
-            ApplicationUser user = await GetCurrentUserAsync();
+            var user = await GetCurrentUserAsync();
             if (user != null)
             {
-                PersonalInformationViewModel userInfo = new PersonalInformationViewModel
+                var userInfo = new PersonalInformationViewModel
                 {
                     BuildingNumber = user.BuildingNumber,
                     City = user.City,
@@ -157,7 +157,7 @@ namespace WebUI.Controllers
             {
                 return View(model);
             }
-            ApplicationUser user = await GetCurrentUserAsync();
+            var user = await GetCurrentUserAsync();
             if (user != null)
             {
                 user.Name = model.Name ?? user.Name;
@@ -171,7 +171,7 @@ namespace WebUI.Controllers
                 user.City = model.City ?? user.City;
                 user.BuildingNumber = model.BuildingNumber ?? user.BuildingNumber;
 
-                IdentityResult result = await _userManager.UpdateAsync(user);
+                var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(7, "User information was successfully updated.");
@@ -187,7 +187,7 @@ namespace WebUI.Controllers
 
         private void AddErrors(IdentityResult result)
         {
-            foreach (IdentityError error in result.Errors)
+            foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }

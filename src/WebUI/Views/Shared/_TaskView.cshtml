@@ -1,17 +1,23 @@
 @using Domain.Entities
 @model WebUI.ViewModels.Task.TaskViewModel
 
-@{string color = "";}
+@{var color = "";}
 @switch (Model.Status)
             {
-                case Status.OPEN:
+                case Status.Open:
                     color = "green";
                     break;
-                case Status.EXPIRED:
+                case Status.Expired:
                     color = "red";
                     break;
-                case Status.REOPENED:
+                case Status.Reopened:
                     color = "yellow";
+                    break;
+                case Status.Resolved:
+                    break;
+                case Status.Completed:
+                    break;
+                case Status.Closed:
                     break;
                 default:
                     color = "green";

@@ -60,11 +60,13 @@ namespace WebUI.Services.Concrete
 
         private HostConfiguration GetIpConfiguration()
         {
-            var hostConfig = new HostConfiguration();
+            var hostConfig = new HostConfiguration
+            {
+                Port = _config.Get<int>(ServerConfig, Port),
+                HostName = _config.Get<string>(ServerConfig, HostName),
+                IpAddress = _config.Get<string>(ServerConfig, IpAddress)
+            };
 
-            hostConfig.Port = _config.Get<int>(ServerConfig, Port);
-            hostConfig.HostName = _config.Get<string>(ServerConfig, HostName);
-            hostConfig.IpAddress = _config.Get<string>(ServerConfig, IpAddress);
 
             return hostConfig;
         }

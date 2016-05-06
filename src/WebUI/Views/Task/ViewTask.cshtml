@@ -6,13 +6,7 @@
 }
 @{ bool isCoach = Context.User.IsInRole("Coach");}
 
-@if (isCoach)
-{
-    @Html.Partial("_TaskEdit", Model)
-}
-else
-{
-    @Html.Partial("_TaskView",Model)
-}
+
+@(isCoach ? Html.Partial("_TaskEdit", Model) : Html.Partial("_TaskView", Model))
 
 

@@ -14,8 +14,8 @@ namespace WebUI.ViewModels.Task
             UserTasks = new List<TaskViewModel>();
             foreach (var task in userTasks)
             {
-                TaskViewModel t = new TaskViewModel(task);
-                this.UserTasks.Add(t);
+                var t = new TaskViewModel(task);
+                UserTasks.Add(t);
             }
         }
     }

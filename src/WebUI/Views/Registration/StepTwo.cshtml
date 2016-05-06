@@ -1,6 +1,6 @@
 ﻿@using System.Threading.Tasks
 @using WebUI.ViewModels.Registration
-@model WebUI.ViewModels.Registration.FamilyViewModel
+@model FamilyViewModel
 @{
     ViewBag.Title = "Registration | Step Two";
 }
@@ -51,39 +51,39 @@
         </div>
     </div>
 
-    
-        <form class="ui form segment attached" id="familyForm">
-            <div>
-                @{ await Html.RenderPartialAsync("_FamilyDetails", Model); }
-            </div>
-            <div class="ui divider hidden"></div>
-            <div class="ui grid">
-                <div class="two column row">
-                    <div class="column">
-                        <input type="reset" value="Reset" class="ui button red fluid" />
-                    </div>
-                    <div class="column">
-                        <input type="button" value="Next" class="ui button blue fluid" id="submitFamily" />
-                    </div>
+
+    <form class="ui form segment attached" id="familyForm">
+        <div>
+            @{ await Html.RenderPartialAsync("_FamilyDetails", Model); }
+        </div>
+        <div class="ui divider hidden"></div>
+        <div class="ui grid">
+            <div class="two column row">
+                <div class="column">
+                    <input type="reset" value="Reset" class="ui button red fluid" />
+                </div>
+                <div class="column">
+                    <input type="button" value="Next" class="ui button blue fluid" id="submitFamily" />
                 </div>
             </div>
-        </form>
-        <form class="ui form segment attached" id="userForm">
-            <div>
-                @{ await Html.RenderPartialAsync("_UserDetails", new UserViewModel {LastName = Model.FamilyName}); }
-            </div>
-            <div class="ui divider hidden"></div>
-            <div class="ui grid">
-                <div class="two column row">
-                    <div class="column">
-                        <input type="reset" value="Reset" class="ui button red fluid" />
-                    </div>
-                    <div class="column">
-                        <input type="button" value="Next" class="ui button blue fluid" id="submitUser" />
-                    </div>
+        </div>
+    </form>
+    <form class="ui form segment attached" id="userForm">
+        <div>
+            @{ await Html.RenderPartialAsync("_UserDetails", new UserViewModel { LastName = Model.FamilyName }); }
+        </div>
+        <div class="ui divider hidden"></div>
+        <div class="ui grid">
+            <div class="two column row">
+                <div class="column">
+                    <input type="reset" value="Reset" class="ui button red fluid" />
+                </div>
+                <div class="column">
+                    <input type="button" value="Next" class="ui button blue fluid" id="submitUser" />
                 </div>
             </div>
-        </form>
+        </div>
+    </form>
     <div class="ui page dimmer" id="page-dimmer">
         <div class="ui text loader">Loading</div>
     </div>
@@ -118,47 +118,44 @@
                 $("#familyForm").hide();
                 $("#userForm").show();
 
-                if (currentUser == userCount - 1) {
+                if (currentUser === userCount - 1) {
                     $('#submitUser').val("Finish");
                 }
 
                 currentUser++;
+                return true;
             }
             else {
                 return false;
             }
         });
-
         $("#submitUser").click(function () {
             if ($("#userForm").valid()) {
+                var data;
                 if (currentUser > 0 && currentUser < userCount) {
-                    var data = {};
+                    data = {};
                     $.each($("#userForm").serializeArray(), function (i, field) {
                         data[field.name] = field.value;
                     });
                     regVm.Users.push(data);
-
                     $("#userForm")[0].reset();
-
-                    if (currentUser == userCount - 1) {
+                    if (currentUser === userCount - 1) {
                         $('#submitUser').val("Finish");
                     }
-
                     currentUser++;
+                    return true;
                 }
-                else if (currentUser == userCount) {
+                else if (currentUser === userCount) {
                     $('#page-dimmer').addClass('active');
-
-                    var data = {};
+                    data = {};
                     $.each($("#userForm").serializeArray(), function (i, field) {
                         data[field.name] = field.value;
                     });
                     regVm.Users.push(data);
-
                     $.post({
                         url: "/Registration/StepTwo",
                         data: regVm,
-                        success: function (data) {
+                        success: function () {
                             $('#page-dimmer').removeClass('active');
                             $("#userForm").hide();
                             $("#successMessage").show();
@@ -169,21 +166,22 @@
                         $("#userForm").hide();
                         $("#familyForm").show();
                     });
+                    return true;
                 }
             } else {
                 return false;
             }
+            return true;
         });
-
         $('#removeUser').click(function () {
             if (userCount < 2)
                 return false;
             else {
                 userCount--;
                 $('#usersCount').text(userCount);
+                return true;
             }
         });
-
         $('#addUser').click(function () {
             userCount++;
             $('#usersCount').text(userCount);

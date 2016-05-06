@@ -38,10 +38,8 @@
             <input type="hidden" asp-for="Id" />
             <div class="field">
                 <label asp-for="Description"></label>
-
-                <input asp-for="Description"/>
+                <input asp-for="Description" />
                 <span asp-validation-for="Description" />
-
             </div>
             <div class="field">
                 <label>Attendees</label>
@@ -57,9 +55,7 @@
                     </div>
                 </div>
             </div>
-
             <div class="field">
-                
                 <div class="two fields">
                     <div class="field">
                         <label>Start</label>
@@ -70,7 +66,6 @@
                             </div>
                             <span asp-validation-for="Start"></span>
                         </div>
-                        
                     </div>
                     <div class="field">
                         <label>End</label>
@@ -78,38 +73,34 @@
                             <div class="ui input left icon">
                                 <i class="calendar icon"></i>
                                 <input asp-for="End" placeholder="End">
-                                
                             </div>
                         </div>
-                        <span asp-validation-for="End" color: #f00></span>
+                        <span asp-validation-for="End"></span>
                     </div>
                 </div>
-                </div>
-
-                <button class="ui primary button fluid" type="submit" value="Save">Save</button>
-
-
-
-</form>
+            </div>
+            <button class="ui primary button fluid" type="submit" value="Save">Save</button>
+        </form>
         <div>
             <a asp-action="Index">Back to List</a>
         </div>
     </div>
+</div>
 
- 
 
-    @section Scripts{
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-        <script>
-            $('.ui.dropdown').dropdown();
-            $('#rangestart').calendar({
-                endCalendar: $('#rangeend')
-            });
-            $('#rangeend').calendar({
-                type: 'time',
-                startCalendar: $('#rangestart')
-            });
-        </script>
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
-    }
+    <script>
+        $('.ui.dropdown').dropdown();
+        $('#rangestart').calendar({
+            endCalendar: $('#rangeend')
+        });
+        $('#rangeend').calendar({
+            type: 'time',
+            startCalendar: $('#rangestart')
+        });
+    </script>
+
+}

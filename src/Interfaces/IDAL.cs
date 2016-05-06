@@ -130,6 +130,6 @@ namespace Interfaces
         /// <returns></returns>
         Task<Appointment> GetAppointmentById(int id);
 
-        Task<Appointment_User> ValidateAppointment(DateTime start, DateTime end, IEnumerable<string> users);
+        Task<AppointmentUser> ValidateAppointment(DateTime start, DateTime end, IEnumerable<string> users);
     }
 }

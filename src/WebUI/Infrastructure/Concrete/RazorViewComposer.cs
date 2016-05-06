@@ -67,9 +67,9 @@ namespace WebUI.Infrastructure.Concrete
                     return stringWriter.ToString();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception($"Something went wrong: {ex.Message}");
             }
         }
     }

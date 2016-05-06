@@ -36,7 +36,7 @@ namespace BLL.Concrete
             
             try
             {
-                using (SmtpClient client = new SmtpClient(credential.Host, credential.Port)
+                using (var client = new SmtpClient(credential.Host, credential.Port)
                 {
                     EnableSsl = credential.UseSsl,
                     UseDefaultCredentials = false,
@@ -57,14 +57,16 @@ namespace BLL.Concrete
 
         private EmailCredential GetCredentialsFromConfig()
         {
-            EmailCredential credentials = new EmailCredential();
+            var credentials = new EmailCredential
+            {
+                Email = _config.Get<string>(Email, Address),
+                Password = _config.Get<string>(Email, Password),
+                Username = _config.Get<string>(Email, Username),
+                UseSsl = _config.Get<bool>(Email, UseSsl),
+                Port = _config.Get<int>(Email, Port),
+                Host = _config.Get<string>(Email, Host)
+            };
 
-            credentials.Email = _config.Get<string>(Email, Address);
-            credentials.Password = _config.Get<string>(Email, Password);
-            credentials.Username = _config.Get<string>(Email, Username);
-            credentials.UseSsl = _config.Get<bool>(Email, UseSsl);
-            credentials.Port = _config.Get<int>(Email, Port);
-            credentials.Host = _config.Get<string>(Email, Host);
 
             return credentials;
         }

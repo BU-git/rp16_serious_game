@@ -10,33 +10,33 @@ namespace DAL
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Appointment_User>()
+            builder.Entity<AppointmentUser>()
               .HasKey(t => new { t.AppointmentId, t.UserId });
 
-            builder.Entity<ApplicationUser_UserGroup>()
+            builder.Entity<ApplicationUserUserGroup>()
               .HasKey(t => new { t.Id, t.UserGroupId });
 
             builder.Entity<ApplicationUser>()
                 .Property(p => p.Id).ValueGeneratedOnAdd();
 
-            builder.Entity<ApplicationUser_UserGroup>()
+            builder.Entity<ApplicationUserUserGroup>()
                 .HasOne(u => u.ApplicationUser)
-                .WithMany(ug => ug.ApplicationUser_UserGroups)
+                .WithMany(ug => ug.ApplicationUserUserGroups)
                 .HasForeignKey(u => u.Id);
 
-            builder.Entity<ApplicationUser_UserGroup>()
+            builder.Entity<ApplicationUserUserGroup>()
                 .HasOne(ug => ug.UserGroup)
-                .WithMany(u => u.ApplicationUser_UserGroups)
+                .WithMany(u => u.ApplicationUserUserGroups)
                 .HasForeignKey(ug => ug.UserGroupId);
 
-            builder.Entity<Appointment_User>()
+            builder.Entity<AppointmentUser>()
                 .HasOne(au => au.User)
-                .WithMany(u => u.User_Appointments)
+                .WithMany(u => u.UserAppointments)
                 .HasForeignKey(au => au.UserId);
 
-            builder.Entity<Appointment_User>()
+            builder.Entity<AppointmentUser>()
                 .HasOne(au => au.Appointment)
-                .WithMany(a => a.Appointment_Users)
+                .WithMany(a => a.AppointmentUsers)
                 .HasForeignKey(au => au.AppointmentId);
 
             builder.Entity<Customer>()
@@ -89,7 +89,7 @@ namespace DAL
         public DbSet<Customer> Customers {get;set;}
         public DbSet<UserGroup> UserGroups { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
-        public DbSet<Appointment_User> Appointment_Users { get; set; }
+        public DbSet<AppointmentUser> Appointment_Users { get; set; }
         public DbSet<ApplicationTask> Tasks { get; set; } 
         public DbSet<UserTask> UserTasks { get; set; } 
         public DbSet<Media> Medias { get; set; }

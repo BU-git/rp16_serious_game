@@ -47,16 +47,16 @@ namespace WebUI.Controllers
                 return View(regVm);
             }
 
-            string randomPass = _cryptoServices.GenerateRandomPassword();
+            var randomPass = _cryptoServices.GenerateRandomPassword();
 
-            UserGroup group = new UserGroup
+            var group = new UserGroup
             {
                 GroupName = regVm.FamilyName,
                 Type = regVm.FamilyType
             };
             await _dal.CreateUserGroup(group);
 
-            ApplicationUser user = new ApplicationUser
+            var user = new ApplicationUser
             {
                 LastName = regVm.FamilyName,
                 Email = regVm.HeadEmail
@@ -82,7 +82,7 @@ namespace WebUI.Controllers
             //TODO: get main data 'bout family 
             //Can't get information about family because dal doesn't contain methods like GetFamilyByName(string familyName)
 
-            FamilyViewModel familyInfo = new FamilyViewModel
+            var familyInfo = new FamilyViewModel
             {
                 Users = new List<UserViewModel>
                 {
@@ -99,28 +99,30 @@ namespace WebUI.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> StepTwo(FamilyViewModel regVm)
         {
-            foreach (UserViewModel u in regVm.Users)
+            foreach (var u in regVm.Users)
             {
-                string randomPass = _cryptoServices.GenerateRandomPassword();
+                var randomPass = _cryptoServices.GenerateRandomPassword();
                 Gender gender;
                 Enum.TryParse(u.Gender.ToString(), out gender);
                 DateTime dateTime;
                 DateTime.TryParse($"{u.Day}/{u.Month}/{u.Year}", out dateTime);
 
-                ApplicationUser user = new ApplicationUser();
-                user.Name = u.Name;
-                user.MiddleName = u.MiddleName;
-                user.LastName = regVm.FamilyName;
-                user.BirthDate = dateTime;
-                user.Email = u.Email;
-                user.Phone = u.Phone;
-                user.Gender = gender;
-                user.ZipCode = regVm.ZipCode;
-                user.Street = regVm.Street;
-                user.Country = regVm.Country;
-                user.Region = regVm.Region;
-                user.City = regVm.City;
-                user.BuildingNumber = regVm.BuildingNumber;
+                var user = new ApplicationUser
+                {
+                    Name = u.Name,
+                    MiddleName = u.MiddleName,
+                    LastName = regVm.FamilyName,
+                    BirthDate = dateTime,
+                    Email = u.Email,
+                    Phone = u.Phone,
+                    Gender = gender,
+                    ZipCode = regVm.ZipCode,
+                    Street = regVm.Street,
+                    Country = regVm.Country,
+                    Region = regVm.Region,
+                    City = regVm.City,
+                    BuildingNumber = regVm.BuildingNumber
+                };
 
                 try
                 {
