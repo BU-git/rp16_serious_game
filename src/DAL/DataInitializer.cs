@@ -18,7 +18,7 @@ namespace DAL
         public DataInitializer(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager , IDAL dal)
         {
-            this._context = context;
+            _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
             _dal = dal;

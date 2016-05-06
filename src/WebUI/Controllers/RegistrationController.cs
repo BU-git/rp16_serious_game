@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Domain.Entities;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
 using WebUI.Infrastructure.Abstract;
 using WebUI.ViewModels.Registration;
@@ -12,8 +11,6 @@ using WebUI.Services.Abstract;
 using WebUI.ViewModels.Email;
 using Gender = Domain.Entities.Gender;
 
-// For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace WebUI.Controllers
 {
     [Authorize]
@@ -22,14 +19,12 @@ namespace WebUI.Controllers
         private readonly IMailManager _mailManager;
         private readonly ICryptoServices _cryptoServices;
         private readonly IDAL _dal;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        
-        public RegistrationController(IMailManager mailManager, ICryptoServices crypto, IDAL dal, SignInManager<ApplicationUser> signInManager)
+
+        public RegistrationController(IMailManager mailManager, ICryptoServices crypto, IDAL dal)
         {
             _mailManager = mailManager;
             _cryptoServices = crypto;
             _dal = dal;
-            _signInManager = signInManager;
         }
 
         [HttpGet]
@@ -77,7 +72,9 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
+#pragma warning disable 1998
         public async Task<IActionResult> StepTwo(string familyName)
+#pragma warning restore 1998
         {
             //TODO: get main data 'bout family 
             //Can't get information about family because dal doesn't contain methods like GetFamilyByName(string familyName)

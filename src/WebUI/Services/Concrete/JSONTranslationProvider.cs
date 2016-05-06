@@ -10,6 +10,7 @@ namespace WebUI.Services.Concrete
 {
     class JsonTranslationProvider : ITranslationProvider
     {
+        // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Local
         public IEnumerable<string> Languages { get; private set; }
 
         private readonly IDictionary<Tuple<string, string>,string>  _translations;

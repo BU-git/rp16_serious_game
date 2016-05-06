@@ -8,12 +8,10 @@ namespace WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        private IDAL _repository;
         private readonly ITranslationProvider _translationProvider;
 
         public HomeController(IDAL repo)
         {
-            _repository = repo;
             _translationProvider = new JsonTranslationProvider(@".\Assets\json\translation.json");
         }
 

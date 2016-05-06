@@ -50,8 +50,6 @@
             </div>
         </div>
     </div>
-
-
     <form class="ui form segment attached" id="familyForm">
         <div>
             @{ await Html.RenderPartialAsync("_FamilyDetails", Model); }
@@ -132,20 +130,20 @@
         $("#submitUser").click(function () {
             if ($("#userForm").valid()) {
                 var data;
-                if (currentUser > 0 && currentUser < userCount) {
+                if (window.currentUser > 0 && window.currentUser < userCount) {
                     data = {};
                     $.each($("#userForm").serializeArray(), function (i, field) {
                         data[field.name] = field.value;
                     });
                     regVm.Users.push(data);
                     $("#userForm")[0].reset();
-                    if (currentUser === userCount - 1) {
+                    if (window.currentUser === userCount - 1) {
                         $('#submitUser').val("Finish");
                     }
-                    currentUser++;
+                    window.currentUser++;
                     return true;
                 }
-                else if (currentUser === userCount) {
+                else if (window.currentUser === userCount) {
                     $('#page-dimmer').addClass('active');
                     data = {};
                     $.each($("#userForm").serializeArray(), function (i, field) {

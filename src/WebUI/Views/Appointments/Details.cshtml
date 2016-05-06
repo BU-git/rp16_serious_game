@@ -12,14 +12,12 @@
             <input type="hidden" asp-for="Id" />
             <div class="field">
                 <label asp-for="Description"></label>
-
-                <input asp-for="Description" readonly="" />
-
+                <input asp-for="Description" readonly />
             </div>
             <div class="field">
                 <label>Attendees</label>
                 <div class="ui horizontal list">
-                    @foreach (ApplicationUser u in Model.Users)
+                    @foreach (var u in Model.Users)
                     {
                         <div class="item">
                             <i class="user icon"></i>
@@ -27,42 +25,36 @@
                         </div>
                     }
                 </div>
-             </div>
-
+            </div>
+            <div class="field">
+                <div class="two fields">
                     <div class="field">
+                        <label asp-for="Start"></label>
 
-                        <div class="two fields">
-                            <div class="field">
-                                <label asp-for="Start"></label>
-
-                                <div class="ui left icon input">
-                                    <input type="text" readonly="" value="@Model.Start">
-                                    <i class="calendar icon"></i>
-                                </div>
-
-                            </div>
-                            <div class="field">
-                                <label asp-for="End"></label>
-
-                                <div class="ui left icon input">
-                                    <input type="text" readonly="" value="@Model.End.ToLongTimeString()">
-                                    <i class="calendar icon"></i>
-                                </div>
-
-                            </div>
+                        <div class="ui left icon input">
+                            <input type="text" readonly value="@Model.Start">
+                            <i class="calendar icon"></i>
                         </div>
                     </div>
+                    <div class="field">
+                        <label asp-for="End"></label>
 
-</form>
+                        <div class="ui left icon input">
+                            <input type="text" readonly value="@Model.End.ToLongTimeString()">
+                            <i class="calendar icon"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
         <div>
             <a asp-action="Index">Back to List</a>
         </div>
     </div>
+</div>
+
+@section Scripts{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
 
-
-    @section Scripts{
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-
-
-    }
+}<

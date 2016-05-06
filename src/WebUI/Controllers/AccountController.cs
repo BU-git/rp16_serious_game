@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
@@ -6,7 +5,6 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 using WebUI.ViewModels.Account;
 using Domain.Entities;
-using Interfaces;
 
 namespace WebUI.Controllers
 {
@@ -16,18 +14,15 @@ namespace WebUI.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
-        private readonly IDAL _DAL;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILoggerFactory loggerFactory,
-            IDAL DAL)
+            ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = loggerFactory.CreateLogger<AccountController>();
-            _DAL = DAL;
         }
 
         //

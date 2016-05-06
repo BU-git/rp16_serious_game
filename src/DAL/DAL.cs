@@ -255,7 +255,7 @@ namespace DAL
 
         public async Task<AppointmentUser> ValidateAppointment(DateTime start, DateTime end, IEnumerable<string> users)
         {
-            return await _context.Appointment_Users.Include(a => a.Appointment).Include(a => a.User).FirstOrDefaultAsync(a => a.Appointment.Start < end && a.Appointment.End > start && users.Contains(a.UserId));
+            return await _context.AppointmentUsers.Include(a => a.Appointment).Include(a => a.User).FirstOrDefaultAsync(a => a.Appointment.Start < end && a.Appointment.End > start && users.Contains(a.UserId));
         }
 
         public async Task AddTaskAsync(ApplicationTask appTask)

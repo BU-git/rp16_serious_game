@@ -6,6 +6,7 @@ using System;
 
 namespace Interfaces
 {
+    // ReSharper disable once InconsistentNaming
     public interface IDAL
     {
         /// <summary>

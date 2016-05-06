@@ -112,7 +112,10 @@ namespace WebUI
                              .Database.Migrate();
                     }
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
             }
 
             app.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());

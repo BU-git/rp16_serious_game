@@ -23,7 +23,7 @@ namespace WebUI.TagHelpers
         {
             //string value = _translationProvider.Translate(Key);
             var value = "lol";
-            output.Content.AppendHtml($"<span data-trl-key=\"{Key}\">{value}</span>");
+            var tagHelperContent = output.Content.AppendHtml($"<span data-trl-key=\"{Key}\">{value}</span>");
 
             base.Process(context, output);
         }

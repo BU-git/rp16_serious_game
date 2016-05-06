@@ -51,11 +51,11 @@
     <div class="ui attached segment" id="content">
         <div class="ui form" id="regForm">
             <h2 class="ui center aligned header">New family</h2>
-            <hr/>
+            <hr />
             here is <translation trl-key="Key"></translation>
-            <br/>
+            <br />
             here is runtime tag <span data-trl-key="Key1"></span> <span data-trl-key="Key2"></span> <span data-trl-key="Key3"></span>
-            <hr/>
+            <hr />
             <form asp-controller="Registration" asp-action="StepOne" class="ui form segment" id="stepOneForm">
                 <div asp-validation-summary="ValidationSummary.ModelOnly"></div>
                 <div class="field">
@@ -71,7 +71,7 @@
                 <div class="field">
                     <label asp-for="HeadEmail"></label>
                     <div class="ui corner labeled input">
-                        <input asp-for="HeadEmail" type="email"/>
+                        <input asp-for="HeadEmail" type="email" />
                         <div class="ui corner label">
                             <i class="asterisk icon"></i>
                         </div>
@@ -109,12 +109,13 @@
         translate();
 
         $('#submitButton')
-            .click(function() {
+            .click(function () {
                 if (!$("form").valid()) {
                     return false;
                 } else {
                     $('form').submit();
                     $('#page-dimmer').addClass('active');
+                    return true;
                 }
             });
 
@@ -123,16 +124,16 @@
                 keys: []
             };
             $("span[data-trl-key]")
-                .each(function() {
+                .each(function () {
                     dat.keys.push($(this).attr("data-trl-key"));
                 });
 
             $.post({
                 url: "/Home/Translate",
                 data: dat,
-                success: function(data) {
+                success: function (data) {
                     $("span[data-trl-key]")
-                        .each(function() {
+                        .each(function () {
                             $(this).text(data[$(this).attr("data-trl-key")]);
                         });
                 }
