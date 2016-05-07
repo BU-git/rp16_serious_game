@@ -10,13 +10,12 @@
         <link rel="stylesheet" href="~/lib/semantic/dist/components/calendar.css" />
         <link rel="stylesheet" href="~/lib/bootstrap/bootstrap.css"/>
         <link rel="stylesheet" href="~/assets/css/site.min.css" />
-       @* <link href="~/assets/css/main.css" rel="stylesheet" />*@
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css"
-              asp-fallback-href="~/lib/semantic/semantic-ui/dist/semantic.css"
+              asp-fallback-href="~/lib/semantic/dist/semantic.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/assets/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
 <body>
@@ -33,6 +32,7 @@
         <div class="ui inverted menu">
             <a asp-controller="Home" asp-action="Index" class="item">Home</a>
             <a asp-controller="Registration" asp-action="StepOne" class="item">Sign Up</a>
+            <a asp-controller="Appointments" asp-action="Index" class="item">Appointments List</a>
         </div>
         <div class="right menu">
             @await Html.PartialAsync("_LoginPartial")
@@ -47,8 +47,8 @@
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
         <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
         <script src="~/lib/jquery-validation/dist/additional-methods.js"></script>
-        <script src="~/lib/semantic/semantic-ui/dist/semantic.js"></script>
-        <script src="~/lib/semantic/semantic-ui/dist/components/calendar.js"></script>
+        <script src="~/lib/semantic/dist/semantic.js"></script>
+        <script src="~/lib/semantic/dist/components/calendar.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/assets/js/site.js" asp-append-version="true"></script>
     </environment>
@@ -61,7 +61,7 @@
                 asp-fallback-src="~/lib/semantic/semantic-ui/dist/semantic.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
         </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/assets/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
     @RenderSection("scripts", required: false)

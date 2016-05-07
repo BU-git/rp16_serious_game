@@ -2,6 +2,8 @@ using System;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
+using Microsoft.Data.Entity.Migrations;
+using DAL;
 
 namespace DAL.Migrations
 {
@@ -97,27 +99,13 @@ namespace DAL.Migrations
                     b.HasAnnotation("Relational:TableName", "AspNetUsers");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ApplicationUser_UserGroup", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUserUserGroup", b =>
                 {
                     b.Property<string>("Id");
 
                     b.Property<int>("UserGroupId");
 
                     b.HasKey("Id", "UserGroupId");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Avatar", b =>
-                {
-                    b.Property<int>("AvatarId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("Level");
-
-                    b.Property<int>("MediaId");
-
-                    b.Property<int>("Type");
-
-                    b.HasKey("AvatarId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Appointment", b =>
@@ -134,7 +122,7 @@ namespace DAL.Migrations
                     b.HasKey("Id");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Appointment_User", b =>
+            modelBuilder.Entity("Domain.Entities.AppointmentUser", b =>
                 {
                     b.Property<int>("AppointmentId");
 
@@ -143,6 +131,20 @@ namespace DAL.Migrations
                     b.Property<bool>("IsOwner");
 
                     b.HasKey("AppointmentId", "UserId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Avatar", b =>
+                {
+                    b.Property<int>("AvatarId")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Level");
+
+                    b.Property<int>("MediaId");
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("AvatarId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customer", b =>
@@ -302,7 +304,7 @@ namespace DAL.Migrations
                         .HasForeignKey("AvatarId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.ApplicationUser_UserGroup", b =>
+            modelBuilder.Entity("Domain.Entities.ApplicationUserUserGroup", b =>
                 {
                     b.HasOne("Domain.Entities.ApplicationUser")
                         .WithMany()
@@ -313,14 +315,7 @@ namespace DAL.Migrations
                         .HasForeignKey("UserGroupId");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Avatar", b =>
-                {
-                    b.HasOne("Domain.Entities.Media")
-                        .WithMany()
-                        .HasForeignKey("MediaId");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Appointment_User", b =>
+            modelBuilder.Entity("Domain.Entities.AppointmentUser", b =>
                 {
                     b.HasOne("Domain.Entities.Appointment")
                         .WithMany()
@@ -329,6 +324,13 @@ namespace DAL.Migrations
                     b.HasOne("Domain.Entities.ApplicationUser")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Avatar", b =>
+                {
+                    b.HasOne("Domain.Entities.Media")
+                        .WithMany()
+                        .HasForeignKey("MediaId");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customer", b =>
