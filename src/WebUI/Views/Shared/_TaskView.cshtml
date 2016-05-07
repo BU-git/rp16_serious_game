@@ -1,6 +1,7 @@
 @using Domain.Entities
 @model WebUI.ViewModels.Task.TaskViewModel
 
+
 @{string color = "";}
 @switch (Model.Status)
             {
@@ -34,12 +35,12 @@
 
     </div>
     <div class="content">
-       
+
             <div class="description">@Html.DisplayFor(model => model.Text)</div>
-        
+
     </div>
-   
-    
+
+
         <div class="content">
 
             <div class="left floated">
@@ -54,10 +55,10 @@
             </div>
         </div>
 
-   
+
         <div class="extra conten">
             @*<div class="fluid ui green button">Send Task*@
-            <a class="fluid ui green button" href="@Url.Action("SubmitTask", "Task", new {taskId = Model.TaskId, userId = Model.UserId})">
+            <a class="fluid ui green button" href="@Url.Action("SubmitTask", "Task", new {taskId = Model.UserTaskId})">
                 Submit
             </a>
             @*</div>*@
@@ -65,7 +66,7 @@
 
         </div>
 
-    
+
 
     <div class="extra content">
         <div class="ui comments">

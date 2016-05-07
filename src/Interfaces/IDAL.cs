@@ -73,12 +73,13 @@ namespace Interfaces
         List<UserTask> GetUserTasks(ApplicationUser user);
         Task AddTaskAsync(ApplicationTask appTask);
         Task UpdateTaskAsync(ApplicationTask appTask);
+        List<ApplicationTask> GetAllApplicationTasks();
         Task AssignTaskAsync(UserTask userTask);
         Task UpdateUserTaskAsync(UserTask userTask);
         Task<List<UserTask>> GetUserTasksAsync(ApplicationUser user);
         ApplicationTask FindTaskbyName(string name);
         ApplicationTask FindTaskbyId(int taskId);
-        UserTask FindUserTaskById(int taskId, string userId);
+        UserTask FindUserTaskById(int id);
         Avatar GetUserAvatarFromContext(ApplicationUser user);
         Avatar GetUserAvatarByUserId(string userId);
         string GetAvatarPathByUserId(string userId);
@@ -89,5 +90,6 @@ namespace Interfaces
         Task<int> UpdateAvatarPath(Avatar avatar, string path);
         List<UserTask> GetUserGroupTasks(UserGroup group);
         List<UserGroup> GetUsersUserGroups(string userId);
+        List<ApplicationUser> GetUserGroupUsers(UserGroup group);
     }
 }

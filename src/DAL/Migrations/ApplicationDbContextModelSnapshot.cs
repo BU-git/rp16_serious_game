@@ -2,6 +2,8 @@ using System;
 using Microsoft.Data.Entity;
 using Microsoft.Data.Entity.Infrastructure;
 using Microsoft.Data.Entity.Metadata;
+using Microsoft.Data.Entity.Migrations;
+using DAL;
 
 namespace DAL.Migrations
 {
@@ -173,19 +175,24 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Domain.Entities.UserTask", b =>
                 {
-                    b.Property<int>("TaskId");
-
-                    b.Property<string>("UserId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("Coins");
 
                     b.Property<DateTime>("ExpireDt");
 
+                    b.Property<DateTime?>("ResolutionDate");
+
                     b.Property<int>("Status");
+
+                    b.Property<int>("TaskId");
 
                     b.Property<string>("Text");
 
-                    b.HasKey("TaskId", "UserId");
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNet.Identity.EntityFramework.IdentityRole", b =>

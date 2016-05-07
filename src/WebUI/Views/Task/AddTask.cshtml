@@ -1,0 +1,135 @@
+@using WebUI.ViewModels.Task
+@model WebUI.ViewModels.Task.AddTaskViewModel
+
+@{
+    ViewData["Title"] = "AddTask";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{ bool isCoach = Context.User.IsInRole("Coach");}
+
+
+<div class="row">
+    <div class="ui middle aligned center aligned grid">
+        <div class="eight wide doubling stackable column">
+
+            <table id="TaskUserSelection" class="ui single line table">
+
+                <tbody>
+                    <tr>
+                        
+                        <td>
+
+                            <div class="header">
+                                <h3>
+                                    <i class="user icon"></i>
+                                    User
+                                </h3>
+                            </div>
+                            Select user whom you whant to assign new task
+                        </td>
+                        <td>
+                            <div id="UsersList" class="ui fluid selection dropdown">
+                                <input id="userId" type="hidden" name="user">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Select Friend</div>
+                                <div class="menu">
+                                    @foreach (var user in Model.Users)
+                                    {
+                                        <div class="item" data-value="@user.Id">
+                                            @user.Name @user.LastName
+                                        </div>
+                                    }
+
+                                </div>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                       
+                        <td>
+                            <div class="header">
+
+                                <h3><i class="list layout icon"></i>Task</h3>
+                                
+                            </div>
+                            Select Task that you want to assign
+                        </td>
+                        <td>
+                            <div id="TaskList" class="ui fluid selection dropdown">
+                                <input id="taskId" type="hidden" name="task">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Select Task</div>
+                                <div class="menu">
+                                    @foreach (var task in Model.Tasks)
+                                    {
+                                        <div class="item" data-value="@task.Id">
+                                            @task.Name
+                                        </div>
+                                    }
+
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+            
+    
+<br/>
+    <div  id="ViewTask">
+
+
+    </div>
+
+    @section Scripts{
+        <script>
+            function SetUpPickers() {
+                var $j = jQuery.noConflict();
+                $j("#expireDt").datepicker({
+                    "setDate": new Date()
+                });
+            };
+
+            $('#TaskUserSelection').change(function () {
+                var $j = jQuery.noConflict();
+                var taskId = $j('#taskId').val();
+                var userId = $j('#userId').val();
+                if (!isEmpty(taskId) && !isEmpty(userId)) {
+                    $j.get('/Task/RenderTask?id=' + taskId + '&userId=' + userId, function (data) {
+
+                        $j('#ViewTask').html(data);
+                        $j('#ViewTask').fadeIn('fast');
+                        SetUpPickers();
+                    });
+                }
+
+
+            });
+
+            function isEmpty(str) {
+                return (!str || 0 === str.length);
+            }
+
+           
+            $('#UsersList.ui.fluid.selection.dropdown')
+                .dropdown();
+            $('#TaskList.ui.fluid.selection.dropdown')
+                .dropdown();
+        </script>
+    }

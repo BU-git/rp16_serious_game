@@ -2,22 +2,16 @@
 @model WebUI.ViewModels.Task.TaskViewModel
 
 <form asp-action="EditTask" method="post">
-    @{string color = "";}
-    @switch (Model.Status)
-            {
-                case Status.OPEN:
-                    color = "green";
-                    break;
-                case Status.EXPIRED:
-                    color = "red";
-                    break;
-                case Status.REOPENED:
-                    color = "yellow";
-                    break;
-                default:
-                    color = "green";
-                    break;
-            }
+    @{
+        string color = "";
+        if (Model.TimeLeft >= 0) { color = "green"; }
+        else
+        {
+            color = "red";
+        }
+
+    }
+
 
     <div class="ui centered card">
         <div class="content">
@@ -34,8 +28,8 @@
                 </div>
                 @*@Html.HiddenFor(x => x.Coins)*@
                 @Html.EditorFor(x=>x.Coins,new { placeholder = "Coins" })
-                @Html.HiddenFor(x=>x.UserId)
-                @Html.HiddenFor(x=>x.TaskId)
+                @Html.HiddenFor(x=>x.UserTaskId)
+
 
             </div>
         </div>
@@ -54,63 +48,77 @@
         <div class="content">
 
             <div class="left floated">
-                <span class="ui @color horizontal label">
+                <span class="ui green horizontal label">
                     @Html.DisplayFor(x => Model.Status)
                 </span>
             </div>
             <div class="right floated meta">
                 <span class="date">
-                    @Html.DisplayFor(model => model.TimeLeft) Days
+                    @Html.DisplayFor(model => model.ResolutionDate) 
+                </span>
+               
+            </div>  
+        </div>
+        <div class="content">
+            <div class="left floated">
+                <span class="ui @color horizontal label">
+                    Due Date
+                </span>
+
+            </div>
+            <div class="right floated meta">
+                <span class="date">
+                    @Html.DisplayFor(model => model.ExpireDt)
                 </span>
             </div>
-        </div>
-        <div class="extra conten">
-            @*<div class="fluid ui green button">Send Task*@
-            @*<a class="fluid ui green button" href="@Url.Action("SubmitTask", "Task", new {taskId = Model.TaskId, userId = Model.UserId})">
-                Submit
-            </a>*@
-            <div class="ui two buttons">
-                <input type="submit" name="command" value="Resent" class="negative ui button">
-                <div class=""></div>
-                <input type="submit" name="command" value="Aprove" class="positive ui button">
             </div>
-            @*</div>*@
+            <div class="extra conten">
+                @*<div class="fluid ui green button">Send Task*@
+                @*<a class="fluid ui green button" href="@Url.Action("SubmitTask", "Task", new {taskId = Model.TaskId, userId = Model.UserId})">
+                    Submit
+                </a>*@
+                <div class="ui two buttons">
+                    <input type="submit" name="command" value="Resent" class="negative ui button">
+                    <div class=""></div>
+                    <input type="submit" name="command" value="Aprove" class="positive ui button">
+                </div>
+                @*</div>*@
 
 
-        </div>
+            </div>
 
-        <div class="extra content">
-            <div class="ui comments">
-                <div class="comment">
+            <div class="extra content">
+                <div class="ui comments">
+                    <div class="comment">
 
-                    <div class="content">
-                        <a class="author">Steve Jobes</a>
-                        <div class="metadata">
-                            <div class="date">2 days ago</div>
-                        </div>
-                        <div class="text">
-                            Revolutionary!
-                        </div>
-                        <div class="actions">
-                            <a class="reply active">Reply</a>
-                        </div>
-                        <form class="ui reply form">
-                            <div class="field">
-                                <div class="ui medium icon input">
-                                    <input type="text" placeholder="Comment...">
+                        <div class="content">
+                            <a class="author">Steve Jobes</a>
+                            <div class="metadata">
+                                <div class="date">2 days ago</div>
+                            </div>
+                            <div class="text">
+                                Revolutionary!
+                            </div>
+                            <div class="actions">
+                                <a class="reply active">Reply</a>
+                            </div>
+                            <form class="ui reply form">
+                                <div class="field">
+                                    <div class="ui medium icon input">
+                                        <input type="text" placeholder="Comment...">
 
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="ui primary submit labeled icon button">
-                                <i class="icon edit"></i> Add Reply
-                            </div>
-                        </form>
+                                <div class="ui primary submit labeled icon button">
+                                    <i class="icon edit"></i> Add Reply
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-    </div>
+        </div>
 
 
 

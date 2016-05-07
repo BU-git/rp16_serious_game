@@ -6,14 +6,16 @@ namespace WebUI.ViewModels.Task
     public class TaskViewModel
     {
         public string UserId { get; set; }
+        public int? UserTaskId { get; set; }
         public string UserName { get; set; }
-        public int? TaskId { get; set; }
+        public int? AppTaskId { get; set; }
         public string Name { get; set; }
         public string Text { get; set; }
         public DateTime Recurency { get; set; }
         public int Coins { get; set; }
         public DateTime? ExpireDt { get; set; }
         public Status Status { get; set; }
+        public DateTime? ResolutionDate { get; set; }
 
         public int TimeLeft
         {
@@ -35,7 +37,7 @@ namespace WebUI.ViewModels.Task
             this.Text = appTask.Text;
             this.Recurency = appTask.Recurency;
             this.Coins = Coins;
-            this.TaskId = appTask.Id;
+            this.AppTaskId = appTask.Id;
         }
 
         public TaskViewModel(UserTask userTask)
@@ -49,10 +51,13 @@ namespace WebUI.ViewModels.Task
             if (userTask.User != null) this.UserName = userTask.User.UserName;
             this.Text = userTask.Text;
             this.UserId = userTask.UserId;
-            this.TaskId = userTask.TaskId;
+            this.AppTaskId = userTask.TaskId;
             this.Status = userTask.Status;
             this.Coins = userTask.Coins;
             this.ExpireDt = userTask.ExpireDt;
+            this.UserTaskId = userTask.Id;
+            this.ResolutionDate = userTask.ResolutionDate;
+
         }
     }
 }
