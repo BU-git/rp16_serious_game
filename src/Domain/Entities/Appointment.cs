@@ -10,6 +10,6 @@ namespace Domain.Entities
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
 
-        public virtual ICollection<AppointmentUser> AppointmentUsers { get; set; }
+        public virtual ICollection<Appointment_User> Appointment_Users { get; set; }
     }
 }

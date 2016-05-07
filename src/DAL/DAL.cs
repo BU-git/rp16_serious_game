@@ -10,7 +10,8 @@ using Microsoft.Data.Entity;
 
 namespace DAL
 {
-    public class Dal : IDAL
+    // ReSharper disable once InconsistentNaming
+    public class DAL : IDAL
     {
         private const string CoachRole = "Coach";
         private const string ParticipantRole = "Participant";
@@ -18,7 +19,7 @@ namespace DAL
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public Dal(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public DAL(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _userManager = userManager;
@@ -84,7 +85,7 @@ namespace DAL
         /// <returns></returns>
         public async Task AddUserToGroup(ApplicationUser user, UserGroup group)
         {
-            var userToGroup = new ApplicationUserUserGroup()
+            var userToGroup = new ApplicationUser_UserGroup()
             {
                 ApplicationUser = user,
                 UserGroup = group

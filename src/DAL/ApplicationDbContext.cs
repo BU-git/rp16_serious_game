@@ -13,18 +13,18 @@ namespace DAL
             builder.Entity<AppointmentUser>()
               .HasKey(t => new { t.AppointmentId, t.UserId });
 
-            builder.Entity<ApplicationUserUserGroup>()
+            builder.Entity<ApplicationUser_UserGroup>()
               .HasKey(t => new { t.Id, t.UserGroupId });
 
             builder.Entity<ApplicationUser>()
                 .Property(p => p.Id).ValueGeneratedOnAdd();
 
-            builder.Entity<ApplicationUserUserGroup>()
+            builder.Entity<ApplicationUser_UserGroup>()
                 .HasOne(u => u.ApplicationUser)
                 .WithMany(ug => ug.ApplicationUserUserGroups)
                 .HasForeignKey(u => u.Id);
 
-            builder.Entity<ApplicationUserUserGroup>()
+            builder.Entity<ApplicationUser_UserGroup>()
                 .HasOne(ug => ug.UserGroup)
                 .WithMany(u => u.ApplicationUserUserGroups)
                 .HasForeignKey(ug => ug.UserGroupId);
