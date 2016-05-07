@@ -18,7 +18,40 @@
         <link rel="stylesheet" href="~/assets/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
-<body>
+<body style="height: 100%">
+    @if (TempData["error"] != null)
+    {
+        <div class="ui negative message">
+            <i class="close icon"></i>
+            <div class="header">
+                Sorry! Something went wrong..
+            </div>
+            <p>
+                @TempData["error"]
+            </p>
+        </div>
+    }
+    @if (TempData["warn"] != null)
+    {
+        <div class="ui warning message">
+            <i class="close icon"></i>
+            <div class="header">
+                There is something you should know
+            </div>
+            <p>
+                @TempData["warn"]
+            </p>
+        </div>
+    }
+    @if (TempData["msg"] != null)
+    {
+        <div class="ui positive message">
+            <i class="close icon"></i>
+            <div class="header">
+                @TempData["msg"]
+            </div>
+        </div>
+    }
     <div class="ui top fixed inverted menu">
         <div class="header item">
             @*<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -26,7 +59,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
-                </button>*@
+                </button>TODO: Make mobile adaptation*@
             <a asp-controller="Home" asp-action="Index" class="navbar-brand">Growth Pad</a>
         </div>
         <div class="ui inverted menu">
@@ -39,7 +72,50 @@
         </div>
     </div>
     <div class="fluid container container-padded">
-        @RenderBody()
+        <div class="ui grid" style="height: 100%;">
+            <div class="three wide column fixed" style="height: 100%; top: -7px;">
+                <div class="ui secondary vertical pointing menu large">
+                    <div class="ui card">
+                        <div class="image">
+                            <img src="https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png">
+                        </div>
+                        <div class="content">
+                            <a class="header">Name</a>
+                            <div class="description">
+                                Description
+                            </div>
+                            <div class="meta">
+
+                            </div>
+                        </div>
+                        <div class="extra content">
+                            <a>
+                                <i class="user icon"></i>
+                                22 Friends
+                            </a>
+                        </div>
+                        <div class="ui bottom attached indincating progress" id="percent">
+                            <div class="bar"></div>
+                        </div>
+                    </div>
+                    <a class="item" href="@Url.Action("Index", "Home")">
+                        Home
+                    </a>
+                    <a class="item" href="@Url.Action("Index", "Manage")">
+                        Profile
+                    </a>
+                    <a class="item">
+                        Meetings
+                    </a>
+                    <a class="item">
+                        Tasks
+                    </a>
+                </div>
+            </div>
+            <div class="thirteen wide column" style="top: -7px">
+                @RenderBody()
+            </div>
+        </div>
     </div>
 
     <environment names="Development">
@@ -56,14 +132,31 @@
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.3.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery">
+
+
+
         </script>
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
                 asp-fallback-src="~/lib/semantic/semantic-ui/dist/semantic.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+
+
+
         </script>
         <script src="~/assets/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
     @RenderSection("scripts", required: false)
+    <script>
+        $('#percent')
+            .progress({
+                percent: 74
+            });
+
+        $('.message .close').on('click', function () {
+              $(this).closest('.message')
+                    .transition('fade');
+          });
+    </script>
 </body>
 </html>

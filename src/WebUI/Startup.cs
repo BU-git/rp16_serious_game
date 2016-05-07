@@ -55,6 +55,8 @@ namespace WebUI
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddCaching();
+            services.AddSession();
             services.AddMvc();
 
             //Add DAL
@@ -123,6 +125,8 @@ namespace WebUI
             app.UseStaticFiles();
 
             app.UseIdentity();
+
+            app.UseSession();
 
             // To configure external authentication please see http://go.microsoft.com/fwlink/?LinkID=532715
 

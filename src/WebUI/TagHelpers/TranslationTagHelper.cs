@@ -21,9 +21,8 @@ namespace WebUI.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            //string value = _translationProvider.Translate(Key);
-            var value = "lol";
-            var tagHelperContent = output.Content.AppendHtml($"<span data-trl-key=\"{Key}\">{value}</span>");
+            string value = _translationProvider.Translate(Key);
+            output.Content.AppendHtml($"<span data-trl-key=\"{Key}\">{value}</span>");
 
             base.Process(context, output);
         }
