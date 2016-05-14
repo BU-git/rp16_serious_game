@@ -17,7 +17,8 @@ namespace WebUI.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("TaskList", "Task");
+            //return View();
         }
 
         public IActionResult About()

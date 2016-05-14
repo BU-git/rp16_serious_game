@@ -55,7 +55,13 @@ namespace DAL
                 .HasForeignKey(u => u.UserId);
 
             builder.Entity<UserTask>()
-                .HasKey(ut => new {ut.TaskId, ut.UserId});
+                .Property(p => p.Id).ValueGeneratedOnAdd();
+
+            builder.Entity<UserTask>()
+                .HasOne(x=>x.ApplicationTask);
+
+            builder.Entity<UserTask>()
+                .HasOne(x => x.User);
 
             builder.Entity<Media>()
                 .HasKey(media => media.Id);
