@@ -1,23 +1,18 @@
 @using Domain.Entities
 @model WebUI.ViewModels.Task.TaskViewModel
 
-@{var color = "";}
+
+@{string color = "";}
 @switch (Model.Status)
             {
-                case Status.Open:
+                case Status.OPEN:
                     color = "green";
                     break;
-                case Status.Expired:
+                case Status.EXPIRED:
                     color = "red";
                     break;
-                case Status.Reopened:
+                case Status.REOPENED:
                     color = "yellow";
-                    break;
-                case Status.Resolved:
-                    break;
-                case Status.Completed:
-                    break;
-                case Status.Closed:
                     break;
                 default:
                     color = "green";
@@ -40,12 +35,12 @@
 
     </div>
     <div class="content">
-       
+
             <div class="description">@Html.DisplayFor(model => model.Text)</div>
-        
+
     </div>
-   
-    
+
+
         <div class="content">
 
             <div class="left floated">
@@ -60,10 +55,10 @@
             </div>
         </div>
 
-   
+
         <div class="extra conten">
             @*<div class="fluid ui green button">Send Task*@
-            <a class="fluid ui green button" href="@Url.Action("SubmitTask", "Task", new {taskId = Model.TaskId, userId = Model.UserId})">
+            <a class="fluid ui green button" href="@Url.Action("SubmitTask", "Task", new {taskId = Model.UserTaskId})">
                 Submit
             </a>
             @*</div>*@
@@ -71,7 +66,7 @@
 
         </div>
 
-    
+
 
     <div class="extra content">
         <div class="ui comments">
