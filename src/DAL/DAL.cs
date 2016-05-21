@@ -373,7 +373,7 @@ namespace DAL
             var users =
                 _context.Users.SelectMany(
                     x =>
-                        x.ApplicationUser_UserGroups.Where(e => e.UserGroupId == group.UserGroupId)
+                        x.ApplicationUserUserGroups.Where(e => e.UserGroupId == group.UserGroupId)
                             .Select(u => u.ApplicationUser)).Distinct().ToList();
             return users;
         }
@@ -431,7 +431,7 @@ namespace DAL
         {
             try
             {
-                var path = _context.Users.First(user => user.Id == userId).Avatar.Media.Path;
+                var path = _context.Users.First(user => user.Id == userId).Avatar.Media.Path; //TODO: add path to default avatar if not found
                 return path;
             }
             catch (NullReferenceException)

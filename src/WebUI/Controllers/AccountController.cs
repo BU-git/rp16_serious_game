@@ -5,6 +5,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 using WebUI.ViewModels.Account;
 using Domain.Entities;
+using Microsoft.AspNet.Mvc.ViewFeatures;
 
 namespace WebUI.Controllers
 {
@@ -186,7 +187,7 @@ namespace WebUI.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
         }
-
+        
         //private async Task<ApplicationUser> GetCurrentUserAsync()
         //{
         //    return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());

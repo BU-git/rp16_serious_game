@@ -84,7 +84,7 @@ namespace WebUI.Controllers
         public async Task<IActionResult> SubmitTask(int taskId)
         {
             UserTask task = _dal.FindUserTaskById(taskId);
-            task.Status = Status.RESOLVED;
+            task.Status = Status.Resolved;
             task.ResolutionDate = DateTime.Now;
             await _dal.UpdateUserTaskAsync(task);
             return RedirectToAction("TaskList");
@@ -130,7 +130,7 @@ namespace WebUI.Controllers
             if (command.Contains("Resent"))
             {
                 usertask.ResolutionDate = null;
-                usertask.Status = Status.REOPENED;
+                usertask.Status = Status.Reopened;
             }
             else if (command.Contains("Aprove"))
             {
@@ -148,7 +148,7 @@ namespace WebUI.Controllers
             UserTask task = new UserTask()
             {
                 Coins = coins,
-                Status = Status.OPEN,
+                Status = Status.Open,
                 TaskId = appTaskId,
                 Text = text,
                 UserId = userId,

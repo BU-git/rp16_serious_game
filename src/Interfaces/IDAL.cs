@@ -97,6 +97,7 @@ namespace Interfaces
         Task<int> UpdateAvatarPath(Avatar avatar, string path);
         List<UserTask> GetUserGroupTasks(UserGroup group);
         List<UserGroup> GetUsersUserGroups(string userId);
+        List<ApplicationUser> GetUserGroupUsers(UserGroup group);
 
         /// <summary>
         /// Create Appointment and assign it's owner
