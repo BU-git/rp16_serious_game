@@ -17,8 +17,69 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/assets/css/site.min.css" asp-append-version="true" />
     </environment>
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        html, body, * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #wrapper {
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+        }
+
+        #content {
+            position: relative;
+            left: 35vw;
+            margin-left: -14vw;
+            width: 75vw;
+        }
+
+        #sidebar {
+            position: absolute;
+            top: 0;
+            left: -5vw;
+            margin-left: 5vw;
+            width: 20vw;
+            max-height: 100%;
+            overflow: hidden;
+        }
+
+            #sidebar:hover {
+                overflow-y: auto;
+            }
+
+            #sidebar > * {
+                max-width: 250px; /* leave some space for vertical scrollbar */
+            }
+    </style>
+
 </head>
-<body style="height: 100%">
+<body>
+<div class="ui top fixed inverted menu">
+    <div class="header item">
+        @*<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>TODO: Make mobile adaptation*@
+        <a asp-controller="Home" asp-action="Index" class="navbar-brand">Growth Pad</a>
+    </div>
+    <div class="ui inverted menu">
+        <a asp-controller="Home" asp-action="Index" class="item">Home</a>
+        <a asp-controller="Registration" asp-action="StepOne" class="item">Sign Up</a>
+        <a asp-controller="Appointments" asp-action="Index" class="item">Appointments List</a>
+    </div>
+    <div class="right menu">
+        @await Html.PartialAsync("_LoginPartial")
+    </div>
+</div>
     @if (TempData["error"] != null)
     {
         <div class="ui negative message">
@@ -52,71 +113,58 @@
             </div>
         </div>
     }
-    <div class="ui top fixed inverted menu">
-        <div class="header item">
-            @*<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>TODO: Make mobile adaptation*@
-            <a asp-controller="Home" asp-action="Index" class="navbar-brand">Growth Pad</a>
-        </div>
-        <div class="ui inverted menu">
-            <a asp-controller="Home" asp-action="Index" class="item">Home</a>
-            <a asp-controller="Registration" asp-action="StepOne" class="item">Sign Up</a>
-            <a asp-controller="Appointments" asp-action="Index" class="item">Appointments List</a>
-        </div>
-        <div class="right menu">
-            @await Html.PartialAsync("_LoginPartial")
-        </div>
-    </div>
-    <div class="fluid container container-padded">
-        <div class="ui grid" style="height: 100%;">
-            <div class="three wide column fixed" style="height: 100%; top: -7px;">
-                <div class="ui secondary vertical pointing menu large">
-                    <div class="ui card">
-                        <div class="image">
-                            <img src="https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png">
-                        </div>
-                        <div class="content">
-                            <a class="header">Name</a>
-                            <div class="description">
-                                Description
-                            </div>
-                            <div class="meta">
 
-                            </div>
-                        </div>
-                        <div class="extra content">
-                            <a>
-                                <i class="user icon"></i>
-                                22 Friends
-                            </a>
-                        </div>
-                        <div class="ui bottom attached indincating progress" id="percent">
-                            <div class="bar"></div>
-                        </div>
-                    </div>
-                    <a class="item" href="@Url.Action("Index", "Home")">
-                        Home
-                    </a>
-                    <a class="item" href="@Url.Action("Index", "Manage")">
-                        Profile
-                    </a>
-                    <a class="item">
-                        Meetings
-                    </a>
-                    <a class="item">
-                        Tasks
-                    </a>
+<div id="sidebar">
+    <h3>Sidebar</h3>
+    <div class="ui secondary vertical pointing menu large">
+        <div class="ui card">
+            <div class="image">
+                <img style="width: 18.3vw" src="https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png" alt="Avatar">
+            </div>
+            <div class="content">
+                <a class="header">Name</a>
+                <div class="description">
+                    Description
+                </div>
+                <div class="meta">
+
                 </div>
             </div>
-            <div class="thirteen wide column" style="top: -7px">
-                @RenderBody()
+            <div class="extra content">
+                <a>
+                    <i class="user icon"></i>
+                    22 Friends
+                </a>
             </div>
+            <div class="ui bottom attached indincating progress" id="percent" style="width: 20vw">
+                <div class="bar"></div>
+            </div>
+        </div> 
+        <a class="item" href="@Url.Action("Index", "Home")">
+            Home
+        </a>
+        <a class="item" href="@Url.Action("Index", "Manage")">
+            Profile
+        </a>
+        <a class="item">
+            Meetings
+        </a>
+        <a class="item">
+            Tasks
+        </a>
+        <a class="item">
+            Menu button
+        </a>
+    </div>
+</div>
+    <div id="wrapper">
+        <div id="content">
+            <h3>Main content</h3>
+            @RenderBody()
         </div>
     </div>
+
+
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -154,9 +202,9 @@
             });
 
         $('.message .close').on('click', function () {
-              $(this).closest('.message')
-                    .transition('fade');
-          });
+            $(this).closest('.message')
+                  .transition('fade');
+        });
     </script>
 </body>
 </html>

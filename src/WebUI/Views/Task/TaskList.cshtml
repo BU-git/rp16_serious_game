@@ -4,7 +4,7 @@
 
 @{
     ViewData["Title"] = "Task List";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
 }
 
 
@@ -36,13 +36,13 @@
 
                     switch (item.Status)
                     {
-                        case Status.OPEN:
+                        case Status.Open:
                             color = "green";
                             break;
-                        case Status.EXPIRED:
+                        case Status.Expired:
                             color = "red";
                             break;
-                        case Status.REOPENED:
+                        case Status.Reopened:
                             color = "yellow";
                             break;
                         default:
