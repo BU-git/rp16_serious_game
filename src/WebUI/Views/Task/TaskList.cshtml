@@ -7,13 +7,27 @@
     Layout = "~/Views/Shared/_PageLayout.cshtml";
 }
 
-
-
 @{
     bool isCoach = Context.User.IsInRole("Coach");
     string userId = Context.User.GetUserId();
 
 }
+
+
+<style>
+    svg > g > g > path {
+        display: none;
+    }
+    svg > g > g > rect {
+        display: none;
+    }
+    svg > g > g > g > text {
+        display: none;
+    }
+</style>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 <div class="ui segments">
     @if (isCoach)
@@ -21,16 +35,25 @@
         <div class="ui padded segment">
             <div id="AddTaskStepsButton" class="ui one column stackable center aligned page grid">
                 <a class="ui positive button active" href="@Url.Action("AddTask", "Task", new {coachId =userId })">Add Task</a>
-               
+
             </div>
         </div>
 
-            }
-            <div class="ui very padded segment">
-                <div class="ui one column stackable center aligned page grid">
-                    <div class="ui tree stackable cards">
+    }
 
-                        @foreach (var item in Model.UserTasks)
+    @if (!isCoach && !String.IsNullOrEmpty(userId))
+    {
+        //Google chart
+
+        <div id="geochart-colors" style="width: 74.8vw; height: 92vh"></div>
+
+    }
+
+    <div class="ui very padded segment">
+        <div class="ui one column stackable center aligned page grid">
+            <div class="ui tree stackable cards">
+
+                @foreach (var item in Model.UserTasks)
                 {
                     string color = "";
 
@@ -72,40 +95,40 @@
                     {
 
 
-                                <div class="content">
-                                    <span class="right floated star">
-                                        <i class="active star @size icon"></i>
-                                        <a class="floating ui yellow circular label">@Html.DisplayFor(m => item.Coins)</a>
-                                    </span>
-                                    <div class="header">
-                                        @Html.DisplayFor(m => item.Name)
-                                    </div>
-                                    @if (isCoach)
-                                    {
-                                        <div class="meta">
-                                            @Html.DisplayFor(x => item.UserName)
-                                        </div>
-                                    }
-
+                        <div class="content">
+                            <span class="right floated star">
+                                <i class="active star @size icon"></i>
+                                <a class="floating ui yellow circular label">@Html.DisplayFor(m => item.Coins)</a>
+                            </span>
+                            <div class="header">
+                                @Html.DisplayFor(m => item.Name)
+                            </div>
+                            @if (isCoach)
+                            {
+                                <div class="meta">
+                                    @Html.DisplayFor(x => item.UserName)
                                 </div>
-                                <div class="content">
+                            }
 
-                                    <div class="ui small feed">
-                                        <div class="event">
-                                            <div class="content">
-                                                <span class="right floated time">
+                        </div>
+                        <div class="content">
 
-                                                    @Html.DisplayFor(x => item.ExpireDt)
-                                                </span>
-                                                <div class="ui @color horizontal label">
-                                                    @Html.DisplayFor(x => item.Status)
-                                                </div>
+                            <div class="ui small feed">
+                                <div class="event">
+                                    <div class="content">
+                                        <span class="right floated time">
 
-                                            </div>
+                                            @Html.DisplayFor(x => item.ExpireDt)
+                                        </span>
+                                        <div class="ui @color horizontal label">
+                                            @Html.DisplayFor(x => item.Status)
                                         </div>
 
                                     </div>
                                 </div>
+
+                            </div>
+                        </div>
 
 
                                 <button type="submit" class="ui bottom attached button">
@@ -115,11 +138,78 @@
                                 </button>
 
 
-                            }
+                    }
 
-                        }
-                    </div>
-                </div>
+                }
             </div>
         </div>
+    </div>
+</div>
+
+<script>
+    google.charts.load('current', { 'packages': ['geochart'] });
+    google.charts.setOnLoadCallback(drawRegionsMap);
+
+    function drawRegionsMap() {
+        var data = google.visualization.arrayToDataTable([
+            ['Region code', 'Continent', 'Color'],
+            ['015', 'Northern Africa', 3],
+		    ['011', 'Western Africa', 3],
+		    ['017', 'Middle Africa', 3],
+		    ['014', 'Eastern Africa', 3],
+		    ['018', 'Southern Africa', 3],
+
+            ['154', 'Northern Europe', 4],
+		    ['155', 'Western Europe', 4],
+		    ['039', 'Southern Europe', 4],
+
+            ['151', 'Eastern Europe', 6],
+
+		    ['021', 'Northern America', 1],
+		    ['029', 'Caribbean', 1],
+		    ['013', 'Central America', 1],
+
+		    ['005', 'South America', 2],
+
+		    ['143', 'Central Asia', 8],
+		    ['030', 'Eastern Asia', 8],
+		    ['035', 'South-Eastern Asia', 8],
+                    
+		    ['034', 'Southern Asia', 7],
+		    ['145', 'Western Asia', 7],
+
+		    ['053', 'Australia and New Zealand', 5],
+		    ['054', 'Melanesia', 5],
+		    ['057', 'Micronesia', 5],
+		    ['061', 'Polynesia', 5],
+        ]);
+
+        var options = {
+            displayMode: 'regions',
+            region: 'world',
+            resolution: 'subcontinents',
+            backgroundColor: '#fff',
+            defaultRegionColor: '#00ffff',
+            defaultColor: '#f5f5f5',
+            legend: null,
+            tooltip: {
+                trigger: 'none'
+            },
+            colorAxis: {
+                colors: ['green', '#FFA703', 'yellow', '#07B6F0', 'red', '#ED6F2F', '#A509AB', '#060CBF']
+            }
+        };
+
+        var chart = new google.visualization.GeoChart(document.getElementById('geochart-colors'));
+        chart.draw(data, options);
+        google.visualization.events.addListener(chart, 'regionClick', mapClick);
+
+        function mapClick(e) {
+            var row = parseInt(data.getFilteredRows([{ column: 0, value: e.region }]));
+            var name = data.getValue(row, 1);
+            var color = data.getValue(row, 2);
+            alert('You clicked region ' + name + '. Color: ' + color);
+        }
+    };
+</script>
 
