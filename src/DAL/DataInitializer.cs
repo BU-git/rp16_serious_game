@@ -263,13 +263,14 @@ namespace DAL
                 {
                     var userTask1 = new UserTask()
                     {
-
+                        Region = Region.Africa,
+                        Country = "Algeria",
                         Coins = firstTask.Coins,
                         ExpireDt = new DateTime(2016, 08, 08),
                         Status = Status.Open,
                         TaskId = firstTask.Id,
                         Text =   firstTask.Text,
-                        UserId = user.Id
+                        UserId = user.Id,
                     };
                     _context.Add(userTask1);
                 }
@@ -278,7 +279,8 @@ namespace DAL
                 {
                     var userTask2 = new UserTask()
                     {
-
+                        Region = Region.Europe,
+                        Country = "France",
                         Coins = secondTask.Coins,
                         ExpireDt = new DateTime(2016, 08, 08),
                         Status = Status.Open,
@@ -293,7 +295,8 @@ namespace DAL
                 {
                     var userTask3 = new UserTask()
                     {
-
+                        Region = Region.NearEast,
+                        Country = "Armenia",
                         Coins = thirdTask.Coins,
                         ExpireDt = new DateTime(2016, 08, 08),
                         Status = Status.Reopened,
@@ -308,6 +311,8 @@ namespace DAL
                 {
                     var userTask4 = new UserTask()
                     {
+                        Region = Region.NearEast,
+                        Country = "Iraq",
                         Coins = fourthTask.Coins,
                         ExpireDt = new DateTime(2015, 08, 08),
                         Status = Status.Expired,

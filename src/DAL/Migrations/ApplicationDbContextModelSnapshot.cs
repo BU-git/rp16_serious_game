@@ -205,7 +205,11 @@ namespace DAL.Migrations
 
                     b.Property<int>("Coins");
 
+                    b.Property<string>("Country");
+
                     b.Property<DateTime>("ExpireDt");
+
+                    b.Property<int>("Region");
 
                     b.Property<DateTime?>("ResolutionDate");
 

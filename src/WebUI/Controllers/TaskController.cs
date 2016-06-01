@@ -71,6 +71,23 @@ namespace WebUI.Controllers
             return View(taskModel);
         }
 
+        // GET: /Task/Region/1
+        public async Task<IActionResult> ViewTasksByRegion(string region)
+        {
+            var user = await GetCurrentUserAsync();
+            Region r;
+            if (Enum.TryParse(region, out r))
+            {
+                var tasks = _dal.GetUserTasksForRegion(user, r);
+                var taskVm = new TaskRegionViewModel(r, tasks);
+                return View(taskVm);
+            }
+            else
+            {
+                return await TaskList();
+            }
+        }
+
         [HttpPost]
         public  IActionResult ViewUserTask(int taskId)
         {

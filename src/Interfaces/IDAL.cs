@@ -84,6 +84,7 @@ namespace Interfaces
         Task AssignTaskAsync(UserTask userTask);
         Task UpdateUserTaskAsync(UserTask userTask);
         Task<List<UserTask>> GetUserTasksAsync(ApplicationUser user);
+        List<UserTask> GetUserTasksForRegion(ApplicationUser user, Region region);
         ApplicationTask FindTaskbyName(string name);
         ApplicationTask FindTaskbyId(int taskId);
         UserTask FindUserTaskById(int id);

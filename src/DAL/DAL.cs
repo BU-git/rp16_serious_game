@@ -345,6 +345,14 @@ namespace DAL
 
         }
 
+        public List<UserTask> GetUserTasksForRegion(ApplicationUser user, Region region)
+        {
+            var userTasks = GetUserTasks(user)
+                    .Where(x => x.Region == region)
+                    .ToList();
+            return userTasks;
+        }
+
         public List<UserTask> GetUserGroupTasks(UserGroup group)
         {
             var users = _context.Users.SelectMany(x => x.ApplicationUserUserGroups.Where(e => e.UserGroupId == group.UserGroupId).Select(s => s.ApplicationUser)).Distinct();
