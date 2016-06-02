@@ -25,6 +25,10 @@
     svg > g > g > g > text {
         display: none;
     }
+    #geochart-colors {
+        margin-left: -1.6vw;
+        margin-top: -5vh;
+    }
 </style>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -43,7 +47,7 @@
     }
 
     <!--Google chart-->
-    <div id="geochart-colors" style="width: 74.8vw; height: 92vh"></div>
+    <div id="geochart-colors" style="width: 76.5vw; height: 98.6vh"></div>
 
     <div class="ui very padded segment">
         <div class="ui one column stackable center aligned page grid">
@@ -146,6 +150,11 @@
     google.charts.load('current', { 'packages': ['geochart'] });
     google.charts.setOnLoadCallback(drawRegionsMap);
 
+    var regions = [
+        "NorthAmerica", "SouthAmerica", "Africa", "Europe",
+        "Australia", "NorthAsia", "NearEast", "SouthAsia"
+    ];
+
     function drawRegionsMap() {
         var data = google.visualization.arrayToDataTable([
             ['Region code', 'Continent', 'Color'],
@@ -184,10 +193,11 @@
             displayMode: 'regions',
             region: 'world',
             resolution: 'subcontinents',
-            backgroundColor: '#fff',
+            backgroundColor: 'transparent',
             defaultRegionColor: '#00ffff',
             defaultColor: '#f5f5f5',
             legend: null,
+            keepAspectRation: false,
             tooltip: {
                 trigger: 'none'
             },
@@ -202,9 +212,18 @@
 
         function mapClick(e) {
             var row = parseInt(data.getFilteredRows([{ column: 0, value: e.region }]));
-            var name = data.getValue(row, 1);
-            var color = data.getValue(row, 2);
-            alert('You clicked region ' + name + '. Color: ' + color);
+            //Url.Action("Task", "ViewTasksByRegion")
+            if (row >= 0 && row < 3) row = 0;
+            else if (row == 3) row = 1;
+            else if (row > 3 && row < 9) row = 2;
+            else if (row >= 9 && row < 12) row = 3;
+            else if (row >= 12 && row < 16) row = 4;
+            else if (row == 16) row = 5;
+            else if (row > 16 && row < 19) row = 6;
+            else if (row >= 19 && row < 22) row = 7;
+            else return;
+            window.location.replace("http://localhost:51842/Task/ViewTasksByRegion/?region=" + regions[row]);
+            return;
         }
     };
 </script>
