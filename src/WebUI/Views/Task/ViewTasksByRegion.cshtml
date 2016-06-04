@@ -23,6 +23,10 @@
 </style>
 
 <div class="ui segments">
+    
+
+    <!--Google chart-->
+    <div id="geochart-colors" style="width: 79.3vw; height: 97vh"></div>
     @if (isCoach)
     {
         <div class="ui padded segment">
@@ -33,10 +37,6 @@
         </div>
 
     }
-
-    <!--Google chart-->
-    <div id="geochart-colors" style="width: 79.3vw; height: 97vh"></div>
-
     <div class="ui very padded segment">
         <div class="ui one column stackable center aligned page grid">
             <div class="ui tree stackable cards">
@@ -156,21 +156,23 @@
 
     @foreach (var t in Model.Tasks)
     {
-        @:dataArray.push(['@t.Country', '@t.Coins']);
+        @:dataArray.push(['@t.Country', @t.Coins]);
     }
 
     function drawRegionsMap() {
         var data = google.visualization.arrayToDataTable(dataArray);
 
         var options = {
-            displayMode: 'markers',
             region: currentRegion,
-            resolution: 'subcontinents',
+            displayMode: 'markers',
             backgroundColor: 'transparent',
             datalessRegionColor: regionColor,
             defaultRegionColor: '#00ffff',
             defaultColor: '#f5f5f5',
             keepAspectRation: false,
+            tooltip: {
+                trigger: 'focus'
+            },
             colorAxis: {
                 colors: ['green', '#FFA703']
             }

@@ -16,17 +16,20 @@
 
 <style>
     /* Remove the colored rectangle on the map */
-     svg > g > g > path {
-         display: none;
-     }
+    svg > g > g > path {
+        display: none;
+    }
+
     svg > g > g > rect {
         display: none;
     }
+
     svg > g > g > g > text {
         display: none;
     }
+
     #geochart-colors {
-        margin-left: -1.6vw;
+        margin-left: -1.4vw;
         margin-top: -5vh;
     }
 </style>
@@ -35,6 +38,8 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 <div class="ui segments">
+    <!--Google chart-->
+    <div id="geochart-colors" style="width: 76.3vw; height: 98.4vh"></div>
     @if (isCoach)
     {
         <div class="ui padded segment">
@@ -45,10 +50,6 @@
         </div>
 
     }
-
-    <!--Google chart-->
-    <div id="geochart-colors" style="width: 76.5vw; height: 98.6vh"></div>
-
     <div class="ui very padded segment">
         <div class="ui one column stackable center aligned page grid">
             <div class="ui tree stackable cards">
@@ -93,8 +94,6 @@
 
                     using (Html.BeginForm("ViewUserTask", "Task", new { taskId = item.UserTaskId }, FormMethod.Post, new { @class = color + " card" }))
                     {
-
-
                         <div class="content">
                             <span class="right floated star">
                                 <i class="active star @size icon"></i>
@@ -109,37 +108,26 @@
                                     @Html.DisplayFor(x => item.UserName)
                                 </div>
                             }
-
                         </div>
                         <div class="content">
-
                             <div class="ui small feed">
                                 <div class="event">
                                     <div class="content">
                                         <span class="right floated time">
-
                                             @Html.DisplayFor(x => item.ExpireDt)
                                         </span>
                                         <div class="ui @color horizontal label">
                                             @Html.DisplayFor(x => item.Status)
                                         </div>
-
                                     </div>
                                 </div>
-
                             </div>
                         </div>
-
-
-                                <button type="submit" class="ui bottom attached button">
-
-                                    <i class="zoom icon"></i>
-                                    View
-                                </button>
-
-
+                        <button type="submit" class="ui bottom attached button">
+                            <i class="zoom icon"></i>
+                            View
+                        </button>
                     }
-
                 }
             </div>
         </div>

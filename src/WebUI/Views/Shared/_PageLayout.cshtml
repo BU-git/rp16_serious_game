@@ -61,25 +61,25 @@
 
 </head>
 <body>
-<div class="ui top fixed inverted menu">
-    <div class="header item">
-        @*<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    <div class="ui top fixed inverted menu">
+        <div class="header item">
+            @*<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>TODO: Make mobile adaptation*@
-        <a asp-controller="Home" asp-action="Index" class="navbar-brand">Growth Pad</a>
+            <a asp-controller="Home" asp-action="Index" class="navbar-brand">Growth Pad</a>
+        </div>
+        <div class="ui inverted menu">
+            <a asp-controller="Home" asp-action="Index" class="item">Home</a>
+            <a asp-controller="Registration" asp-action="StepOne" class="item">Sign Up</a>
+            <a asp-controller="Appointments" asp-action="Index" class="item">Appointments List</a>
+        </div>
+        <div class="right menu">
+            @await Html.PartialAsync("_LoginPartial")
+        </div>
     </div>
-    <div class="ui inverted menu">
-        <a asp-controller="Home" asp-action="Index" class="item">Home</a>
-        <a asp-controller="Registration" asp-action="StepOne" class="item">Sign Up</a>
-        <a asp-controller="Appointments" asp-action="Index" class="item">Appointments List</a>
-    </div>
-    <div class="right menu">
-        @await Html.PartialAsync("_LoginPartial")
-    </div>
-</div>
     @if (TempData["error"] != null)
     {
         <div class="ui negative message">
@@ -119,7 +119,7 @@
     <div class="ui secondary vertical pointing menu large">
         <div class="ui card">
             <div class="image">
-                <img style="width: 18.3vw" src="https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png" alt="Avatar">
+                <img style="width: 100%" src="https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png" alt="Avatar">
             </div>
             <div class="content">
                 <a class="header">Name</a>
@@ -139,7 +139,7 @@
             <div class="ui bottom attached indincating progress" id="percent" style="width: 20vw">
                 <div class="bar"></div>
             </div>
-        </div> 
+        </div>
         <a class="item" href="@Url.Action("Index", "Home")">
             Home
         </a>
@@ -149,13 +149,13 @@
         <a class="item">
             Meetings
         </a>
-        <a class="item">
+        <a class="item" href="@Url.Action("TaskList", "Task")">
             Tasks
         </a>
-        <a class="item">
-            Menu button
-        </a>
+        <div class="ui divider"></div>
     </div>
+
+    
 </div>
     <div id="wrapper">
         <div id="content">
