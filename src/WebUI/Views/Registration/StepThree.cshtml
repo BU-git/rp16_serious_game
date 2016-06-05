@@ -24,23 +24,17 @@
             </div>
         </div>
     </div>
-    <form class="ui form segment attached" id="familyForm">
+    <form class="ui form segment attached" id="userForm">
         <input asp-for="AvatarId" type="hidden" id="avatarId" />
         <div class="ui grid">
-            <div class="ten wide centered column">
+            <div class="twelve wide centered column">
                 <ul class="ui bxslider centered aligned bxslider-unshifted">
-                    @*@foreach (var avatar in Model.Avatars)
-                        {
-                            <li id=@avatar.AvatarId>
-                                <img src=@avatar.Media.Path alt="Avatar ID: @avatar.AvatarId" />
-                            </li>
-                        }*@
-                    <li id="123">
-                        <img src="http://www.gettyimages.pt/gi-resources/images/Homepage/Hero/PT/PT_hero_42_153645159.jpg" />
-                    </li>
-                    <li id="456">
-                        <img src="http://indy100.independent.co.uk/image/31869-c6d5w5.jpg" />
-                    </li>
+                    @foreach (var avatar in Model?.Avatars)
+                    {
+                        <li id=@avatar.AvatarId>
+                            <img src=@avatar.Media.Path alt="Avatar ID: @avatar.AvatarId" />
+                        </li>
+                    }
                 </ul>
             </div>
             <div class="row">
@@ -69,18 +63,42 @@
 @section Scripts{
     <script>
         $(document).ready(function () {
-            $('.bxslider').bxSlider({
-                mode: 'fade',
-                pagerCustom: '#bx-pager',
-                adaptiveHeight: true,
-                slideWidth: 300,
-                useCSS: true,
-                touchEnabled: true,
-                slideMargin: 10
-            });
+            $('.bxslider')
+                .bxSlider({
+                    mode: 'fade',
+                    pagerCustom: '#bx-pager',
+                    adaptiveHeight: true,
+                    slideWidth: 400,
+                    useCSS: true,
+                    touchEnabled: true
+                });
+            $('.bx-wrapper').css('margin-bottom', '0');
         });
-        var slider = $('.bxslider').bxSlider;
         $("#successMessage").hide(0);
-
+        $("#submitUser").click(function () {
+            if ($("#userForm").valid()) {
+                var slider = $('.bxslider').bxSlider();
+                var data = slider.getCurrentSlideElement().attr('id');
+                $('#page-dimmer').addClass('active');
+                $.post({
+                    url: "/Registration/StepThree",
+                    data: { avatarId: data },
+                    success: function () {
+                        $('#page-dimmer').removeClass('active');
+                        $("#userForm").hide();
+                        $("#successMessage").show();
+                    }
+                }).fail(function () {
+                    $('#page-dimmer').removeClass('active');
+                    alert("Something went wrong..\nPlease repeat the registration");
+                    $("#userForm").hide();
+                    $("#familyForm").show();
+                });
+                return true;
+            } else {
+                return false;
+            }
+            return true;
+        });
     </script>
 }

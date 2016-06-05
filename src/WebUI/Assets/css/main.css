@@ -28,3 +28,13 @@
     margin: 0;
     padding: 0;
 }
+
+.bx-wrapper .bx-viewport {
+    -moz-box-shadow: 0 0 5px #ccc;
+    -webkit-box-shadow: 0 0 5px #ccc;
+    box-shadow: 0 0 5px #ccc;
+    border: 0px;
+    left: -5px;
+    background: #fff;
+    margin-bottom: 0 !important;
+}

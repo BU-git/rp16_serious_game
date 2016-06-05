@@ -156,5 +156,20 @@ namespace WebUI.Controllers
         {
             return View(model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> StepThree(int avatarId)
+        {
+            var user = await GetCurrentUserAsync();
+            var avatar = await _dal.GetAvatarById(avatarId);
+            await _dal.UpdateUserAvatar(avatar, user);
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        private async Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return await _dal.GetUserByEmail(HttpContext.User.Identity.Name);
+        }
     }
 }

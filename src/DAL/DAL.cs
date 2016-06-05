@@ -436,6 +436,23 @@ namespace DAL
             }
         }
 
+        public async Task<Avatar> GetAvatarById(int id)
+        {
+            try
+            {
+                var avatar = await _context.Avatars.FirstAsync(avatar1 => avatar1.AvatarId == id);
+                return avatar;
+            }
+            catch (NullReferenceException)
+            {
+                throw new Exception($"Avatar with {id} Id doesn't exist!");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Something went wrong:{ex.Message} ");
+            }
+        }
+
         public string GetAvatarPathByUserId(string userId)
         {
             try
