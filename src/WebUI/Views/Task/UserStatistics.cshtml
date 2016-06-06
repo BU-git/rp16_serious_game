@@ -1,0 +1,66 @@
+﻿@model WebUI.ViewModels.Task.StatisticsViewModel
+
+@{
+    Layout = "_PageLayout";
+}
+
+<div class="ui segments">
+    <div class="ui top attached tabular menu">
+        @foreach (var group in Model.GroupsTasks)
+        {
+            <a class="item active" data-tab="@group.UserGroup.GroupName">@group.UserGroup.GroupName</a>
+        }
+    </div>
+    @foreach (var group in Model.GroupsTasks)
+    {
+        <div class="ui bottom attached tab segment active" data-tab="@group.UserGroup.GroupName">
+            <h3>
+                Family @group.UserGroup.GroupName
+            </h3>
+
+            <div id="piechart" style="width: 900px; height: 500px;"></div>
+
+            @foreach (var u in group.UserStats)
+            {
+                {
+                    await Html.RenderPartialAsync("_StatisticsView", u);
+                }
+            }
+        </div>
+    }
+
+
+    <div class="ui bottom attached tab segment" data-tab="second">
+        Second
+    </div>
+    <div class="ui bottom attached tab segment" data-tab="third">
+        Third
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        //$(".tabular.menu .item").tab();
+
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        var data = [['Task_status', 'Count']];
+
+        data.push(['Done', 100], ['InProgress', 50]);
+
+        function drawChart() {
+
+            var sumData = google.visualization.arrayToDataTable(data);
+
+            var options = {
+                title: 'Task status'
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+            chart.draw(sumData, options);
+        }
+    </script>
+}

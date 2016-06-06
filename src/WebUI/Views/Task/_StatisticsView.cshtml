@@ -1,0 +1,65 @@
+﻿@model WebUI.ViewModels.Task.UserWithStatsViewModel
+
+<div class="ui segments">
+    <div>
+        <a>
+            <img src="https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png" alt="Avatar">
+            <span>@Model.Name</span>
+        </a>
+    </div>
+    <div>
+        <h3>Tasks</h3>
+        <div class="ui statistic">
+            <div class="value">
+                @Model.CompletedTasks
+            </div>
+            <div class="label">
+                Completed
+            </div>
+        </div>
+        <div class="ui statistic">
+            <div class="value">
+                @Model.TasksLeft
+            </div>
+            <div class="label">
+                Left
+            </div>
+        </div>
+
+        <div id="chart_div"></div>
+    </div>
+</div>
+
+@*<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+    google.charts.load('current', { packages: ['corechart', 'line'] });
+    google.charts.setOnLoadCallback(drawBackgroundColor);
+
+    var data = [];
+
+    @foreach (var task in Model.TasksByDays)
+    {
+        @:data.push(['@task.Day', @task.TasksCompleted]);
+    }
+
+        function drawBackgroundColor() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('number', 'Days');
+            data.addColumn('number', 'Completed');
+
+            data.addRows(data);
+
+            var options = {
+            hAxis: {
+            title: 'Days'
+            },
+            vAxis: {
+            title: 'Tasks completed'
+            },
+            backgroundColor: '#f1f8e9'
+            };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+    }
+</script>*@

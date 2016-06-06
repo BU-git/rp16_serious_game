@@ -53,8 +53,8 @@ namespace WebUI.Controllers
                 }
                 if (userTasks.Count > 0)
                 {
-                    userTasks =  userTasks.Where(
-                            x => x.Status == Status.Resolved ).ToList();
+                    userTasks = userTasks.Where(
+                            x => x.Status == Status.Resolved).ToList();
 
                 }
             }
@@ -89,15 +89,15 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public  IActionResult ViewUserTask(int taskId)
+        public IActionResult ViewUserTask(int taskId)
         {
-                
+
             UserTask task = _dal.FindUserTaskById(taskId);
             TaskViewModel taskModel = new TaskViewModel(task);
             return View("ViewTask", taskModel);
         }
 
-       // [HttpPost]
+        // [HttpPost]
         public async Task<IActionResult> SubmitTask(int taskId)
         {
             UserTask task = _dal.FindUserTaskById(taskId);
@@ -110,16 +110,16 @@ namespace WebUI.Controllers
         public IActionResult AddTask(string coachId)
         {
             List<UserGroup> groups = _dal.GetUsersUserGroups(coachId);
-           
+
             List<ApplicationUser> users = new List<ApplicationUser>();
             foreach (var group in groups)
             {
                 var u = _dal.GetUserGroupUsers(group);
-                if (u.Count>0)
+                if (u.Count > 0)
                     users.AddRange(u);
             }
 
-            
+
             var tasks = _dal.GetAllApplicationTasks();
             AddTaskViewModel model = new AddTaskViewModel
             {
@@ -134,12 +134,12 @@ namespace WebUI.Controllers
         {
             var appTask = _dal.FindTaskbyId(id);
             var user = await _dal.GetUserById(userId);
-            TaskViewModel task = new TaskViewModel(appTask) {UserId = user.Id, UserName =user.UserName };
+            TaskViewModel task = new TaskViewModel(appTask) { UserId = user.Id, UserName = user.UserName };
             return PartialView("_NewTask", task);
         }
 
         [HttpPost]
-        public IActionResult EditTask(string text,int coins, string command,int userTaskId)
+        public IActionResult EditTask(string text, int coins, string command, int userTaskId)
         {
             UserTask usertask = _dal.FindUserTaskById(userTaskId);
             usertask.Text = text;
@@ -173,6 +173,55 @@ namespace WebUI.Controllers
             };
             await _dal.AssignTaskAsync(task);
             return RedirectToAction("TaskList");
+        }
+
+        public async Task<IActionResult> UserStatistics()
+        {
+            if (!User.IsInRole("Coach"))
+            {
+                return await TaskList();
+            }
+
+            var currentUser = await GetCurrentUserAsync();
+            var userGroups = _dal.GetUsersUserGroups(currentUser.Id);
+            var statistics = new StatisticsViewModel();
+
+            foreach (var userGroup in userGroups)
+            {
+                var groupVm = new GroupViewModel
+                {
+                    UserTasks = _dal.GetUserGroupTasks(userGroup),
+                    UserGroup = userGroup,
+                    UserStats = new List<UserWithStatsViewModel>()
+                };
+
+                foreach (var user in _dal.GetUserGroupUsers(userGroup)
+                    .SkipWhile(u => u.Id == currentUser.Id))
+                {
+                    var stats = new UserWithStatsViewModel(user);
+                    stats.Tasks = _dal.GetUserTasks(user);
+
+                    stats.CompletedTasks = stats.Tasks.Count(t => t.Status == Status.Completed);
+
+                    stats.TasksLeft = stats.Tasks
+                        .Count(t => t.Status == Status.Open || t.Status == Status.Reopened);
+
+                    var dailyStats = from task in stats.Tasks
+                        where task.ResolutionDate >= DateTime.Now.AddDays(-7)
+                        group task by task.ResolutionDate?.Day
+                        into tasksByDays
+                        select new DailyStatistics(tasksByDays.Count(), tasksByDays.Key);
+
+                    stats.TasksByDays = dailyStats.ToList();
+
+                    groupVm.UserStats.Add(stats);
+                }
+
+                statistics.GroupsTasks = 
+                    new List<GroupViewModel> { groupVm };
+            }
+
+            return View(statistics);
         }
 
         //[ActionName("ViewTask")]
