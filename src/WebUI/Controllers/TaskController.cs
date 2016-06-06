@@ -142,7 +142,7 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditTask(string text, int coins, string command, int userTaskId)
+        public async Task<IActionResult> EditTask(string text, int coins, string command, int userTaskId)
         {
             UserTask usertask = _dal.FindUserTaskById(userTaskId);
             usertask.Text = text;
