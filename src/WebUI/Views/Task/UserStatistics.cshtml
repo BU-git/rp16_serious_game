@@ -2,20 +2,23 @@
 
 @{
     Layout = "_PageLayout";
+    string firstGroup = Model.GroupsTasks[0]?.UserGroup.GroupName;
+    int counter = 0;
 }
 
 <div class="ui segments" id="appender">
-    <div class="ui top attached tabular menu">
+    <div class="ui top attached pointing secondary tabular menu">
         @foreach (var group in Model.GroupsTasks)
         {
-            <a class="item active" data-tab="@group.UserGroup.GroupName">@group.UserGroup.GroupName</a>
+            <a class="item" id="@("tab" + counter++)" data-tab="@group.UserGroup.GroupName">@group.UserGroup.GroupName</a>
         }
     </div>
 
     @foreach (var group in Model.GroupsTasks)
     {
+        counter = 0;
         string pieChartId = group.UserGroup.GroupName + "_pieChart";
-        <div class="ui bottom attached tab segment active" data-tab="@group.UserGroup.GroupName">
+        <div class="ui tab segment" id="@("content" + counter++)" data-tab="@group.UserGroup.GroupName">
 
             <div class="ui grid">
                 <div id="@pieChartId" style="height: 270px" class="column six wide"></div>
@@ -67,7 +70,9 @@
 @section Scripts{
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
-        //$(".tabular.menu .item").tab();
+        $(".tabular.menu .item").tab({ history: false });
+        $('#tab0').addClass('active');
+        $('#content0').addClass('active');
 
         google.charts.load('current', { 'packages': ['corechart', 'line'] });
         google.charts.setOnLoadCallback(drawCharts);
@@ -77,21 +82,21 @@
         @foreach (var groupTask in Model.GroupsTasks)
         {
             @:var group = { users: [] };
-            @:group.familyName = '@groupTask.UserGroup.GroupName';
-            @:group.completed = @groupTask.CompletedTasks;
-            @:group.opened = @groupTask.TasksLeft;
-            foreach (var stat in groupTask.UserStats)
+                    @:group.familyName = '@groupTask.UserGroup.GroupName';
+                    @:group.completed = @groupTask.CompletedTasks;
+                    @:group.opened = @groupTask.TasksLeft;
+                    foreach (var stat in groupTask.UserStats)
             {
                 @:var user = { statistics: [] };
-                @:user.name = '@stat.UserName';
-                for (int i = 0; i < stat.TasksByDays.Count; i++)
+                        @:user.name = '@stat.UserName';
+                        for (int i = 0; i < stat.TasksByDays.Count; i++)
                 {
                     @:user.statistics.push([@stat.TasksByDays[i].Day, @stat.TasksByDays[i].TasksCompleted]);
-                }
+                        }
                 @:group.users.push(user);
-            }
+                    }
             @:dataTree.push(group);
-        }
+                }
 
         function drawCharts() {
             drawPieChart();

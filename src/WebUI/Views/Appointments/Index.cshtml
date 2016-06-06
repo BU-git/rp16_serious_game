@@ -5,44 +5,45 @@
     var action = User.IsInRole("Coach") ? "Edit" : "Details";
 }
 
-<div class="ui text container">
-    <h2 class="ui center aligned header">Appointments List</h2>
-    @if (User.IsInRole("Coach"))
-    {
-        <a asp-action="Create" class="ui labeled icon blue button">
-            <i class="add icon"></i> Create New
-        </a>
-    }
-    <p></p>
-    <div class="ui cards">
-        @foreach (var item in Model)
+<div style="margin-top: 20px;">
+    <div class="ui text container">
+        <h2 class="ui center aligned header">Appointments List</h2>
+        @if (User.IsInRole("Coach"))
         {
-            <div class="ui fluid blue card">
-                <a class="content" asp-action=@action asp-route-id="@item.Id">
-                    <div class="header">
-                        @item.Start.ToShortDateString()
-                    </div>
-                    <div class="meta">
-                        @item.Start.ToShortTimeString() - @item.End.ToShortTimeString()
-                    </div>
-                    <div class="description">
-                        <p>@item.Description</p>
-                    </div>
-                    <div class="extra content">
-                        
-                    </div>
-                </a>
-                @if (User.IsInRole("Coach"))
-                {
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="ui bottom attached button">
-                        <i class="delete icon"></i> Delete
-                    </a>
-                }
-            </div>
+            <a asp-action="Create" class="ui labeled icon blue button">
+                <i class="add icon"></i> Create New
+            </a>
         }
+        <p></p>
+        <div class="ui cards">
+            @foreach (var item in Model)
+            {
+                <div class="ui fluid blue card">
+                    <a class="content" asp-action=@action asp-route-id="@item.Id">
+                        <div class="header">
+                            @item.Start.ToShortDateString()
+                        </div>
+                        <div class="meta">
+                            @item.Start.ToShortTimeString() - @item.End.ToShortTimeString()
+                        </div>
+                        <div class="description">
+                            <p>@item.Description</p>
+                        </div>
+                        <div class="extra content">
+
+                        </div>
+                    </a>
+                    @if (User.IsInRole("Coach"))
+                {
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="ui bottom attached button">
+                            <i class="delete icon"></i> Delete
+                        </a>
+                    }
+                </div>
+            }
+        </div>
     </div>
 </div>
-
 
   
 @section Scripts{

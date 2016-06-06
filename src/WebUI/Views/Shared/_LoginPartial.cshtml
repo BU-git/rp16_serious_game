@@ -5,13 +5,13 @@
     <form asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="right menu">
         <div class="right menu">
             <a class="item" asp-controller="Manage" asp-action="Index" title="Manage">Hello @User.GetUserName()!</a>
-            <button type="submit" class="ui inverted yellow basic button">Log off</button>
+            <button type="submit" class="ui inverted yellow basic button"><i class="sign out icon"></i>Log off</button>
         </div>
     </form>
 }
 else
 {
     <div class="right menu">
-        <a class="ui item inverted green button" asp-controller="Account" asp-action="Login">Log in</a>
+        <a class="ui item inverted green button" asp-controller="Account" asp-action="Login"><i class="sign in icon"></i>Log in</a>
     </div>
 }

@@ -4,7 +4,6 @@
 
 @{
     ViewData["Title"] = "Task List";
-    Layout = "~/Views/Shared/_PageLayout.cshtml";
 }
 
 @{
@@ -39,16 +38,15 @@
 
 <div class="ui segments">
     <!--Google chart-->
-    <div id="geochart-colors" style="width: 76.3vw; height: 98.4vh"></div>
     @if (isCoach)
     {
-        <div class="ui padded segment">
-            <div id="AddTaskStepsButton" class="ui one column stackable center aligned page grid">
-                <a class="ui positive button active" href="@Url.Action("AddTask", "Task", new {coachId =userId })">Add Task</a>
-
-            </div>
-        </div>
-
+        <a class="ui positive circular icon button massive" style="position: fixed; right: 50px; bottom: 40px;"href="@Url.Action("AddTask", "Task", new {coachId = userId})">
+            <i class="plus icon"></i>
+        </a>
+    }
+    else
+    {
+        <div id="geochart-colors" style="width: 76.3vw; height: 98.4vh"></div>
     }
     <div class="ui very padded segment">
         <div class="ui one column stackable center aligned page grid">
