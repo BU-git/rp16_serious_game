@@ -4,14 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Growth Pad</title>
-
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/semantic/dist/semantic.css" />
         <link rel="stylesheet" href="~/lib/semantic/dist/components/calendar.css" />
         <link rel="stylesheet" href="~/lib/bootstrap/bootstrap.css" />
         <link rel="stylesheet" href="~/assets/css/site.min.css" />
         <link rel="stylesheet" href="~/lib/bxslider/jquery.bxslider.css" />
-
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css"
@@ -44,7 +42,6 @@
     <div class="fluid container container-padded">
         @RenderBody()
     </div>
-
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
@@ -68,7 +65,6 @@
         <script src="~/assets/js/site.min.js" asp-append-version="true"></script>
         <script src="~/lib/bxslider/jquery.bxslider.min.js" asp-append-version="true"></script>
     </environment>
-
     @RenderSection("scripts", required: false)
 </body>
 </html>
