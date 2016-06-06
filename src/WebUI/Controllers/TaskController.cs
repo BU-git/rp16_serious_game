@@ -184,7 +184,10 @@ namespace WebUI.Controllers
 
             var currentUser = await GetCurrentUserAsync();
             var userGroups = _dal.GetUsersUserGroups(currentUser.Id);
-            var statistics = new StatisticsViewModel();
+            var statistics = new StatisticsViewModel()
+            {
+                GroupsTasks = new List<GroupViewModel>()
+            };
 
             foreach (var userGroup in userGroups)
             {
@@ -196,33 +199,57 @@ namespace WebUI.Controllers
                 };
 
                 foreach (var user in _dal.GetUserGroupUsers(userGroup)
-                    .SkipWhile(u => u.Id == currentUser.Id))
+                    .Where(u => u.Id != currentUser.Id))
                 {
                     var stats = new UserWithStatsViewModel(user);
                     stats.Tasks = _dal.GetUserTasks(user);
 
-                    stats.CompletedTasks = stats.Tasks.Count(t => t.Status == Status.Completed);
+                    stats.CompletedTasks = stats.Tasks.Count(
+                        t => t.Status == Status.Completed || 
+                        t.Status == Status.Resolved);
 
                     stats.TasksLeft = stats.Tasks
-                        .Count(t => t.Status == Status.Open || t.Status == Status.Reopened);
+                        .Count(t => t.Status == Status.Open || 
+                        t.Status == Status.Reopened);
 
-                    var dailyStats = from task in stats.Tasks
-                        where task.ResolutionDate >= DateTime.Now.AddDays(-7)
+                    List<DailyStatistics> monthlyReport = new List<DailyStatistics>();
+                    
+                    var dailyStats = (from task in stats.Tasks
+                        where task.ResolutionDate > DateTime.Now.AddDays(-DateTime.Now.Day) //Get statistics from the beggining of the month
                         group task by task.ResolutionDate?.Day
                         into tasksByDays
-                        select new DailyStatistics(tasksByDays.Count(), tasksByDays.Key);
+                        select new DailyStatistics(tasksByDays.Count(), tasksByDays.Key, DateTime.Now.Month)).ToList();
 
-                    stats.TasksByDays = dailyStats.ToList();
+                    for (int i = 0; i < DateTime.Now.Day; i++)
+                    {
+                        monthlyReport.Add(dailyStats.Any(d => d.Day == i + 1)
+                            ? dailyStats.FirstOrDefault(st => st.Day == i + 1)
+                            : new DailyStatistics(0, i + 1, DateTime.Now.Month));
+                    }
 
+                    stats.TasksByDays = monthlyReport;
+                    
                     groupVm.UserStats.Add(stats);
                 }
 
-                statistics.GroupsTasks = 
-                    new List<GroupViewModel> { groupVm };
+                groupVm.CompletedTasks = groupVm.UserTasks
+                        .Count(t => t.Status == Status.Completed ||
+                        t.Status == Status.Resolved);
+                groupVm.TasksLeft = groupVm.UserTasks
+                    .Count(t => t.Status == Status.Open || 
+                    t.Status == Status.Reopened);
+
+                statistics.GroupsTasks.Add(groupVm);
             }
 
             return View(statistics);
         }
+
+        //[HttpPost]
+        //public async Task<JsonResult> GetStatistics()
+        //{
+            
+        //}
 
         //[ActionName("ViewTask")]
         //public IActionResult ViewTask(TaskViewModel task)

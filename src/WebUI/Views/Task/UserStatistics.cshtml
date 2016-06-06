@@ -4,21 +4,55 @@
     Layout = "_PageLayout";
 }
 
-<div class="ui segments">
+<div class="ui segments" id="appender">
     <div class="ui top attached tabular menu">
         @foreach (var group in Model.GroupsTasks)
         {
             <a class="item active" data-tab="@group.UserGroup.GroupName">@group.UserGroup.GroupName</a>
         }
     </div>
+
     @foreach (var group in Model.GroupsTasks)
     {
+        string pieChartId = group.UserGroup.GroupName + "_pieChart";
         <div class="ui bottom attached tab segment active" data-tab="@group.UserGroup.GroupName">
-            <h3>
-                Family @group.UserGroup.GroupName
-            </h3>
 
-            <div id="piechart" style="width: 900px; height: 500px;"></div>
+            <div class="ui grid">
+                <div id="@pieChartId" style="height: 270px" class="column six wide"></div>
+
+                <div class="ui column ten wide grid">
+                    <div class="column eleven wide">
+                        <div class="ui statistic">
+                            <div class="value">
+                                @group.UserGroup.GroupName
+                            </div>
+                            <div class="label">
+                                Family
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column four wide">
+                        <div class="ui statistic">
+                            <div class="value">
+                                @group.UserStats.Count
+                            </div>
+                            <div class="label">
+                                Members
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column five wide">
+                        <div class="ui statistic">
+                            <div class="value">
+                                @group.UserGroup.Type
+                            </div>
+                            <div class="label">
+                                Status
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             @foreach (var u in group.UserStats)
             {
@@ -28,14 +62,6 @@
             }
         </div>
     }
-
-
-    <div class="ui bottom attached tab segment" data-tab="second">
-        Second
-    </div>
-    <div class="ui bottom attached tab segment" data-tab="third">
-        Third
-    </div>
 </div>
 
 @section Scripts{
@@ -43,24 +69,80 @@
     <script type="text/javascript">
         //$(".tabular.menu .item").tab();
 
-        google.charts.load('current', { 'packages': ['corechart'] });
-        google.charts.setOnLoadCallback(drawChart);
+        google.charts.load('current', { 'packages': ['corechart', 'line'] });
+        google.charts.setOnLoadCallback(drawCharts);
 
-        var data = [['Task_status', 'Count']];
+        var dataTree = [];
 
-        data.push(['Done', 100], ['InProgress', 50]);
+        @foreach (var groupTask in Model.GroupsTasks)
+        {
+            @:var group = { users: [] };
+            @:group.familyName = '@groupTask.UserGroup.GroupName';
+            @:group.completed = @groupTask.CompletedTasks;
+            @:group.opened = @groupTask.TasksLeft;
+            foreach (var stat in groupTask.UserStats)
+            {
+                @:var user = { statistics: [] };
+                @:user.name = '@stat.UserName';
+                for (int i = 0; i < stat.TasksByDays.Count; i++)
+                {
+                    @:user.statistics.push([@stat.TasksByDays[i].Day, @stat.TasksByDays[i].TasksCompleted]);
+                }
+                @:group.users.push(user);
+            }
+            @:dataTree.push(group);
+        }
 
-        function drawChart() {
+        function drawCharts() {
+            drawPieChart();
+            drawLineChart();
+        }
 
-            var sumData = google.visualization.arrayToDataTable(data);
-
+        function drawPieChart() {
             var options = {
                 title: 'Task status'
             };
 
-            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            for (var i = 0; i < dataTree.length; i++) {
+                var pieChartData = [
+                    ['Task status', 'Count'],
+                    ['Done', dataTree[i].completed],
+                    ['In progress', dataTree[i].opened]
+                ];
+                var sumData = google.visualization.arrayToDataTable(pieChartData);
+                var chart = new google.visualization.PieChart(
+                    document.getElementById(dataTree[i].familyName + '_pieChart'));
+                chart.draw(sumData, options);
+            }
+        }
 
-            chart.draw(sumData, options);
+        function drawLineChart() {
+            var options = {
+                chart: {
+                    title: 'Number of completed tasks',
+                    subtitle: 'for the current month'
+                }
+            };
+
+            for (var i = 0; i < dataTree.length; i++) {
+                for (var j = 0; j < dataTree[i].users.length; j++) {
+                    var lineChartData = new google.visualization.DataTable();
+                    var statArray = [];
+
+                    lineChartData.addColumn('number', 'Day');
+                    lineChartData.addColumn('number', 'Completed tasks');
+
+                    for (var k = 0; k < dataTree[i].users[j].statistics.length; k++) {
+                        if (dataTree[i].users[j].statistics[k] != undefined)
+                            statArray.push(dataTree[i].users[j].statistics[k]);
+                    }
+
+                    lineChartData.addRows(statArray);
+                    var chart = new google.charts.Line(
+                            document.getElementById(dataTree[i].users[j].name + '_chart_div'));
+                    chart.draw(lineChartData, options);
+                }
+            }
         }
     </script>
 }
