@@ -175,11 +175,13 @@ namespace DAL
                     ApplicationUser = appUser,
                     Avatar = avatar
                 };
+                _context.ApplicationUser_Avatars.Add(userAvatar);
                 var user = await _userManager.FindByIdAsync(appUser.Id);
                 user.ApplicationUser_Avatars.Add(userAvatar);
                 var updAvatar = _context.Avatars.First(avatar1 => avatar1 == avatar);
                 updAvatar.ApplicationUser_Avatars.Add(userAvatar);
                 var result = await _userManager.UpdateAsync(user);
+                _context.Avatars.Update(updAvatar);
                 await _context.SaveChangesAsync();
                 return result;
             }
@@ -557,6 +559,7 @@ namespace DAL
             {
                 var userAvatar = _context.Avatars.First(av => av == avatar);
                 userAvatar.Media.MainPath = path;
+                _context.Avatars.Update(userAvatar);
                 var result = await _context.SaveChangesAsync();
                 return result;
             }

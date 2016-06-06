@@ -28,7 +28,7 @@ namespace Domain.Entities
 
         public string Phone { get; set; }
 
-        public int Coins { get; set; }
+        public int Coins { get; set; } = 0;
 
         public int? CurrentAvatarId { get; set; }
         

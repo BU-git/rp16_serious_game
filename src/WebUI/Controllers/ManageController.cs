@@ -6,6 +6,8 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 using WebUI.ViewModels.Manage;
 using Domain.Entities;
+using Interfaces;
+using WebUI.ViewModels.Registration;
 
 namespace WebUI.Controllers
 {
@@ -15,15 +17,17 @@ namespace WebUI.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
+        private readonly IDAL _dal;
 
         public ManageController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory,IDAL dal)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = loggerFactory.CreateLogger<ManageController>();
+            _dal = dal;
         }
 
         //
@@ -181,6 +185,27 @@ namespace WebUI.Controllers
                 return View(model);
             }
             return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangeAvatar()
+        {
+            var user = await GetCurrentUserAsync();
+            var avatarViewModel = new AvatarsViewModel();
+            foreach (var userAvatar in user.ApplicationUser_Avatars)
+            {
+                avatarViewModel.Avatars.Add(userAvatar.Avatar);
+            }
+            return View(avatarViewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeAvatar(int avatarId)
+        {
+            var user = await GetCurrentUserAsync();
+            var avatar = await _dal.GetAvatarById(avatarId);
+            await _dal.UpdateUserAvatar(avatar, user);
+            return RedirectToAction("TaskList", "Task");
         }
 
         #region Helpers

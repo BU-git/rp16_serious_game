@@ -7,6 +7,7 @@ using Microsoft.AspNet.Mvc;
 using Interfaces;
 using WebUI.ViewModels.Task;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Identity;
 
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,10 +18,12 @@ namespace WebUI.Controllers
     public class TaskController : Controller
     {
         private readonly IDAL _dal;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TaskController(IDAL dal)
+        public TaskController(IDAL dal, UserManager<ApplicationUser> userManager)
         {
             _dal = dal;
+            _userManager = userManager;
         }
 
         // GET: /<controller>/
@@ -144,6 +147,7 @@ namespace WebUI.Controllers
             UserTask usertask = _dal.FindUserTaskById(userTaskId);
             usertask.Text = text;
             usertask.Coins = coins;
+            var user = await GetCurrentUserAsync();
             if (command.Contains("Resent"))
             {
                 usertask.ResolutionDate = null;
@@ -152,9 +156,11 @@ namespace WebUI.Controllers
             else if (command.Contains("Aprove"))
             {
                 usertask.Status = Status.Completed;
+                user.Coins += usertask.Coins;
             }
 
-            _dal.UpdateUserTaskAsync(usertask);
+            await _dal.UpdateUserTaskAsync(usertask);
+            await _userManager.UpdateAsync(user);
             return RedirectToAction("TaskList");
         }
 
