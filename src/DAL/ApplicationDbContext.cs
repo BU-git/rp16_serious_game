@@ -10,7 +10,7 @@ namespace DAL
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<AppointmentUser>()
+            builder.Entity<Appointment_User>()
               .HasKey(t => new { t.AppointmentId, t.UserId });
 
             builder.Entity<ApplicationUser_UserGroup>()
@@ -21,22 +21,22 @@ namespace DAL
 
             builder.Entity<ApplicationUser_UserGroup>()
                 .HasOne(u => u.ApplicationUser)
-                .WithMany(ug => ug.ApplicationUserUserGroups)
+                .WithMany(ug => ug.ApplicationUser_UserGroups)
                 .HasForeignKey(u => u.Id);
 
             builder.Entity<ApplicationUser_UserGroup>()
                 .HasOne(ug => ug.UserGroup)
-                .WithMany(u => u.ApplicationUserUserGroups)
+                .WithMany(u => u.ApplicationUser_UserGroups)
                 .HasForeignKey(ug => ug.UserGroupId);
 
-            builder.Entity<AppointmentUser>()
+            builder.Entity<Appointment_User>()
                 .HasOne(au => au.User)
-                .WithMany(u => u.UserAppointments)
+                .WithMany(u => u.User_Appointments)
                 .HasForeignKey(au => au.UserId);
 
-            builder.Entity<AppointmentUser>()
+            builder.Entity<Appointment_User>()
                 .HasOne(au => au.Appointment)
-                .WithMany(a => a.AppointmentUsers)
+                .WithMany(a => a.Appointment_Users)
                 .HasForeignKey(au => au.AppointmentId);
 
             builder.Entity<Customer>()
@@ -95,7 +95,7 @@ namespace DAL
         public DbSet<Customer> Customers {get;set;}
         public DbSet<UserGroup> UserGroups { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
-        public DbSet<AppointmentUser> AppointmentUsers { get; set; }
+        public DbSet<Appointment_User> AppointmentUsers { get; set; }
         public DbSet<ApplicationTask> Tasks { get; set; } 
         public DbSet<UserTask> UserTasks { get; set; } 
         public DbSet<Media> Medias { get; set; }

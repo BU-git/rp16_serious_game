@@ -23,3 +23,8 @@
 .validation-summary-valid {
     display: none;
 }
+
+.bxslider-unshifted {
+    margin: 0;
+    padding: 0;
+}

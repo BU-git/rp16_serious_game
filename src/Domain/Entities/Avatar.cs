@@ -6,7 +6,7 @@ namespace Domain.Entities
     {
         public int AvatarId { get; set; }
         public int Type { get; set; }
-        public int Level { get; set; }
+        public int Price { get; set; }
         public int MediaId { get; set; }
 
         public Media Media { get; set; }

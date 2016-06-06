@@ -179,7 +179,7 @@ namespace DAL
 
             foreach (var userId in attendeesIds)
             {
-                var appointmentUser = new AppointmentUser()
+                var appointmentUser = new Appointment_User()
                 {
                     AppointmentId = appointment.Id,
                     UserId = userId,
@@ -201,15 +201,15 @@ namespace DAL
         {
             //Remove users
             var userIds = attendeesIds as IList<string> ?? attendeesIds.ToList();
-            foreach (var appointmentUser in appointment.AppointmentUsers.Where(appointmentUser => !userIds.Contains(appointmentUser.UserId)))
+            foreach (var appointmentUser in appointment.Appointment_Users.Where(appointmentUser => !userIds.Contains(appointmentUser.UserId)))
             {
                 _context.Remove(appointmentUser);
             }
 
             //Add users
             foreach (var appointmentUser in from userId in userIds
-                                            where !appointment.AppointmentUsers.Select(a => a.UserId).Contains(userId)
-                                            select new AppointmentUser()
+                                            where !appointment.Appointment_Users.Select(a => a.UserId).Contains(userId)
+                                            select new Appointment_User()
                                             {
                                                 AppointmentId = appointment.Id,
                                                 UserId = userId
@@ -241,7 +241,7 @@ namespace DAL
         /// <returns></returns>
         public async Task<List<Appointment>> GetUserAppointments(string userId)
         {
-            return await _context.Appointments.Where(a => a.AppointmentUsers.Any(au => au.UserId == userId)).ToListAsync();
+            return await _context.Appointments.Where(a => a.Appointment_Users.Any(au => au.UserId == userId)).ToListAsync();
         }
 
         /// <summary>
@@ -251,10 +251,10 @@ namespace DAL
         /// <returns></returns>
         public async Task<Appointment> GetAppointmentById(int id)
         {
-            return await _context.Appointments.Include(a => a.AppointmentUsers).ThenInclude(au => au.User).SingleAsync(a => a.Id == id);
+            return await _context.Appointments.Include(a => a.Appointment_Users).ThenInclude(au => au.User).SingleAsync(a => a.Id == id);
         }
 
-        public async Task<AppointmentUser> ValidateAppointment(DateTime start, DateTime end, IEnumerable<string> users)
+        public async Task<Appointment_User> ValidateAppointment(DateTime start, DateTime end, IEnumerable<string> users)
         {
             return await _context.AppointmentUsers.Include(a => a.Appointment).Include(a => a.User).FirstOrDefaultAsync(a => a.Appointment.Start < end && a.Appointment.End > start && users.Contains(a.UserId));
         }
@@ -356,8 +356,8 @@ namespace DAL
 
         public List<UserTask> GetUserGroupTasks(UserGroup group)
         {
-            var users = _context.Users.SelectMany(x => x.ApplicationUserUserGroups.Where(e => e.UserGroupId == group.UserGroupId).Select(s => s.ApplicationUser)).Distinct();
-            
+            var users = _context.Users.SelectMany(x => x.ApplicationUser_UserGroups.Where(e => e.UserGroupId == group.UserGroupId).Select(s => s.ApplicationUser)).Distinct();
+
             var tasks = new List<UserTask>();
             foreach (var user in users)
             {
@@ -372,7 +372,7 @@ namespace DAL
         {
             var userGroups =
                 _context.UserGroups.SelectMany(
-                    x => x.ApplicationUserUserGroups.Where(e => e.ApplicationUser.Id == userId)
+                    x => x.ApplicationUser_UserGroups.Where(e => e.ApplicationUser.Id == userId)
                             .Select(e => e.UserGroup)).Distinct().ToList();
             return userGroups;
         } 
@@ -382,7 +382,7 @@ namespace DAL
             var users =
                 _context.Users.SelectMany(
                     x =>
-                        x.ApplicationUserUserGroups.Where(e => e.UserGroupId == group.UserGroupId)
+                        x.ApplicationUser_UserGroups.Where(e => e.UserGroupId == group.UserGroupId)
                             .Select(u => u.ApplicationUser)).Distinct().ToList();
             return users;
         }
@@ -508,6 +508,12 @@ namespace DAL
             {
                 throw new Exception($"Something went wrong:{ex.Message} ");
             }
+        }
+
+        public async Task<List<Avatar>> GetAllAvatarsWithPrice(int price)
+        {
+            var avatars = await _context.Avatars.Where(avatar => avatar.Price == price).ToListAsync();
+            return avatars;
         }
     }
 }

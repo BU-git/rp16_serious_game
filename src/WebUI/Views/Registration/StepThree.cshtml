@@ -1,0 +1,86 @@
+﻿@model WebUI.ViewModels.Registration.AvatarsViewModel
+@{
+    ViewBag.Title = "Registration | Step Three";
+}
+
+<div class="ui text container">
+    <div class="ui steps top attached center aligned">
+        <div class="step">
+            <div class="content">
+                <div class="title">Step 1</div>
+                <div class="description">Create new family</div>
+            </div>
+        </div>
+        <div class="step">
+            <div class="content">
+                <div class="title">Step 2</div>
+                <div class="description">Enter information about family members</div>
+            </div>
+        </div>
+        <div class="active step">
+            <div class="content">
+                <div class="title">Step 3</div>
+                <div class="description">Choose an avatar</div>
+            </div>
+        </div>
+    </div>
+    <form class="ui form segment attached" id="familyForm">
+        <input asp-for="AvatarId" type="hidden" id="avatarId" />
+        <div class="ui grid">
+            <div class="ten wide centered column">
+                <ul class="ui bxslider centered aligned bxslider-unshifted">
+                    @*@foreach (var avatar in Model.Avatars)
+                        {
+                            <li id=@avatar.AvatarId>
+                                <img src=@avatar.Media.Path alt="Avatar ID: @avatar.AvatarId" />
+                            </li>
+                        }*@
+                    <li id="123">
+                        <img src="http://www.gettyimages.pt/gi-resources/images/Homepage/Hero/PT/PT_hero_42_153645159.jpg" />
+                    </li>
+                    <li id="456">
+                        <img src="http://indy100.independent.co.uk/image/31869-c6d5w5.jpg" />
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <div class="column">
+                    <input type="button" value="Choose avatar" class="ui button blue fluid" id="submitUser" />
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="ui page dimmer" id="page-dimmer">
+        <div class="ui text loader">Loading</div>
+    </div>
+    <div id="successMessage" class="ui segment attached">
+        <div class="ui divider hidden"></div>
+        <h1 class="ui header center aligned">Your avatar was succesfully chosen!</h1>
+        <div class="ui divider hidden"></div>
+        <div class="ui text right aligned">
+            <a asp-controller="Home" asp-action="Index" class="ui blue button large basic labeled icon">
+                Continue to main page.
+                <i class="right arrow icon"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.bxslider').bxSlider({
+                mode: 'fade',
+                pagerCustom: '#bx-pager',
+                adaptiveHeight: true,
+                slideWidth: 300,
+                useCSS: true,
+                touchEnabled: true,
+                slideMargin: 10
+            });
+        });
+        var slider = $('.bxslider').bxSlider;
+        $("#successMessage").hide(0);
+
+    </script>
+}

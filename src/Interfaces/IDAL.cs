@@ -94,6 +94,7 @@ namespace Interfaces
         Task<IdentityResult> UpdateUserAvatar(Avatar avatar, ApplicationUser appUser);
         Task<List<Avatar>> GetAllAvatarsAsync();
         Task<List<ApplicationUser>> GetAllUsersWithAvatarsAsync();
+        Task<List<Avatar>> GetAllAvatarsWithPrice(int price);
         string GetAvatarPath(Avatar avatar);
         Task<int> UpdateAvatarPath(Avatar avatar, string path);
         List<UserTask> GetUserGroupTasks(UserGroup group);
@@ -133,7 +134,6 @@ namespace Interfaces
         /// <param name="id">id</param>
         /// <returns></returns>
         Task<Appointment> GetAppointmentById(int id);
-
-        Task<AppointmentUser> ValidateAppointment(DateTime start, DateTime end, IEnumerable<string> users);
+        Task<Appointment_User> ValidateAppointment(DateTime start, DateTime end, IEnumerable<string> users);
     }
 }
