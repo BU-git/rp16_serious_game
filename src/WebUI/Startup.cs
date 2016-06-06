@@ -60,7 +60,7 @@ namespace WebUI
             services.AddMvc();
 
             //Add DAL
-            services.AddScoped<IDAL, Dal>();
+            services.AddScoped<IDAL, DAL.DAL>();
 
             // Add application services.
             services.AddTransient<TranslationManager>();

@@ -1,0 +1,27 @@
+﻿@model WebUI.ViewModels.AvatarMarket.AvatarsManyViewModel
+@{
+    ViewData["Title"] = "Avatar List";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
+}
+<div class="ui very padded segment">
+    <div class="ui four column stackable center aligned page grid">
+        <div class="ui four tree stackable special cards">
+            @foreach (var avatar in Model.AvatarViewModels)
+            {
+                using (Html.BeginForm("AvatarList", "Marketplace", new { avatarId = avatar.Avatar.AvatarId }, FormMethod.Post, new { @class = "card" }))
+                {
+                    @Html.Partial("_AvatarView", avatar)
+                }
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $('.card .image').dimmer({
+            on: 'hover'
+        });
+        $('.card .content-unpadded').css('padding', '0');
+    </script>
+}

@@ -138,17 +138,38 @@ namespace WebUI.Controllers
                 };
                 await _mailManager.SendRegistrationMailAsync(registrationMessage, u.Email);
             }
-            
+
             //TODO: assign members to concrete family considering previous comment about DAL
             //TODO: add success message
-
-            return await StepTwo("");
+            var avatars = await _dal.GetAllAvatarsWithPrice(0);
+            return StepThree(new AvatarsViewModel { Avatars = avatars });
         }
 
         [HttpPost]
         public PartialViewResult RegistrationForm()
         {
             return PartialView("_UserDetails", new UserViewModel());
+        }
+
+        [HttpGet]
+        public IActionResult StepThree(AvatarsViewModel model)
+        {
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> StepThree(int avatarId)
+        {
+            var user = await GetCurrentUserAsync();
+            var avatar = await _dal.GetAvatarById(avatarId);
+            await _dal.UpdateUserAvatar(avatar, user);
+            return RedirectToAction("Index", "Home");
+        }
+
+
+        private async Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return await _dal.GetUserByEmail(HttpContext.User.Identity.Name);
         }
     }
 }

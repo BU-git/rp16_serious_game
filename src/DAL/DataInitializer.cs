@@ -179,9 +179,9 @@ namespace DAL
 
                 if (user1 != null && user2 != null && coach != null)
                 {
-                    var uug1 = new ApplicationUserUserGroup();
-                    var uug2 = new ApplicationUserUserGroup();
-                    var uug3 = new ApplicationUserUserGroup();
+                    var uug1 = new ApplicationUser_UserGroup();
+                    var uug2 = new ApplicationUser_UserGroup();
+                    var uug3 = new ApplicationUser_UserGroup();
 
                     uug1.ApplicationUser = user1;
                     uug1.UserGroup = userGroup;
