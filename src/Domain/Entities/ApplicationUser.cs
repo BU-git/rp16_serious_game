@@ -28,12 +28,14 @@ namespace Domain.Entities
 
         public string Phone { get; set; }
 
-        public int? AvatarId { get; set; }
+        public int Coins { get; set; }
+
+        public int? CurrentAvatarId { get; set; }
         
         public List<ApplicationUser_UserGroup> ApplicationUser_UserGroups { get; set; }
         public List<Customer> Customer { get; set; }
         public List<UserTask> UserTasks { get; set; }
-        public Avatar Avatar { get; set; }
+        public List<ApplicationUser_Avatar> ApplicationUser_Avatars { get; set; }
 
         public virtual ICollection<Appointment_User> User_Appointments { get; set; }
     }

@@ -101,7 +101,8 @@ namespace Interfaces
         List<UserTask> GetUserGroupTasks(UserGroup group);
         List<UserGroup> GetUsersUserGroups(string userId);
         List<ApplicationUser> GetUserGroupUsers(UserGroup group);
-
+        Task<IdentityResult> UpdateUserAvailableAvatars(Avatar avatar, ApplicationUser appUser);
+        Task<List<Avatar>> FindNotAvailableAvatars(ApplicationUser appUser);
         /// <summary>
         /// Create Appointment and assign it's owner
         /// </summary>

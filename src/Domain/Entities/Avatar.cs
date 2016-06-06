@@ -10,6 +10,6 @@ namespace Domain.Entities
         public int MediaId { get; set; }
 
         public Media Media { get; set; }
-        public List<ApplicationUser> ApplicationUsers { get; set; }
+        public List<ApplicationUser_Avatar> ApplicationUser_Avatars { get; set; }
     }
 }

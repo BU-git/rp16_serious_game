@@ -166,6 +166,46 @@ namespace DAL
             await _context.SaveChangesAsync();
         }
 
+        public async Task<IdentityResult> UpdateUserAvailableAvatars(Avatar avatar, ApplicationUser appUser)
+        {
+            try
+            {
+                var userAvatar = new ApplicationUser_Avatar
+                {
+                    ApplicationUser = appUser,
+                    Avatar = avatar
+                };
+                var user = await _userManager.FindByIdAsync(appUser.Id);
+                user.ApplicationUser_Avatars.Add(userAvatar);
+                var updAvatar = _context.Avatars.First(avatar1 => avatar1 == avatar);
+                updAvatar.ApplicationUser_Avatars.Add(userAvatar);
+                var result = await _userManager.UpdateAsync(user);
+                await _context.SaveChangesAsync();
+                return result;
+            }
+            catch (Exception)
+            {
+                throw new Exception("There is no such User in the system");
+            }
+        }
+
+        public async Task<List<Avatar>> FindNotAvailableAvatars(ApplicationUser appUser)
+        {
+            try
+            {
+                var user = await _userManager.FindByIdAsync(appUser.Id);
+                var avatars = await _context.Avatars.Where(
+                    avatar =>
+                        avatar.ApplicationUser_Avatars.All(userAvatar => userAvatar.ApplicationUser != appUser))
+                    .ToListAsync();
+                return avatars;
+            }
+            catch (Exception)
+            {
+                throw new Exception("There is no such User in the system");
+            }
+        }
+
         /// <summary>
         /// Create Appointment and assign it's owner
         /// </summary>
@@ -285,13 +325,13 @@ namespace DAL
             return task;
 
         }
-        
+
         public List<ApplicationTask> GetAllApplicationTasks()
         {
             var tasks = _context.Tasks.ToList();
             return tasks;
         }
-        
+
         public async Task UpdateTaskAsync(ApplicationTask appTask)
         {
             var taskWithSameName = _context.Tasks.FirstOrDefault(x => x.Name == appTask.Name && x.Id != appTask.Id);
@@ -314,26 +354,26 @@ namespace DAL
             var task = _context.Tasks.FirstOrDefault(x => x.Id == userTask.TaskId);
             if (user != null && task != null)
             {
-            _context.UserTasks.Add(userTask);
-            await _context.SaveChangesAsync();
+                _context.UserTasks.Add(userTask);
+                await _context.SaveChangesAsync();
             }
-            else 
-                throw  new Exception($"No such User {userTask.UserId} or Task {userTask.TaskId} ");
+            else
+                throw new Exception($"No such User {userTask.UserId} or Task {userTask.TaskId} ");
 
         }
 
         public async Task UpdateUserTaskAsync(UserTask userTask)
         {
             var usertask =
-                _context.UserTasks.FirstOrDefault(x =>x.Id == userTask.Id);
+                _context.UserTasks.FirstOrDefault(x => x.Id == userTask.Id);
 
             if (usertask != null)
             {
-            _context.Entry(usertask).State = EntityState.Detached;
-            _context.Entry(userTask).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+                _context.Entry(usertask).State = EntityState.Detached;
+                _context.Entry(userTask).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
             }
-            else 
+            else
                 throw new Exception($"No task {userTask.Id}");
 
         }
@@ -375,7 +415,7 @@ namespace DAL
                     x => x.ApplicationUser_UserGroups.Where(e => e.ApplicationUser.Id == userId)
                             .Select(e => e.UserGroup)).Distinct().ToList();
             return userGroups;
-        } 
+        }
 
         public List<ApplicationUser> GetUserGroupUsers(UserGroup group)
         {
@@ -390,8 +430,8 @@ namespace DAL
         public UserTask FindUserTaskById(int id)
         {
             var userTask =
-                _context.UserTasks.Where(x => x.Id == id )
-                    .Include(x => x.ApplicationTask).Include(x=>x.User)
+                _context.UserTasks.Where(x => x.Id == id)
+                    .Include(x => x.ApplicationTask).Include(x => x.User)
                     .FirstOrDefault();
             return userTask;
         }
@@ -406,7 +446,8 @@ namespace DAL
         {
             try
             {
-                var avatar = _userManager.Users.First(applicationUser => applicationUser == user).Avatar;
+                var avatarId = _userManager.Users.First(applicationUser => applicationUser == user).CurrentAvatarId;
+                var avatar = _context.Avatars.First(avatar1 => avatar1.AvatarId == avatarId);
                 return avatar;
             }
             catch (NullReferenceException)
@@ -423,7 +464,8 @@ namespace DAL
         {
             try
             {
-                var avatar = _context.Users.First(user => user.Id == userId).Avatar;
+                var avatarId = _context.Users.First(user => user.Id == userId).CurrentAvatarId;
+                var avatar = _context.Avatars.First(avatar1 => avatar1.AvatarId == avatarId);
                 return avatar;
             }
             catch (NullReferenceException)
@@ -457,7 +499,8 @@ namespace DAL
         {
             try
             {
-                var path = _context.Users.First(user => user.Id == userId).Avatar.Media.Path; //TODO: add path to default avatar if not found
+                var avatarId = _context.Users.First(user => user.Id == userId).CurrentAvatarId; //TODO: add path to default avatar if not found
+                var path = _context.Avatars.First(avatar1 => avatar1.AvatarId == avatarId).Media.MainPath;
                 return path;
             }
             catch (NullReferenceException)
@@ -466,7 +509,7 @@ namespace DAL
             }
             catch (Exception ex)
             {
-                throw new Exception($"Something went wrong:{ex.Message} "); 
+                throw new Exception($"Something went wrong:{ex.Message} ");
             }
         }
 
@@ -475,7 +518,7 @@ namespace DAL
             try
             {
                 var user = await _userManager.FindByIdAsync(appUser.Id);
-                user.Avatar = avatar;
+                user.CurrentAvatarId = avatar.AvatarId;
                 var result = await _userManager.UpdateAsync(user);
                 return result;
             }
@@ -492,14 +535,14 @@ namespace DAL
 
         public async Task<List<ApplicationUser>> GetAllUsersWithAvatarsAsync()
         {
-            return await _userManager.Users.Where(user => user.Avatar != null).ToListAsync();
+            return await _userManager.Users.Where(user => user.CurrentAvatarId != null).ToListAsync();
         }
 
         public string GetAvatarPath(Avatar avatar)
         {
             try
             {
-                var path = _context.Avatars.First(av => av == avatar).Media.Path;
+                var path = _context.Avatars.First(av => av == avatar).Media.MainPath;
                 return path;
             }
             catch (NullReferenceException)
@@ -513,7 +556,7 @@ namespace DAL
             try
             {
                 var userAvatar = _context.Avatars.First(av => av == avatar);
-                userAvatar.Media.Path = path;
+                userAvatar.Media.MainPath = path;
                 var result = await _context.SaveChangesAsync();
                 return result;
             }

@@ -58,7 +58,7 @@ namespace DAL
                 .Property(p => p.Id).ValueGeneratedOnAdd();
 
             builder.Entity<UserTask>()
-                .HasOne(x=>x.ApplicationTask);
+                .HasOne(x => x.ApplicationTask);
 
             builder.Entity<UserTask>()
                 .HasOne(x => x.User);
@@ -69,10 +69,18 @@ namespace DAL
             builder.Entity<Avatar>()
                 .HasKey(avatar => avatar.AvatarId);
 
-            builder.Entity<Avatar>()
-                .HasMany(av => av.ApplicationUsers)
-                .WithOne(user => user.Avatar)
-                .HasForeignKey(user => user.AvatarId);
+            builder.Entity<ApplicationUser_Avatar>()
+                .HasKey(avatar => new { avatar.Id, avatar.AvatarId });
+
+            builder.Entity<ApplicationUser_Avatar>()
+                .HasOne(u => u.ApplicationUser)
+                .WithMany(ug => ug.ApplicationUser_Avatars)
+                .HasForeignKey(u => u.Id);
+
+            builder.Entity<ApplicationUser_Avatar>()
+                .HasOne(ug => ug.ApplicationUser)
+                .WithMany(u => u.ApplicationUser_Avatars)
+                .HasForeignKey(ug => ug.AvatarId);
 
             builder.Entity<Media>()
                 .HasMany(media => media.Avatars)
@@ -86,19 +94,17 @@ namespace DAL
             builder.Entity<ApplicationUser>().Ignore(x => x.LockoutEnabled);
             builder.Entity<ApplicationUser>().Ignore(x => x.LockoutEnd);
             builder.Entity<ApplicationUser>().Ignore(x => x.TwoFactorEnabled);
-
-
-            
         }
 
-
-        public DbSet<Customer> Customers {get;set;}
+        public DbSet<ApplicationUser_Avatar> ApplicationUser_Avatars { get; set; }
+        public DbSet<ApplicationUser_UserGroup> ApplicationUser_UserGroups { get; set; }
+        public DbSet<Customer> Customers { get; set; }
         public DbSet<UserGroup> UserGroups { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<Appointment_User> AppointmentUsers { get; set; }
-        public DbSet<ApplicationTask> Tasks { get; set; } 
-        public DbSet<UserTask> UserTasks { get; set; } 
+        public DbSet<ApplicationTask> Tasks { get; set; }
+        public DbSet<UserTask> UserTasks { get; set; }
         public DbSet<Media> Medias { get; set; }
-        public DbSet<Avatar> Avatars { get; set; }  
+        public DbSet<Avatar> Avatars { get; set; }
     }
 }
