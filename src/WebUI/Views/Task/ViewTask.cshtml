@@ -1,12 +1,8 @@
 @model WebUI.ViewModels.Task.TaskViewModel
-
 @{
     ViewData["Title"] = "ViewTask";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @{ bool isCoach = Context.User.IsInRole("Coach");}
-
-
 @(isCoach ? Html.Partial("_TaskEdit", Model) : Html.Partial("_TaskView", Model))
 
 

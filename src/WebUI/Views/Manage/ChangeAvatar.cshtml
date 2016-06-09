@@ -1,0 +1,83 @@
+﻿@model WebUI.ViewModels.Registration.AvatarsViewModel
+@{
+    ViewBag.Title = "Registration | Step Three";
+}
+
+<div class="ui text container">
+    <form class="ui form segment attached" id="userForm">
+        <input asp-for="AvatarId" type="hidden" id="avatarId" />
+        <div class="ui grid">
+            <div class="twelve wide centered column">
+                <ul class="ui bxslider centered aligned bxslider-unshifted">
+                    @foreach (var avatar in Model.Avatars)
+                    {
+                        <li id=@avatar.AvatarId>
+                            <img src=@avatar.Media.MainPath alt="Avatar ID: @avatar.AvatarId" />
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="row">
+                <div class="column">
+                    <input type="button" value="Choose avatar" class="ui button blue fluid" id="submitUser" />
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="ui page dimmer" id="page-dimmer">
+        <div class="ui text loader">Loading</div>
+    </div>
+    <div id="successMessage" class="ui segment attached">
+        <div class="ui divider hidden"></div>
+        <h1 class="ui header center aligned">Your avatar was succesfully chosen!</h1>
+        <div class="ui divider hidden"></div>
+        <div class="ui text right aligned">
+            <a asp-controller="Home" asp-action="Index" class="ui blue button large basic labeled icon">
+                Continue to main page.
+                <i class="right arrow icon"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.bxslider')
+                .bxSlider({
+                    mode: 'fade',
+                    pagerCustom: '#bx-pager',
+                    adaptiveHeight: true,
+                    slideWidth: 400,
+                    useCSS: true,
+                    touchEnabled: true
+                });
+            $('.bx-wrapper').css('margin-bottom', '0');
+        });
+        $("#successMessage").hide(0);
+        $("#submitUser").click(function () {
+            if ($("#userForm").valid()) {
+                var slider = $('.bxslider').bxSlider();
+                var data = slider.getCurrentSlideElement().attr('id');
+                $('#page-dimmer').addClass('active');
+                $.post({
+                    url: "/Task/TaskList",
+                    data: { avatarId: data },
+                    success: function () {
+                        $('#page-dimmer').removeClass('active');
+                        $("#userForm").hide();
+                        $("#successMessage").show();
+                    }
+                }).fail(function () {
+                    $('#page-dimmer').removeClass('active');
+                    alert("Something went wrong..\nPlease repeat the choice!");
+                    $("#userForm").hide();
+                });
+                return true;
+            } else {
+                return false;
+            }
+            return true;
+        });
+    </script>
+}

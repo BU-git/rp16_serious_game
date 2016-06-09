@@ -1,0 +1,153 @@
+﻿@model WebUI.ViewModels.Task.StatisticsViewModel
+
+@{
+    Layout = "_PageLayout";
+    string firstGroup = Model.GroupsTasks[0]?.UserGroup.GroupName;
+    int counter = 0;
+}
+
+<div class="ui segments" id="appender">
+    <div class="ui top attached pointing secondary tabular menu">
+        @foreach (var group in Model.GroupsTasks)
+        {
+            <a class="item" id="@("tab" + counter++)" data-tab="@group.UserGroup.GroupName">@group.UserGroup.GroupName</a>
+        }
+    </div>
+
+    @foreach (var group in Model.GroupsTasks)
+    {
+        counter = 0;
+        string pieChartId = group.UserGroup.GroupName + "_pieChart";
+        <div class="ui tab segment" id="@("content" + counter++)" data-tab="@group.UserGroup.GroupName">
+
+            <div class="ui grid">
+                <div id="@pieChartId" style="height: 270px" class="column six wide"></div>
+
+                <div class="ui column ten wide grid">
+                    <div class="column eleven wide">
+                        <div class="ui statistic">
+                            <div class="value">
+                                @group.UserGroup.GroupName
+                            </div>
+                            <div class="label">
+                                Family
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column four wide">
+                        <div class="ui statistic">
+                            <div class="value">
+                                @group.UserStats.Count
+                            </div>
+                            <div class="label">
+                                Members
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column five wide">
+                        <div class="ui statistic">
+                            <div class="value">
+                                @group.UserGroup.Type
+                            </div>
+                            <div class="label">
+                                Status
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @foreach (var u in group.UserStats)
+            {
+                {
+                    await Html.RenderPartialAsync("_StatisticsView", u);
+                }
+            }
+        </div>
+    }
+</div>
+
+@section Scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        $(".tabular.menu .item").tab({ history: false });
+        $('#tab0').addClass('active');
+        $('#content0').addClass('active');
+
+        google.charts.load('current', { 'packages': ['corechart', 'line'] });
+        google.charts.setOnLoadCallback(drawCharts);
+
+        var dataTree = [];
+
+        @foreach (var groupTask in Model.GroupsTasks)
+        {
+            @:var group = { users: [] };
+                    @:group.familyName = '@groupTask.UserGroup.GroupName';
+                    @:group.completed = @groupTask.CompletedTasks;
+                    @:group.opened = @groupTask.TasksLeft;
+                    foreach (var stat in groupTask.UserStats)
+            {
+                @:var user = { statistics: [] };
+                        @:user.name = '@stat.UserName';
+                        for (int i = 0; i < stat.TasksByDays.Count; i++)
+                {
+                    @:user.statistics.push([@stat.TasksByDays[i].Day, @stat.TasksByDays[i].TasksCompleted]);
+                        }
+                @:group.users.push(user);
+                    }
+            @:dataTree.push(group);
+                }
+
+        function drawCharts() {
+            drawPieChart();
+            drawLineChart();
+        }
+
+        function drawPieChart() {
+            var options = {
+                title: 'Task status'
+            };
+
+            for (var i = 0; i < dataTree.length; i++) {
+                var pieChartData = [
+                    ['Task status', 'Count'],
+                    ['Done', dataTree[i].completed],
+                    ['In progress', dataTree[i].opened]
+                ];
+                var sumData = google.visualization.arrayToDataTable(pieChartData);
+                var chart = new google.visualization.PieChart(
+                    document.getElementById(dataTree[i].familyName + '_pieChart'));
+                chart.draw(sumData, options);
+            }
+        }
+
+        function drawLineChart() {
+            var options = {
+                chart: {
+                    title: 'Number of completed tasks',
+                    subtitle: 'for the current month'
+                }
+            };
+
+            for (var i = 0; i < dataTree.length; i++) {
+                for (var j = 0; j < dataTree[i].users.length; j++) {
+                    var lineChartData = new google.visualization.DataTable();
+                    var statArray = [];
+
+                    lineChartData.addColumn('number', 'Day');
+                    lineChartData.addColumn('number', 'Completed tasks');
+
+                    for (var k = 0; k < dataTree[i].users[j].statistics.length; k++) {
+                        if (dataTree[i].users[j].statistics[k] != undefined)
+                            statArray.push(dataTree[i].users[j].statistics[k]);
+                    }
+
+                    lineChartData.addRows(statArray);
+                    var chart = new google.charts.Line(
+                            document.getElementById(dataTree[i].users[j].name + '_chart_div'));
+                    chart.draw(lineChartData, options);
+                }
+            }
+        }
+    </script>
+}

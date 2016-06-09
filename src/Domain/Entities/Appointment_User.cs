@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities
 {
-    public class AppointmentUser
+    public class Appointment_User
     {
         public int AppointmentId { get; set; }
         public virtual Appointment Appointment { get; set; }

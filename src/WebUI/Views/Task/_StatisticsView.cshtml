@@ -1,0 +1,61 @@
+﻿@model WebUI.ViewModels.Task.UserWithStatsViewModel
+
+@{
+    string divId = Model.UserName + "_chart_div";
+}
+
+<div class="ui segments">
+    <div class="ui grid" style="margin-top: 5px; margin-left: 5px">
+        <div class="ui five wide column items">
+            <div class="ui item">
+                <div class="ui middle aligned tiny image">
+                    <img src="https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png" alt="Avatar">
+                </div>
+                <div class="content">
+                    <div class="header">@Model.Name @Model.LName</div>
+                    <div class="meta">
+                        <span class="price">@Model.Phone</span>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="ui statistic">
+                    <div class="value">
+                        @Model.CompletedTasks
+                    </div>
+                    <div class="label">
+                        Completed
+                    </div>
+                </div>
+                <div class="ui statistic">
+                    <div class="value">
+                        @Model.TasksLeft
+                    </div>
+                    <div class="label">
+                        Left
+                    </div>
+                </div>
+                <div class="ui statistic">
+                    <div class="value">
+                        XP
+                    </div>
+                    <div class="label">
+                        Exp
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h1 class="ui vertical divider">
+            <i class="bar chart icon"></i>
+        </h1>
+
+        <div class="ui eleven wide column">
+            <div id="@divId"></div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    
+</script>

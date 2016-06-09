@@ -13,8 +13,12 @@ namespace Domain.Entities
         public string Text { get; set; }
         public DateTime? ResolutionDate { get; set; }
 
+        public Region Region { get; set; }
+        public string Country { get; set; }
+
         public ApplicationUser User { get; set; }
         public ApplicationTask ApplicationTask { get; set; }
     }
     public enum Status { Open, Resolved, Completed, Reopened, Expired, Closed }
+    public enum Region { NorthAmerica, SouthAmerica, Africa, Europe, Australia, NorthAsia, NearEast, SouthAsia }
 }

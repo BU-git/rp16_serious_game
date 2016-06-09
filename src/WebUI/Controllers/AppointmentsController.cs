@@ -50,7 +50,7 @@ namespace WebUI.Controllers
                 Description = appointment.Description,
                 Start = appointment.Start,
                 End = appointment.End,
-                Users = appointment.AppointmentUsers.Select(a => a.User).ToList()
+                Users = appointment.Appointment_Users.Select(a => a.User).ToList()
             };
             return View(appointmentView);
         }
@@ -116,7 +116,7 @@ namespace WebUI.Controllers
                 Description = appointment.Description,
                 Start = appointment.Start,
                 End = appointment.End,
-                Users = appointment.AppointmentUsers.Select(a => a.User).ToList()
+                Users = appointment.Appointment_Users.Select(a => a.User).ToList()
             };
 
             ViewBag.Users = await _dal.GetUsers();
@@ -174,7 +174,7 @@ namespace WebUI.Controllers
                 Description = appointment.Description,
                 Start = appointment.Start,
                 End = appointment.End,
-                Users = appointment.AppointmentUsers.Select(a => a.User).ToList()
+                Users = appointment.Appointment_Users.Select(a => a.User).ToList()
             };
             return View(appointmentView);
         }

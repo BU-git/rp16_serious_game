@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities
 {
-    public class ApplicationUserUserGroup
+    public class ApplicationUser_UserGroup
     {
         public string Id { get; set; }
         public ApplicationUser ApplicationUser { get; set; }

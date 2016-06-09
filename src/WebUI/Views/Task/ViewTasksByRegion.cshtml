@@ -1,6 +1,6 @@
-@using System.Security.Claims
+﻿@using System.Security.Claims
 @using Domain.Entities
-@model WebUI.ViewModels.Task.TaskListViewModel
+@model WebUI.ViewModels.Task.TaskRegionViewModel
 
 @{
     ViewData["Title"] = "Task List";
@@ -9,50 +9,38 @@
 @{
     bool isCoach = Context.User.IsInRole("Coach");
     string userId = Context.User.GetUserId();
-
 }
-
-
-<style>
-    /* Remove the colored rectangle on the map */
-    svg > g > g > path {
-        display: none;
-    }
-
-    svg > g > g > rect {
-        display: none;
-    }
-
-    svg > g > g > g > text {
-        display: none;
-    }
-
-    #geochart-colors {
-        margin-left: -1.4vw;
-        margin-top: -5vh;
-    }
-</style>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
+<style>
+    #geochart-colors {
+        margin-left: -2.25vw;
+        margin-top: -4vh;
+    }
+</style>
+
 <div class="ui segments">
+    
+
     <!--Google chart-->
+    <div id="geochart-colors" style="width: 79.3vw; height: 97vh"></div>
     @if (isCoach)
     {
-        <a class="ui positive circular icon button massive" style="position: fixed; right: 50px; bottom: 40px;"href="@Url.Action("AddTask", "Task", new {coachId = userId})">
-            <i class="plus icon"></i>
-        </a>
-    }
-    else
-    {
-        <div id="geochart-colors" style="width: 76.3vw; height: 98.4vh"></div>
+        <div class="ui padded segment">
+            <div id="AddTaskStepsButton" class="ui one column stackable center aligned page grid">
+                <a class="ui positive button active" href="@Url.Action("AddTask", "Task", new {coachId =userId })">Add Task</a>
+
+            </div>
+        </div>
+
     }
     <div class="ui very padded segment">
         <div class="ui one column stackable center aligned page grid">
             <div class="ui tree stackable cards">
 
-                @foreach (var item in Model.UserTasks)
+                @foreach (var item in Model.Tasks)
                 {
                     string color = "";
 
@@ -90,42 +78,55 @@
                         size = "large";
                     }
 
-                    using (Html.BeginForm("ViewUserTask", "Task", new { taskId = item.UserTaskId }, FormMethod.Post, new { @class = color + " card" }))
+                    using (Html.BeginForm("ViewUserTask", "Task", new { taskId = item.TaskId }, FormMethod.Post, new { @class = color + " card" }))
                     {
+
+
                         <div class="content">
                             <span class="right floated star">
                                 <i class="active star @size icon"></i>
                                 <a class="floating ui yellow circular label">@Html.DisplayFor(m => item.Coins)</a>
                             </span>
                             <div class="header">
-                                @Html.DisplayFor(m => item.Name)
+                                @Html.DisplayFor(m => item.ApplicationTask.Name)
                             </div>
                             @if (isCoach)
                             {
                                 <div class="meta">
-                                    @Html.DisplayFor(x => item.UserName)
+                                    @Html.DisplayFor(x => item.User.Name)
                                 </div>
                             }
+
                         </div>
                         <div class="content">
+
                             <div class="ui small feed">
                                 <div class="event">
                                     <div class="content">
                                         <span class="right floated time">
+
                                             @Html.DisplayFor(x => item.ExpireDt)
                                         </span>
                                         <div class="ui @color horizontal label">
                                             @Html.DisplayFor(x => item.Status)
                                         </div>
+
                                     </div>
                                 </div>
+
                             </div>
                         </div>
+
+
                         <button type="submit" class="ui bottom attached button">
+
                             <i class="zoom icon"></i>
                             View
                         </button>
+
+
                     }
+
                 }
             </div>
         </div>
@@ -136,59 +137,43 @@
     google.charts.load('current', { 'packages': ['geochart'] });
     google.charts.setOnLoadCallback(drawRegionsMap);
 
-    var regions = [
-        "NorthAmerica", "SouthAmerica", "Africa", "Europe",
-        "Australia", "NorthAsia", "NearEast", "SouthAsia"
-    ];
+    var regions = {
+        NorthAmerica: { code: '021', color: 'green' },
+        SouthAmerica: { code: '005', color: '#FFA703' },
+        Africa: { code: '002', color: 'yellow' },
+        Europe: { code: '150', color: '#07B6F0' },
+        Australia: { code: '009', color: 'red' },
+        NorthAsia: { code: '151', color: '#ED6F2F' },
+        NearEast: { code: '145', color: '#A509AB' },
+        SouthAsia: { code: '030', color: '#060CBF' }
+    };
+
+    var currentRegion = regions['@Model.Region.ToString()'].code;
+    var regionColor = regions['@Model.Region.ToString()'].color;
+
+    var dataArray = [['Country', 'Coins']];
+
+    @foreach (var t in Model.Tasks)
+    {
+        @:dataArray.push(['@t.Country', @t.Coins]);
+    }
 
     function drawRegionsMap() {
-        var data = google.visualization.arrayToDataTable([
-            ['Region code', 'Continent', 'Color'],
-		    ['021', 'Northern America', 1],
-		    ['029', 'Caribbean', 1],
-		    ['013', 'Central America', 1],
-
-		    ['005', 'South America', 2],
-
-            ['015', 'Northern Africa', 3],
-		    ['011', 'Western Africa', 3],
-		    ['017', 'Middle Africa', 3],
-		    ['014', 'Eastern Africa', 3],
-		    ['018', 'Southern Africa', 3],
-
-            ['154', 'Northern Europe', 4],
-		    ['155', 'Western Europe', 4],
-		    ['039', 'Southern Europe', 4],
-
-		    ['053', 'Australia and New Zealand', 5],
-		    ['054', 'Melanesia', 5],
-		    ['057', 'Micronesia', 5],
-		    ['061', 'Polynesia', 5],
-
-            ['151', 'Eastern Europe', 6],
-
-		    ['034', 'Southern Asia', 7],
-		    ['145', 'Western Asia', 7],
-
-		    ['143', 'Central Asia', 8],
-		    ['030', 'Eastern Asia', 8],
-		    ['035', 'South-Eastern Asia', 8],
-        ]);
+        var data = google.visualization.arrayToDataTable(dataArray);
 
         var options = {
-            displayMode: 'regions',
-            region: 'world',
-            resolution: 'subcontinents',
+            region: currentRegion,
+            displayMode: 'markers',
             backgroundColor: 'transparent',
+            datalessRegionColor: regionColor,
             defaultRegionColor: '#00ffff',
             defaultColor: '#f5f5f5',
-            legend: null,
             keepAspectRation: false,
             tooltip: {
-                trigger: 'none'
+                trigger: 'focus'
             },
             colorAxis: {
-                colors: ['green', '#FFA703', 'yellow', '#07B6F0', 'red', '#ED6F2F', '#A509AB', '#060CBF']
+                colors: ['green', '#FFA703']
             }
         };
 
@@ -197,20 +182,7 @@
         google.visualization.events.addListener(chart, 'regionClick', mapClick);
 
         function mapClick(e) {
-            var row = parseInt(data.getFilteredRows([{ column: 0, value: e.region }]));
-            //Url.Action("Task", "ViewTasksByRegion")
-            if (row >= 0 && row < 3) row = 0;
-            else if (row == 3) row = 1;
-            else if (row > 3 && row < 9) row = 2;
-            else if (row >= 9 && row < 12) row = 3;
-            else if (row >= 12 && row < 16) row = 4;
-            else if (row == 16) row = 5;
-            else if (row > 16 && row < 19) row = 6;
-            else if (row >= 19 && row < 22) row = 7;
-            else return;
-            window.location.replace("http://localhost:51842/Task/ViewTasksByRegion/?region=" + regions[row]);
-            return;
+            
         }
     };
 </script>
-

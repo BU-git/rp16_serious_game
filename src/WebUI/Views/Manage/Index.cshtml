@@ -3,9 +3,9 @@
     ViewData["Title"] = "Manage your account";
 }
 
-<div class="ui text container">
+<div class="ui text container" style="bottom: 5px; top: 10px">
     <h2 class="ui header bottom attached center aligned">Change your account settings</h2>
-    <div class="ui text container attached">
+    <div class="ui text container center aligned">
         @if (ViewData["StatusMessage"] != null && ViewData["StatusMessage"]?.ToString() != "")
         {
             <div class="ui info message large">
@@ -15,11 +15,11 @@
                 </div>
             </div>
         }
-        <div class="ui fields">
-            <div class="field eight wide">
+        <div class="ui two buttons">
+            <div class="button">
                 <a asp-action="EditPersonalInformation" class="ui button">Edit personal information</a>
             </div>
-            <div class="field eight wide">
+            <div class="button">
                 @if (Model.HasPassword)
                 {
                     <a asp-controller="Manage" asp-action="ChangePassword" class="ui button blue">Change password</a>
@@ -28,6 +28,9 @@
                 {
                     <a asp-controller="Manage" asp-action="SetPassword" class="ui button green">Create password</a>
                 }
+            </div>
+            <div class="field eight wide">
+                <a asp-action="ChangeAvatar" class="ui button">Change Avatar</a>
             </div>
         </div>
     </div>

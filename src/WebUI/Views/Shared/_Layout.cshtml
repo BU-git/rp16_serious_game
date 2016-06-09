@@ -4,18 +4,19 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Growth Pad</title>
-
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/semantic/dist/semantic.css" />
         <link rel="stylesheet" href="~/lib/semantic/dist/components/calendar.css" />
         <link rel="stylesheet" href="~/lib/bootstrap/bootstrap.css" />
         <link rel="stylesheet" href="~/assets/css/site.min.css" />
+        <link rel="stylesheet" href="~/lib/bxslider/jquery.bxslider.css" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css"
               asp-fallback-href="~/lib/semantic/dist/semantic.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/assets/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/bxslider/jquery.bxslider.css" asp-append-version="true" />
     </environment>
 </head>
 <body>
@@ -31,8 +32,8 @@
         </div>
         <div class="ui inverted menu">
             <a asp-controller="Home" asp-action="Index" class="item">Home</a>
-            <a asp-controller="Registration" asp-action="StepOne" class="item">Sign Up</a>
-            <a asp-controller="Appointments" asp-action="Index" class="item">Appointments List</a>
+            <a asp-controller="Registration" asp-action="StepOne" class="item">Register family</a>
+            <a asp-controller="Appointments" asp-action="Index" class="item">Appointments</a>
         </div>
         <div class="right menu">
             @await Html.PartialAsync("_LoginPartial")
@@ -41,7 +42,6 @@
     <div class="fluid container container-padded">
         @RenderBody()
     </div>
-
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
@@ -50,7 +50,8 @@
         <script src="~/lib/semantic/dist/semantic.js"></script>
         <script src="~/lib/semantic/dist/components/calendar.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/assets/js/site.js" asp-append-version="true"></script>
+        <script src="~/lib/bxslider/jquery.bxslider.min.js"></script>
+        <script src="~/assets/js/site.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.3.min.js"
@@ -62,8 +63,8 @@
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
         </script>
         <script src="~/assets/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/lib/bxslider/jquery.bxslider.min.js" asp-append-version="true"></script>
     </environment>
-
     @RenderSection("scripts", required: false)
 </body>
 </html>

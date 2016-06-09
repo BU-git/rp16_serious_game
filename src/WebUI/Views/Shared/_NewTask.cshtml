@@ -4,8 +4,8 @@
 
 <form asp-action="AsignTask" method="post">
    
-    <div class="ui centered card">
-        <div class="content">
+    <div class="ui centered segment text container">
+        <div class="content" style="margin: 7px">
             <!--<a class="header">@Html.DisplayFor(model => Model.Name)</a>-->
             <div class="ui transparent input">
              
@@ -15,7 +15,7 @@
                 <a class="author">@Html.DisplayFor(x => Model.UserName)</a>
 
             </div>
-        <div class="extra conten">
+        <div class="extra content" style="margin: 7px">
             <div class="ui left labeled input">
                 <div class="ui label">
                     <i class="active star icon"></i>
@@ -29,19 +29,17 @@
                 @Html.HiddenFor(x => x.Name)
             </div>
         </div>
-        <div class="content">
+        <div class="content"  style="margin: 7px">
             
 
             <div class="ui form">
                 <div class="field">
-
-
                     @Html.TextAreaFor(m => m.Text)
                 </div>
             </div>
         </div>
 
-        <div class="content">
+        <div class="content"  style="margin: 7px">
                    <div class="ui fluid icon input">
                         <i class="calendar icon"></i>
                        
@@ -51,8 +49,8 @@
                     </div>
                
                 
-        </div>
-        <div class="extra conten">
+        </div >
+        <div class="extra content"  style="margin: 7px">
             @*<div class="fluid ui green button">Send Task*@
             @*<a class="fluid ui green button" href="@Url.Action("SubmitTask", "Task", new {taskId = Model.TaskId, userId = Model.UserId})">
                 Submit

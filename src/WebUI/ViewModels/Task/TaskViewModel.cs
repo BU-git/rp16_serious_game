@@ -16,6 +16,7 @@ namespace WebUI.ViewModels.Task
         public DateTime? ExpireDt { get; set; }
         public Status Status { get; set; }
         public DateTime? ResolutionDate { get; set; }
+        public Region Region { get; set; }
 
         public int TimeLeft
         {
@@ -57,7 +58,7 @@ namespace WebUI.ViewModels.Task
             this.ExpireDt = userTask.ExpireDt;
             this.UserTaskId = userTask.Id;
             this.ResolutionDate = userTask.ResolutionDate;
-
+            this.Region = userTask.Region;
         }
     }
 }
