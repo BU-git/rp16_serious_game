@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using System;
+using System.Collections.Generic;
 
 namespace WebUI.ViewModels.Task
 {
@@ -17,6 +18,7 @@ namespace WebUI.ViewModels.Task
         public Status Status { get; set; }
         public DateTime? ResolutionDate { get; set; }
         public Region Region { get; set; }
+        public List<CommentViewModel> Comments { get; set; }
 
         public int TimeLeft
         {

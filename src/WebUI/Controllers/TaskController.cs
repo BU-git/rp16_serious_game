@@ -8,6 +8,10 @@ using Interfaces;
 using WebUI.ViewModels.Task;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
+using System.Security.Claims;
+using System.Web;
+using Microsoft.Net.Http.Headers;
+using Microsoft.AspNet.Http;
 
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -74,6 +78,70 @@ namespace WebUI.Controllers
             return View(taskModel);
         }
 
+        public List<CommentViewModel> CommentsToModel(List<Comment> comments)
+        {
+            return comments?.Select(c =>
+                new CommentViewModel
+                {
+                    Id = c.Id,
+                    ParentId = c.ParentId,
+                    Author = c.Author.Name,
+                    Text = c.Text,
+                    Date = c.EditDate.ToString("dd.MM.yy HH:mm"),
+                    Children = CommentsToModel(c.Replies) ?? new List<CommentViewModel>()
+                }).ToList();
+        }
+
+        public async Task<List<CommentViewModel>> GetTaskComments(int taskId)
+        {
+            var comments = (await _dal.GetTaskComments(taskId)).Where(c => c.ParentId == null).ToList();//get root level comments
+
+            return CommentsToModel(comments);
+        }
+
+        public async Task<IActionResult> Comments(int id)
+        {
+            return Json(await GetTaskComments(id));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddComment(CommentViewModel commentModel, int id)
+        {
+
+            var file = Request.Form.Files.GetFile("Image");
+
+            string UploadDestination = $"upload/";
+            string Filename = "";
+
+            if (file.ContentDisposition != null)
+            {
+                //parse uploaded file
+                var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+                Filename = parsedContentDisposition.FileName.Trim('"');
+                string uploadPath = UploadDestination + Filename;
+
+                //save the file to upload destination
+                file.SaveAs(uploadPath);
+            }
+
+            string Photo = Filename;
+
+            if (Photo != "")
+            {
+                Photo = Url.Content($"~/upload/{Photo}");
+            }
+
+            var comment = new Comment
+            {
+                ParentId = commentModel.ParentId,
+                Author = await _dal.GetUserById(HttpContext.User.GetUserId()),
+                Text = commentModel.Text,
+                EditDate = DateTime.Now
+            };
+            await _dal.AddComment(comment, id);
+            return Content("Success :)");
+        }
+
         // GET: /Task/Region/
         public async Task<IActionResult> ViewTasksByRegion(string region)
         {
@@ -92,11 +160,12 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public IActionResult ViewUserTask(int taskId)
+        public async Task<IActionResult> ViewUserTask(int taskId)
         {
 
             UserTask task = _dal.FindUserTaskById(taskId);
             TaskViewModel taskModel = new TaskViewModel(task);
+            taskModel.Comments = await GetTaskComments(task.Id);
             return View("ViewTask", taskModel);
         }
 

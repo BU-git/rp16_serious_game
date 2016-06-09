@@ -67,35 +67,13 @@
         </div>
 
 
-
-    <div class="extra content">
-        <div class="ui comments">
-            <div class="comment">
-
-                <div class="content">
-                    <a class="author">Steve Jobes</a>
-                    <div class="metadata">
-                        <div class="date">2 days ago</div>
-                    </div>
-                    <div class="text">
-                        Revolutionary!
-                    </div>
-                    <div class="actions">
-                        <a class="reply active">Reply</a>
-                    </div>
-                    <form class="ui reply form">
-                        <div class="field">
-                            <div class="ui medium icon input">
-                                <input type="text" placeholder="Comment...">
-
-                            </div>
-                        </div>
-                        <div class="ui primary submit labeled icon button">
-                            <i class="icon edit"></i> Add Reply
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <div class="content" id="comments">
+        @Html.React("CommentBox", new
+        {
+            initialData = Model.Comments,
+            url = $"/Task/Comments/{Model.UserTaskId}",
+            submitUrl = $"/Task/AddComment/{Model.UserTaskId}"
+        })
     </div>
-</div>
+        
+    </div>
