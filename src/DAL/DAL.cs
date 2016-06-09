@@ -575,7 +575,7 @@ namespace DAL
 
         public async Task<List<Avatar>> GetAllAvatarsWithPrice(int price)
         {
-            var avatars = await _context.Avatars.Where(avatar => avatar.Price == price).ToListAsync();
+            var avatars = await _context.Avatars.Include(avatar => avatar.Media).Where(avatar => avatar.Price == price).ToListAsync();
             return avatars;
         }
     }

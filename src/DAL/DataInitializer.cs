@@ -335,7 +335,7 @@ namespace DAL
                 var media = new Media
                 {
                     Type = Type.Image,
-                    MainPath = "~/images/Level_0.png"
+                    MainPath = "~/assets/images/Level_0.png"
                 };
                 var avatar = new Avatar
                 {
@@ -347,8 +347,8 @@ namespace DAL
                 var media1 = new Media
                 {
                     Type = Type.Image,
-                    MainPath = "~/images/Level_1.png",
-                    AdditionalPath = "~/images/Level_1_blocked.png"
+                    MainPath = "~/assets/images/Level_1.png",
+                    AdditionalPath = "~/assets/images/Level_1_blocked.png"
                 };
                 var avatar1 = new Avatar
                 {
@@ -360,8 +360,8 @@ namespace DAL
                 var media2 = new Media
                 {
                     Type = Type.Image,
-                    MainPath = "~/images/Level_2.png",
-                    AdditionalPath = "~/images/Level_2_blocked.png"
+                    MainPath = "~/assets/images/Level_2.png",
+                    AdditionalPath = "~/assets/images/Level_2_blocked.png"
                 };
                 var avatar2 = new Avatar
                 {
@@ -373,8 +373,8 @@ namespace DAL
                 var media3 = new Media
                 {
                     Type = Type.Image,
-                    MainPath = "~/images/Level_3.png",
-                    AdditionalPath = "~/images/Level_3_blocked.png"
+                    MainPath = "~/assets/images/Level_3.png",
+                    AdditionalPath = "~/assets/images/Level_3_blocked.png"
                 };
                 var avatar3 = new Avatar
                 {
@@ -386,8 +386,8 @@ namespace DAL
                 var media4 = new Media
                 {
                     Type = Type.Image,
-                    MainPath = "~/images/Level_4.png",
-                    AdditionalPath = "~/images/Level_4_blocked.png"
+                    MainPath = "~/assets/images/Level_4.png",
+                    AdditionalPath = "~/assets/images/Level_4_blocked.png"
                 };
                 var avatar4 = new Avatar
                 {
@@ -399,8 +399,8 @@ namespace DAL
                 var media5 = new Media
                 {
                     Type = Type.Image,
-                    MainPath = "~/images/Level_5.png",
-                    AdditionalPath = "~/images/Level_5_blocked.png"
+                    MainPath = "~/assets/images/Level_5.png",
+                    AdditionalPath = "~/assets/images/Level_5_blocked.png"
                 };
                 var avatar5 = new Avatar
                 {
@@ -412,8 +412,8 @@ namespace DAL
                 var media6 = new Media
                 {
                     Type = Type.Image,
-                    MainPath = "~/images/Level_6.png",
-                    AdditionalPath = "~/images/Level_6_blocked.png"
+                    MainPath = "~/assets/images/Level_6.png",
+                    AdditionalPath = "~/assets/images/Level_6_blocked.png"
                 };
                 var avatar6 = new Avatar
                 {
@@ -425,8 +425,8 @@ namespace DAL
                 var media7 = new Media
                 {
                     Type = Type.Image,
-                    MainPath = "~/images/Level_7.png",
-                    AdditionalPath = "~/images/Level_7_blocked.png"
+                    MainPath = "~/assets/images/Level_7.png",
+                    AdditionalPath = "~/assets/images/Level_7_blocked.png"
                 };
                 var avatar7 = new Avatar
                 {
@@ -438,8 +438,8 @@ namespace DAL
                 var media8 = new Media
                 {
                     Type = Type.Image,
-                    MainPath = "~/images/Level_8.png",
-                    AdditionalPath = "~/images/Level_8_blocked.png"
+                    MainPath = "~/assets/images/Level_8.png",
+                    AdditionalPath = "~/assets/images/Level_8_blocked.png"
                 };
                 var avatar8 = new Avatar
                 {
@@ -451,8 +451,8 @@ namespace DAL
                 var media9 = new Media
                 {
                     Type = Type.Image,
-                    MainPath = "~/images/Level_9.png",
-                    AdditionalPath = "~/images/Level_9_blocked.png"
+                    MainPath = "~/assets/images/Level_9.png",
+                    AdditionalPath = "~/assets/images/Level_9_blocked.png"
                 };
                 var avatar9 = new Avatar
                 {
@@ -464,8 +464,8 @@ namespace DAL
                 var media10 = new Media
                 {
                     Type = Type.Image,
-                    MainPath = "~/images/Level_10.png",
-                    AdditionalPath = "~/images/Level_10_blocked.png"
+                    MainPath = "~/assets/images/Level_10.png",
+                    AdditionalPath = "~/assets/images/Level_10_blocked.png"
                 };
                 var avatar10 = new Avatar
                 {
@@ -477,8 +477,8 @@ namespace DAL
                 var media6_2 = new Media
                 {
                     Type = Type.Image,
-                    MainPath = "~/images/Level_6(2).png",
-                    AdditionalPath = "~/images/Level_6(2)_blocked.png"
+                    MainPath = "~/assets/images/Level_6(2).png",
+                    AdditionalPath = "~/assets/images/Level_6(2)_blocked.png"
                 };
                 var avatar6_2 = new Avatar
                 {
