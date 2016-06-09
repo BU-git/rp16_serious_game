@@ -17,7 +17,7 @@ paths.js = "./Assets/js/**/*.js";
 paths.css = "./Assets/css/**/*.css";
 paths.json = "./Assets/json/**/*.json";
 paths.libs = "./Libraries/**/*";
-paths.images = "./images/**/*";
+paths.images = "./Assets/images/**/*.png";
 paths.minJs = paths.webroot + "js/**/*.min.js";
 paths.minCss = paths.webroot + "css/**/*.min.css";
 paths.concatJsDest = paths.webroot + "assets/js/site.min.js";
@@ -65,7 +65,7 @@ gulp.task("copy:libraries", function () {
 });
 
 gulp.task("copy:images", function () {
-    return gulp.src(paths.images, { base: './Assets' })
+    return gulp.src(paths.images)
       .pipe(gulp.dest(paths.imagesDest));
 });
 

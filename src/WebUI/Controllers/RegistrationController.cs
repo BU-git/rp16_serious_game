@@ -141,8 +141,7 @@ namespace WebUI.Controllers
 
             //TODO: assign members to concrete family considering previous comment about DAL
             //TODO: add success message
-            var avatars = await _dal.GetAllAvatarsWithPrice(0);
-            return StepThree(new AvatarsViewModel { Avatars = avatars });
+            return await StepThree();
         }
 
         [HttpPost]
@@ -152,8 +151,10 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult StepThree(AvatarsViewModel model)
+        public async Task<IActionResult> StepThree()
         {
+            var avatars = await _dal.GetAllAvatarsWithPrice(0);
+            var model = new AvatarsViewModel { Avatars = avatars };
             return View(model);
         }
 

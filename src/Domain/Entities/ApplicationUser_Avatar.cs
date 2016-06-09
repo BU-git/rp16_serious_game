@@ -7,7 +7,7 @@ namespace Domain.Entities
 {
     public class ApplicationUser_Avatar
     {
-        public string Id { get; set; }
+        public string UserId { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
 
         public int AvatarId { get; set; }
