@@ -77,6 +77,26 @@ namespace DAL
                 .WithOne(avatar => avatar.Media)
                 .HasForeignKey(avatar => avatar.MediaId);
 
+            builder.Entity<Comment>()
+                .HasOne(c => c.Parent)
+                .WithMany(c => c.Replies)
+                .HasForeignKey(c => c.ParentId)
+                .OnDelete(Microsoft.Data.Entity.Metadata.DeleteBehavior.Restrict);
+
+            builder.Entity<Comment>()
+                .HasOne(c => c.Author);
+
+            builder.Entity<Task_Comment>()
+                .HasKey(t => new { t.TaskId, t.CommentId });
+
+            builder.Entity<Task_Comment>()
+                .HasOne(tc => tc.Comment);
+
+            builder.Entity<Task_Comment>()
+                .HasOne(tc => tc.UserTask)
+                .WithMany(u => u.Task_Comments)
+                .HasForeignKey(tc => tc.TaskId);
+
             builder.Entity<ApplicationUser>().Ignore(x => x.AccessFailedCount);
             builder.Entity<ApplicationUser>().Ignore(x => x.EmailConfirmed);
             builder.Entity<ApplicationUser>().Ignore(x => x.AccessFailedCount);
@@ -96,5 +116,6 @@ namespace DAL
         public DbSet<Avatar> Avatars { get; set; }
         public DbSet<ApplicationUser_Avatar> ApplicationUser_Avatars { get; set; }
         public DbSet<ApplicationUser_UserGroup> ApplicationUser_UserGroups { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }

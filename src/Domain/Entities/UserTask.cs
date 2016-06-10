@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Domain.Entities
 {
@@ -18,6 +19,8 @@ namespace Domain.Entities
 
         public ApplicationUser User { get; set; }
         public ApplicationTask ApplicationTask { get; set; }
+
+        public List<Task_Comment> Task_Comments { get; set; }
     }
     public enum Status { Open, Resolved, Completed, Reopened, Expired, Closed }
     public enum Region { NorthAmerica, SouthAmerica, Africa, Europe, Australia, NorthAsia, NearEast, SouthAsia }

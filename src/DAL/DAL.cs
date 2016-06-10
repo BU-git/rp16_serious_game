@@ -578,5 +578,24 @@ namespace DAL
             var avatars = await _context.Avatars.Include(avatar => avatar.Media).Where(avatar => avatar.Price == price).ToListAsync();
             return avatars;
         }
+
+        public async Task<List<Comment>> GetTaskComments(int taskId)
+        {
+            return await _context.Comments.Include(c => c.Task_Comment).Include(c => c.Author).Where(c => c.Task_Comment.TaskId == taskId).ToListAsync();
+        }
+
+        public async Task AddComment(Comment comment, int taskId)
+        {
+            _context.Comments.Add(comment);
+
+            var taskComment = new Task_Comment()
+            {
+                TaskId = taskId,
+                CommentId = comment.Id
+            };
+            _context.Add(taskComment);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
