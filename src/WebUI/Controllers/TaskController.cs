@@ -110,27 +110,29 @@ namespace WebUI.Controllers
 
             var file = Request.Form.Files.GetFile("Image");
 
-            string UploadDestination = $"upload/";
-            string Filename = "";
-
-            if (file.ContentDisposition != null)
+            if (file != null)
             {
-                //parse uploaded file
-                var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
-                Filename = parsedContentDisposition.FileName.Trim('"');
-                string uploadPath = UploadDestination + Filename;
+                string UploadDestination = $"upload/";
+                string Filename = "";
 
-                //save the file to upload destination
-                file.SaveAs(uploadPath);
+                if (file.ContentDisposition != null)
+                {
+                    //parse uploaded file
+                    var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+                    Filename = parsedContentDisposition.FileName.Trim('"');
+                    string uploadPath = UploadDestination + Filename;
+                    
+                    //save the file to upload destination
+                    file.SaveAs(uploadPath);
+                }
+
+                string Photo = Filename;
+
+                if (Photo != "")
+                {
+                    Photo = Url.Content($"~/upload/{Photo}");
+                }
             }
-
-            string Photo = Filename;
-
-            if (Photo != "")
-            {
-                Photo = Url.Content($"~/upload/{Photo}");
-            }
-
             var comment = new Comment
             {
                 ParentId = commentModel.ParentId,
