@@ -1,6 +1,11 @@
 @using Domain.Entities
 @model WebUI.ViewModels.Task.TaskViewModel
 
+@{
+    bool isCoach = Context.User.IsInRole("Coach");
+}
+
+
 <div class="ui ">
     
         @{
@@ -77,11 +82,17 @@
                     Submit
                 </a>*@
                     <div class="ui two buttons">
-                        <input type="submit" name="command" value="Resent" class="negative ui button">
-                        <div class=""></div>
-                        <input type="submit" name="command" value="Aprove" class="positive ui button">
-                    </div>
-                    @*</div>*@
+                        @if (Model.Status == Status.Resolved)
+                        {
+
+
+                            <input type="submit" name="command" value="Resent" class="negative ui button">
+                            <div class=""></div>
+                            <input type="submit" name="command" value="Aprove" class="positive ui button">
+
+                        }
+                    </div>                
+    @*</div>*@
 
 
                 </div>

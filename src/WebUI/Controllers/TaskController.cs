@@ -30,9 +30,17 @@ namespace WebUI.Controllers
             _userManager = userManager;
         }
 
-        // GET: /<controller>/
         [HttpGet]
         public async Task<IActionResult> TaskList()
+        {
+            var model = new TaskListViewModel();
+
+            return View(model);
+        }
+
+        // GET: /<controller>/
+        [HttpGet]
+        public async Task<IActionResult> PartialTaskList(string type)
         {
             var user = await GetCurrentUserAsync();
             var userTasks = new List<UserTask>();
@@ -42,10 +50,31 @@ namespace WebUI.Controllers
                 userTasks = _dal.GetUserTasks(user);
                 if (userTasks.Count > 0)
                 {
-                    userTasks =
-                       userTasks.Where(
-                           x => x.Status == Status.Open || x.Status == Status.Expired || x.Status == Status.Reopened).ToList();
+                    switch (type)
+                    {
+                        case "ResolvedTasks":
+                            userTasks =
+                                userTasks.Where(
+                                     x => x.Status == Status.Resolved ).ToList();
+                            break;
+                        case "AssignedTasks":
+                            userTasks =
+                                userTasks.Where(
+                                     x => x.Status == Status.Open || x.Status == Status.Expired || x.Status == Status.Reopened).ToList();
+                            break;
+                        case "VerifiedTasks":
+                            userTasks =
+                                userTasks.Where(
+                                     x => x.Status == Status.Closed || x.Status == Status.Completed ).ToList();
+                            break;
+                        default:
+                            userTasks =
+                                userTasks.Where(
+                                     x => x.Status == Status.Open || x.Status == Status.Expired || x.Status == Status.Reopened).ToList();
+                            break;
+                    }
 
+                    
                 }
             }
             else if (role.Contains("Coach"))
@@ -60,14 +89,35 @@ namespace WebUI.Controllers
                 }
                 if (userTasks.Count > 0)
                 {
-                    userTasks = userTasks.Where(
-                            x => x.Status == Status.Resolved).ToList();
+                    switch (type)
+                    {
+                        case "ResolvedTasks":
+                            userTasks =
+                                userTasks.Where(
+                                     x => x.Status == Status.Resolved).ToList();
+                            break;
+                        case "AssignedTasks":
+                            userTasks =
+                                userTasks.Where(
+                                     x => x.Status == Status.Open || x.Status == Status.Expired || x.Status == Status.Reopened).ToList();
+                            break;
+                        case "VerifiedTasks":
+                            userTasks =
+                                userTasks.Where(
+                                     x => x.Status == Status.Closed || x.Status == Status.Completed).ToList();
+                            break;
+                        default:
+                            userTasks =
+                                userTasks.Where(
+                                     x => x.Status == Status.Open || x.Status == Status.Expired || x.Status == Status.Reopened).ToList();
+                            break;
+                    }
 
                 }
             }
 
             var model = new TaskListViewModel(userTasks);
-            return View(model);
+            return PartialView("_TaskList",model);
         }
 
         [ActionName("ViewAppTask")]

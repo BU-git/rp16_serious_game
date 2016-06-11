@@ -9,7 +9,6 @@
 @{
     bool isCoach = Context.User.IsInRole("Coach");
     string userId = Context.User.GetUserId();
-
 }
 
 
@@ -37,6 +36,18 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 <div class="ui segments">
+    @if (isCoach)
+    {
+        <input type="hidden" value="ResolvedTasks" id="InitialTaskType"/>
+
+
+    }
+    else
+    {
+        <input type="hidden" value="AssignedTasks" id="InitialTaskType" />
+
+    }
+
     <!--Google chart-->
     @if (isCoach)
     {
@@ -48,88 +59,29 @@
     {
         <div id="geochart-colors" style="width: 76.3vw; height: 98.4vh"></div>
     }
-    <div class="ui very padded segment">
-        <div class="ui one column stackable center aligned page grid">
-            <div class="ui tree stackable cards">
 
-                @foreach (var item in Model.UserTasks)
-                {
-                    string color = "";
 
-                    switch (item.Status)
-                    {
-                        case Status.Open:
-                            color = "green";
-                            break;
-                        case Status.Expired:
-                            color = "red";
-                            break;
-                        case Status.Reopened:
-                            color = "yellow";
-                            break;
-                        default:
-                            color = "green";
-                            break;
-                    }
+    <div id="TaskTypeMenu" class="ui fluid three item menu">
+        <a id="ResolvedTasks" class="item active">
+            Resolved Tasks
+        </a>
+        <a id="AssignedTasks" class="item">
+            Assigned Tasks
+        </a>
+        <a id="VerifiedTasks" class="item">
+            Verified Tasks
+        </a>
 
-                    string size = "";
-                    if (item.Coins < 2)
-                    {
-                        size = "tiny";
-                    }
-                    else if (item.Coins <= 10)
-                    {
-                        size = "small";
-                    }
-                    else if (item.Coins <= 50)
-                    {
-                        size = "";
-                    }
-                    else if (item.Coins > 50)
-                    {
-                        size = "large";
-                    }
-
-                    using (Html.BeginForm("ViewUserTask", "Task", new { taskId = item.UserTaskId }, FormMethod.Post, new { @class = color + " card" }))
-                    {
-                        <div class="content">
-                            <span class="right floated star">
-                                <i class="active star @size icon"></i>
-                                <a class="floating ui yellow circular label">@Html.DisplayFor(m => item.Coins)</a>
-                            </span>
-                            <div class="header">
-                                @Html.DisplayFor(m => item.Name)
-                            </div>
-                            @if (isCoach)
-                            {
-                                <div class="meta">
-                                    @Html.DisplayFor(x => item.UserName)
-                                </div>
-                            }
-                        </div>
-                        <div class="content">
-                            <div class="ui small feed">
-                                <div class="event">
-                                    <div class="content">
-                                        <span class="right floated time">
-                                            @Html.DisplayFor(x => item.ExpireDt)
-                                        </span>
-                                        <div class="ui @color horizontal label">
-                                            @Html.DisplayFor(x => item.Status)
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <button type="submit" class="ui bottom attached button">
-                            <i class="zoom icon"></i>
-                            View
-                        </button>
-                    }
-                }
-            </div>
-        </div>
     </div>
+
+    <div id="TaskListSection">
+
+    </div>
+    
+
+
+
+
 </div>
 
 <script>
@@ -214,3 +166,38 @@
     };
 </script>
 
+@section Scripts{
+
+    <script type="text/javascript">
+
+        $('#TaskTypeMenu').on('click', 'a', function() {
+            var $j = jQuery.noConflict();
+
+            $j(this).addClass('active').siblings().removeClass('active');
+            var taskType = $j(this).attr('id');
+            ChangeTaskType(taskType);
+        });
+
+        $(document).ready(function () {
+            var $j = jQuery.noConflict();
+
+            var TaskType = $j('#InitialTaskType').val();
+            $j('#'+TaskType).addClass('active').siblings().removeClass('active');
+
+            ChangeTaskType(TaskType);
+        });
+
+        function ChangeTaskType(taskType) {
+            var $j = jQuery.noConflict();
+
+            $j.get('/Task/PartialTaskList?type=' + taskType,
+                function(data) {
+
+                    $j('#TaskListSection').html(data);
+                    $j('#TaskListSection').fadeIn('fast');
+                });
+        }
+
+    </script>
+
+}

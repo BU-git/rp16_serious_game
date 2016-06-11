@@ -2,6 +2,13 @@
 @model WebUI.ViewModels.Task.TaskViewModel
 
 
+@{
+    bool isCoach = Context.User.IsInRole("Coach");
+}
+
+
+
+
 @{string color = "";}
 @switch (Model.Status)
             {
@@ -55,16 +62,20 @@
             </div>
         </div>
 
-
-        <div class="extra conten">
-            @*<div class="fluid ui green button">Send Task*@
+    <div class="extra conten">
+        @if (Model.Status == Status.Open || Model.Status == Status.Reopened || Model.Status == Status.Expired)
+        {
             <a class="fluid ui green button" href="@Url.Action("SubmitTask", "Task", new {taskId = Model.UserTaskId})">
                 Submit
             </a>
-            @*</div>*@
+
+        }
+
+        @*<div class="fluid ui green button">Send Task*@
+        @*</div>*@
 
 
-        </div>
+    </div>
 
 
     <div class="content" id="comments">
