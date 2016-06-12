@@ -34,7 +34,7 @@ namespace Domain.Entities
         public List<ApplicationUser_UserGroup> ApplicationUser_UserGroups { get; set; }
         public List<Customer> Customer { get; set; }
         public List<UserTask> UserTasks { get; set; }
-        public List<ApplicationUser_Avatar> ApplicationUser_Avatars { get; set; }
+        public List<ApplicationUser_Avatar> ApplicationUser_Avatars { get; set; } = new List<ApplicationUser_Avatar>();
         public virtual ICollection<Appointment_User> User_Appointments { get; set; }
     }
 

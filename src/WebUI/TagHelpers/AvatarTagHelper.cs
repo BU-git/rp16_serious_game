@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Interfaces;
+﻿using Interfaces;
 using Microsoft.AspNet.Razor.TagHelpers;
-using RestSharp.Extensions;
 
 namespace WebUI.TagHelpers
 {

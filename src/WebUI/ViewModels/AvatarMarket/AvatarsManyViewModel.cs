@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace WebUI.ViewModels.AvatarMarket
 {
     public class AvatarsManyViewModel
     {
-        public List<AvatarViewModel> AvatarViewModels { get; set; }
+        public List<AvatarViewModel> AvatarViewModels { get; set; } = new List<AvatarViewModel>();
     }
 }

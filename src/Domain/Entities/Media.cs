@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     public class Media
     {
@@ -9,7 +7,8 @@ namespace Domain.Entities
         public string MainPath { get; set; }
         public string AdditionalPath { get; set; }
 
-        public List<Avatar> Avatars { get; set; } 
+        public int AvatarId { get; set; }
+        public Avatar Avatar { get; set; } 
     }
 
     public enum Type

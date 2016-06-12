@@ -1,4 +1,4 @@
-/// <binding />
+/// <binding BeforeBuild='default' />
 "use strict";
 
 var gulp = require("gulp"),
@@ -39,8 +39,8 @@ gulp.task("clean:libs", function (cb) {
     rimraf(paths.libsDest, cb);
 });
 
-gulp.task("clean:assets", function(cb) {
-    rimraf(paths.webroot, cb);
+gulp.task("clean:images", function(cb) {
+    rimraf(paths.imagesDest, cb);
 });
 
 gulp.task("min:js", function () {
@@ -75,7 +75,7 @@ gulp.task("copy:json", function () {
 });
 
 
-gulp.task("clean", ["clean:js", "clean:css", "clean:assets"]);
+gulp.task("clean", ["clean:js", "clean:css", "clean:images"]);
 gulp.task("min", ["min:js", "min:css"]);
 gulp.task("copy", ["copy:libraries", "copy:images", "copy:json"]);
 gulp.task("default", ["clean", "min", "copy"]);

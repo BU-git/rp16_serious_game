@@ -175,7 +175,6 @@ namespace DAL
                     ApplicationUser = appUser,
                     Avatar = avatar
                 };
-                _context.ApplicationUser_Avatars.Add(userAvatar);
                 var user = await _userManager.FindByIdAsync(appUser.Id);
                 user.ApplicationUser_Avatars.Add(userAvatar);
                 var updAvatar = _context.Avatars.First(avatar1 => avatar1 == avatar);
@@ -195,11 +194,10 @@ namespace DAL
         {
             try
             {
-                var user = await _userManager.FindByIdAsync(appUser.Id);
-                var avatars = await _context.Avatars.Where(
-                    avatar =>
-                        avatar.ApplicationUser_Avatars.All(userAvatar => userAvatar.ApplicationUser != appUser))
-                    .ToListAsync();
+                var avatars = await
+                    _context.Avatars.Include(a => a.Media)
+                        .Where(a => a.ApplicationUser_Avatars.All(u => u.ApplicationUserId != appUser.Id))
+                        .ToListAsync();
                 return avatars;
             }
             catch (Exception)

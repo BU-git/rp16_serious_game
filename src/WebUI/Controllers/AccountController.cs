@@ -5,7 +5,6 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 using WebUI.ViewModels.Account;
 using Domain.Entities;
-using Microsoft.AspNet.Mvc.ViewFeatures;
 
 namespace WebUI.Controllers
 {

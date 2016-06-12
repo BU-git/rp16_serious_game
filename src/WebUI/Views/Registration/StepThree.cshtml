@@ -32,7 +32,7 @@
                     @foreach (var avatar in Model?.Avatars)
                     {
                         <li id=@avatar.AvatarId>
-                            <img src=@avatar.Media.MainPath alt="Avatar ID: @avatar.AvatarId" />
+                            <img src=@avatar.Media.MainPath alt="Avatar ID: @avatar.AvatarId" class="img-centered"/>
                         </li>
                     }
                 </ul>

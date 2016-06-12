@@ -161,10 +161,18 @@ namespace WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> StepThree(int avatarId)
         {
-            var user = await GetCurrentUserAsync();
-            var avatar = await _dal.GetAvatarById(avatarId);
-            await _dal.UpdateUserAvatar(avatar, user);
-            return RedirectToAction("Index", "Home");
+            try
+            {
+                var user = await GetCurrentUserAsync();
+                var avatar = await _dal.GetAvatarById(avatarId);
+                await _dal.UpdateUserAvailableAvatars(avatar, user);
+                await _dal.UpdateUserAvatar(avatar, user);
+                return RedirectToAction("TaskList", "Task");
+            }
+            catch (Exception)
+            {
+                return await StepThree();
+            }
         }
 
 

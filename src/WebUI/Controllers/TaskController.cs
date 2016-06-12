@@ -9,7 +9,6 @@ using WebUI.ViewModels.Task;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using System.Security.Claims;
-using System.Web;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNet.Http;
 

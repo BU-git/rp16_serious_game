@@ -70,12 +70,22 @@ namespace DAL
                 .HasKey(avatar => avatar.AvatarId);
 
             builder.Entity<ApplicationUser_Avatar>()
-                .HasKey(avatar => new { avatar.UserId, avatar.AvatarId });
+                .HasKey(avatar => new { avatar.ApplicationUserId, avatar.AvatarId });
+
+            builder.Entity<ApplicationUser_Avatar>()
+                .HasOne(avatar => avatar.Avatar)
+                .WithMany(avatar => avatar.ApplicationUser_Avatars)
+                .HasForeignKey(avatar => avatar.AvatarId);
+
+            builder.Entity<ApplicationUser_Avatar>()
+                .HasOne(avatar => avatar.ApplicationUser)
+                .WithMany(avatar => avatar.ApplicationUser_Avatars)
+                .HasForeignKey(avatar => avatar.ApplicationUserId);
 
             builder.Entity<Media>()
-                .HasMany(media => media.Avatars)
+                .HasOne(media => media.Avatar)
                 .WithOne(avatar => avatar.Media)
-                .HasForeignKey(avatar => avatar.MediaId);
+                .HasForeignKey<Media>(media => media.AvatarId);
 
             builder.Entity<Comment>()
                 .HasOne(c => c.Parent)
@@ -114,8 +124,6 @@ namespace DAL
         public DbSet<UserTask> UserTasks { get; set; }
         public DbSet<Media> Medias { get; set; }
         public DbSet<Avatar> Avatars { get; set; }
-        public DbSet<ApplicationUser_Avatar> ApplicationUser_Avatars { get; set; }
-        public DbSet<ApplicationUser_UserGroup> ApplicationUser_UserGroups { get; set; }
         public DbSet<Comment> Comments { get; set; }
     }
 }

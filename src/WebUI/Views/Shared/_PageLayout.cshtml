@@ -1,66 +1,24 @@
 ﻿<!DOCTYPE html>
-<html>
+<html class="unpadded">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Growth Pad</title>
-
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/semantic/dist/semantic.css" />
         <link rel="stylesheet" href="~/lib/semantic/dist/components/calendar.css" />
-        <link rel="stylesheet" href="~/lib/bootstrap/bootstrap.css" />
         <link rel="stylesheet" href="~/assets/css/site.min.css" />
+        <link rel="stylesheet" href="~/lib/bxslider/jquery.bxslider.css" />
     </environment>
     <environment names="Staging,Production">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/css/bootstrap.min.css"
               asp-fallback-href="~/lib/semantic/dist/semantic.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/assets/css/site.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/lib/bxslider/jquery.bxslider.css" asp-append-version="true" />
     </environment>
-    <style>
-        html, body {
-            height: 100%;
-        }
-
-        html, body, * {
-            padding: 0;
-            margin: 0;
-        }
-
-        #wrapper {
-            width: 100%;
-            height: 100%;
-            overflow-y: scroll;
-        }
-
-        #content {
-            position: relative;
-            left: 35vw;
-            margin-left: -14vw;
-            width: 75vw;
-        }
-
-        #sidebar {
-            position: absolute;
-            top: 0;
-            left: -5vw;
-            margin-left: 5vw;
-            width: 20vw;
-            max-height: 100%;
-            overflow: hidden;
-        }
-
-            #sidebar:hover {
-                overflow-y: auto;
-            }
-
-            #sidebar > * {
-                max-width: 250px; /* leave some space for vertical scrollbar */
-            }
-    </style>
-
 </head>
-<body>
+<body class="unpadded">
     <div class="ui top fixed inverted menu">
         <div class="header item">
             @*<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -116,65 +74,60 @@
             </div>
         </div>
     }
-
-<div id="sidebar">
-    <h3>Sidebar</h3>
-    <div class="ui secondary vertical pointing menu large">
-        <div class="ui card">
-            <div class="image">
-                <img style="width: 100%" src="https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png" alt="Avatar">
-            </div>
-            <div class="content">
-                <a class="header">Name</a>
-                <div class="description">
-                    Description
+    <div id="sidebar">
+        <h3>Sidebar</h3>
+        <div class="ui secondary vertical pointing menu large">
+            <div class="ui card">
+                <div class="image">
+                    <img style="width: 100%" src="https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png" alt="Avatar">
                 </div>
-                <div class="meta">
-
+                <div class="content">
+                    <a class="header">Name</a>
+                    <div class="description">
+                        Description
+                    </div>
+                    <div class="meta">
+                    </div>
+                </div>
+                <div class="extra content">
+                    <a>
+                        <i class="user icon"></i>
+                        22 Friends
+                    </a>
+                </div>
+                <div class="ui bottom attached indincating progress" id="percent" style="width: 20vw">
+                    <div class="bar"></div>
                 </div>
             </div>
-            <div class="extra content">
-                <a>
-                    <i class="user icon"></i>
-                    22 Friends
-                </a>
-            </div>
-            <div class="ui bottom attached indincating progress" id="percent" style="width: 20vw">
-                <div class="bar"></div>
-            </div>
-        </div>
-        <a class="item" href="@Url.Action("Index", "Home")">
-            <i class="large home icon"></i>
-            Home
-        </a>
-        @if (User.IsInRole("Coach"))
-        {
-            <a class="item" href="@Url.Action("UserStatistics", "Task")">
-                <i class="large bar chart icon"></i>
-                Users' statistics
+            <a class="item" href="@Url.Action("Index", "Home")">
+                <i class="large home icon"></i>
+                Home
             </a>
-        }
-        <a class="item" href="@Url.Action("Index", "Appointments")">
-            <i class="large calendar icon"></i>
-            Meetings
-        </a>
-        <a class="item" href="@Url.Action("Index", "Manage")">
-            <i class="large options icon"></i>
-            Profile settings
-        </a>
-        <div class="ui divider"></div>
-    </div>
+            @if (User.IsInRole("Coach"))
+            {
+                <a class="item" href="@Url.Action("UserStatistics", "Task")">
+                    <i class="large bar chart icon"></i>
+                    Users' statistics
+                </a>
+            }
+            <a class="item" href="@Url.Action("Index", "Appointments")">
+                <i class="large calendar icon"></i>
+                Meetings
+            </a>
+            <a class="item" href="@Url.Action("Index", "Manage")">
+                <i class="large options icon"></i>
+                Profile settings
+            </a>
+            <div class="ui divider"></div>
+        </div>
 
-    
-</div>
+
+    </div>
     <div id="wrapper">
         <div id="content" style="top: 40px">
             @RenderBody()
         </div>
     </div>
-
-
-
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
@@ -182,27 +135,21 @@
         <script src="~/lib/jquery-validation/dist/additional-methods.js"></script>
         <script src="~/lib/semantic/dist/semantic.js"></script>
         <script src="~/lib/semantic/dist/components/calendar.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/assets/js/site.js" asp-append-version="true"></script>
+        <script src="~/assets/js/site.js"></script>
+        <script src="~/lib/bxslider/jquery.bxslider.min.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.3.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery">
-
-
-
         </script>
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
                 asp-fallback-src="~/lib/semantic/semantic-ui/dist/semantic.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-
-
-
         </script>
         <script src="~/assets/js/site.min.js" asp-append-version="true"></script>
+        <script src="~/lib/bxslider/jquery.bxslider.min.js" asp-append-version="true"></script>
     </environment>
-
     @RenderSection("scripts", required: false)
     <script>
         $('#percent')
