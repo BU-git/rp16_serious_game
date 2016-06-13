@@ -137,7 +137,7 @@ namespace Interfaces
         /// <returns></returns>
         Task<Appointment> GetAppointmentById(int id);
         Task<Appointment_User> ValidateAppointment(DateTime start, DateTime end, IEnumerable<string> users);
-
+        Task<UserGroup> GetUserGroupByName(string familyName);
         Task<List<Comment>> GetTaskComments(int taskId);
         Task AddComment(Comment comment, int taskId);
     }

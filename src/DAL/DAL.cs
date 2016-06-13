@@ -95,6 +95,11 @@ namespace DAL
             await _context.SaveChangesAsync();
         }
 
+        public async Task<UserGroup> GetUserGroupByName(string familyName)
+        {
+            return await _context.UserGroups.FirstOrDefaultAsync(g => g.GroupName == familyName);
+        }
+
         /// <summary>
         /// Finds and returns user with specified id
         /// </summary>

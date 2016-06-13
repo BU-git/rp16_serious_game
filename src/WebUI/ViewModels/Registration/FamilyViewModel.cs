@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Domain.Entities;
 
 namespace WebUI.ViewModels.Registration
 {
@@ -36,5 +37,18 @@ namespace WebUI.ViewModels.Registration
         [Required(ErrorMessage = "This field should not be empty")]
         [Display(Name = "Building number")]
         public string BuildingNumber { get; set; }
+
+        public int FamilyId { get; set; }
+
+        public FamilyViewModel(UserGroup userGroup)
+        {
+            FamilyName = userGroup.GroupName;
+            FamilyId = userGroup.UserGroupId;
+        }
+
+        public FamilyViewModel()
+        {
+            
+        }
     }
 }

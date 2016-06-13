@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Domain.Entities;
 using Microsoft.AspNet.Mvc;
@@ -7,6 +8,7 @@ using WebUI.Infrastructure.Abstract;
 using WebUI.ViewModels.Registration;
 using Interfaces;
 using Microsoft.AspNet.Authorization;
+using Microsoft.AspNet.Http.Extensions;
 using WebUI.Services.Abstract;
 using WebUI.ViewModels.Email;
 using Gender = Domain.Entities.Gender;
@@ -30,6 +32,12 @@ namespace WebUI.Controllers
         [HttpGet]
         public IActionResult StepOne()
         {
+            if (!User.IsInRole("Coach"))
+            {
+                TempData["warn"] = "Access denied.";
+                return RedirectToAction("TaskList", "Task");
+            }
+
             return View(new MainFamilyData());
         }
 
@@ -41,8 +49,21 @@ namespace WebUI.Controllers
             {
                 return View(regVm);
             }
+            if (!User.IsInRole("Coach"))
+            {
+                TempData["warn"] = "Access denied.";
+                return RedirectToAction("TaskList", "Task");
+            }
 
             var randomPass = _cryptoServices.GenerateRandomPassword();
+
+            var user = new ApplicationUser
+            {
+                LastName = regVm.FamilyName,
+                Email = regVm.HeadEmail,
+                UserName = regVm.HeadEmail
+            };
+            await _dal.CreateParticipant(user, randomPass);
 
             var group = new UserGroup
             {
@@ -50,20 +71,15 @@ namespace WebUI.Controllers
                 Type = regVm.FamilyType
             };
             await _dal.CreateUserGroup(group);
+            await _dal.AddUserToGroup(user, group);
 
-            var user = new ApplicationUser
-            {
-                LastName = regVm.FamilyName,
-                Email = regVm.HeadEmail
-            };
-            await _dal.CreateParticipant(user, randomPass); //TODO: show message
-
+            var userGroup = await _dal.GetUserGroupByName(regVm.FamilyName);
             var registrationMessage = new RegistrationMessage
             {
                 Password = randomPass,
                 Name = regVm.FamilyName,
                 Login = regVm.HeadEmail,
-                LinkUrl = Url.Action("StepTwo")
+                LinkUrl = $"{Url.Action("StepTwo")}/{userGroup.UserGroupId}"
             };
 
             await _mailManager.SendRegistrationMailAsync(registrationMessage, regVm.HeadEmail);
@@ -72,21 +88,31 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
-#pragma warning disable 1998
-        public async Task<IActionResult> StepTwo(string familyName)
-#pragma warning restore 1998
+        public async Task<IActionResult> StepTwo(int id)
         {
-            //TODO: get main data 'bout family 
-            //Can't get information about family because dal doesn't contain methods like GetFamilyByName(string familyName)
-
-            var familyInfo = new FamilyViewModel
+            if (User.IsInRole("Coach"))
             {
-                Users = new List<UserViewModel>
-                {
-                    new UserViewModel()
-                },
-                FamilyName = "Doe"
-                //Here must be users
+                TempData["warn"] = "Access denied.";
+                return RedirectToAction("TaskList", "Task");
+            }
+
+            var userGroup = await _dal.GetUserGroupById(id);
+            if (userGroup == null)
+            {
+                TempData["warn"] = "Access denied.";
+                return RedirectToAction("TaskList", "Task");
+            }
+
+            //var user = await GetCurrentUserAsync();
+            //if (user.ApplicationUser_UserGroups.Any(g => g.UserGroupId == userGroup.UserGroupId))
+            //{
+            //    TempData["warn"] = "Access denied.";
+            //    return RedirectToAction("TaskList", "Task");
+            //}
+
+            var familyInfo = new FamilyViewModel(userGroup)
+            {
+                Users = new List<UserViewModel>()
             };
 
             return View(familyInfo);
@@ -96,6 +122,14 @@ namespace WebUI.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> StepTwo(FamilyViewModel regVm)
         {
+            if (User.IsInRole("Coach"))
+            {
+                TempData["warn"] = "Access denied.";
+                return RedirectToAction("TaskList", "Task");
+            }
+
+            var userGroup = await _dal.GetUserGroupById(regVm.FamilyId);
+
             foreach (var u in regVm.Users)
             {
                 var randomPass = _cryptoServices.GenerateRandomPassword();
@@ -104,44 +138,67 @@ namespace WebUI.Controllers
                 DateTime dateTime;
                 DateTime.TryParse($"{u.Day}/{u.Month}/{u.Year}", out dateTime);
 
-                var user = new ApplicationUser
+                var userInDb = await _dal.GetUserByEmail(u.Email);
+                if (userInDb != null)
                 {
-                    Name = u.Name,
-                    MiddleName = u.MiddleName,
-                    LastName = regVm.FamilyName,
-                    BirthDate = dateTime,
-                    Email = u.Email,
-                    Phone = u.Phone,
-                    Gender = gender,
-                    ZipCode = regVm.ZipCode,
-                    Street = regVm.Street,
-                    Country = regVm.Country,
-                    Region = regVm.Region,
-                    City = regVm.City,
-                    BuildingNumber = regVm.BuildingNumber
-                };
+                    userInDb.Name = u.Name;
+                    userInDb.MiddleName = u.MiddleName;
+                    userInDb.LastName = regVm.FamilyName;
+                    userInDb.BirthDate = dateTime;
+                    userInDb.Email = u.Email;
+                    userInDb.Phone = u.Phone;
+                    userInDb.Gender = gender;
+                    userInDb.ZipCode = regVm.ZipCode;
+                    userInDb.Street = regVm.Street;
+                    userInDb.Country = regVm.Country;
+                    userInDb.Region = regVm.Region;
+                    userInDb.City = regVm.City;
+                    userInDb.BuildingNumber = regVm.BuildingNumber;
 
-                try
-                {
-                    await _dal.CreateParticipant(user, randomPass); //TODO: The try/catch block shouldn't be here!
+                    try
+                    {
+                        await _dal.EditUser(userInDb);
+                    }
+                    catch (Exception exc)
+                    {
+                        TempData["error"] = exc.Message;
+                        return View(regVm);
+                    }
                 }
-                catch (Exception)
+                else
                 {
-                    return View(regVm);
-                }
+                    var user = new ApplicationUser
+                    {
+                        Name = u.Name,
+                        MiddleName = u.MiddleName,
+                        LastName = regVm.FamilyName,
+                        BirthDate = dateTime,
+                        Email = u.Email,
+                        Phone = u.Phone,
+                        Gender = gender,
+                        ZipCode = regVm.ZipCode,
+                        Street = regVm.Street,
+                        Country = regVm.Country,
+                        Region = regVm.Region,
+                        City = regVm.City,
+                        BuildingNumber = regVm.BuildingNumber,
+                        UserName = u.Email
+                    };
 
-                var registrationMessage = new RegistrationMessage
-                {
-                    Login = u.Email,
-                    Name = u.Name,
-                    Password = randomPass
-                };
-                await _mailManager.SendRegistrationMailAsync(registrationMessage, u.Email);
+                    await _dal.CreateParticipant(user, randomPass);
+                    await _dal.AddUserToGroup(user, userGroup);
+
+                    var registrationMessage = new RegistrationMessage
+                    {
+                        Login = u.Email,
+                        Name = u.Name,
+                        Password = randomPass
+                    };
+                    await _mailManager.SendRegistrationMailAsync(registrationMessage, u.Email);
+                }
             }
 
-            //TODO: assign members to concrete family considering previous comment about DAL
-            //TODO: add success message
-            return await StepThree();
+           return RedirectToAction("StepTwo");
         }
 
         [HttpPost]
@@ -153,6 +210,12 @@ namespace WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> StepThree()
         {
+            if (User.IsInRole("Coach"))
+            {
+                TempData["warn"] = "Access denied.";
+                return RedirectToAction("TaskList", "Task");
+            }
+
             var avatars = await _dal.GetAllAvatarsWithPrice(0);
             var model = new AvatarsViewModel { Avatars = avatars };
             return View(model);
@@ -161,6 +224,12 @@ namespace WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> StepThree(int avatarId)
         {
+            if (User.IsInRole("Coach"))
+            {
+                TempData["warn"] = "Access denied.";
+                return RedirectToAction("TaskList", "Task");
+            }
+
             try
             {
                 var user = await GetCurrentUserAsync();
@@ -169,8 +238,9 @@ namespace WebUI.Controllers
                 await _dal.UpdateUserAvatar(avatar, user);
                 return RedirectToAction("TaskList", "Task");
             }
-            catch (Exception)
+            catch (Exception exc)
             {
+                TempData["error"] = exc.Message;
                 return await StepThree();
             }
         }

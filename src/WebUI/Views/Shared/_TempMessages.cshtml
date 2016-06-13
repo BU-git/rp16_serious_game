@@ -1,0 +1,33 @@
+﻿@if (TempData["error"] != null)
+{
+    <div class="ui negative message">
+        <i class="close icon"></i>
+        <div class="header">
+            Sorry! Something went wrong..
+        </div>
+        <p>
+            @TempData["error"]
+        </p>
+    </div>
+}
+@if (TempData["warn"] != null)
+{
+    <div class="ui warning message">
+        <i class="close icon"></i>
+        <div class="header">
+            Something happened
+        </div>
+        <p>
+            @TempData["warn"]
+        </p>
+    </div>
+}
+@if (TempData["msg"] != null)
+{
+    <div class="ui positive message">
+        <i class="close icon"></i>
+        <div class="header">
+            @TempData["msg"]
+        </div>
+    </div>
+}

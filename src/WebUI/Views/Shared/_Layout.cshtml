@@ -29,11 +29,6 @@
                 </button>*@
             <a asp-controller="Home" asp-action="Index" class="navbar-brand">Growth Pad</a>
         </div>
-        <div class="ui inverted menu">
-            <a asp-controller="Home" asp-action="Index" class="item">Home</a>
-            <a asp-controller="Registration" asp-action="StepOne" class="item">Register family</a>
-            <a asp-controller="Appointments" asp-action="Index" class="item">Appointments</a>
-        </div>
         <div class="right menu">
             @await Html.PartialAsync("_LoginPartial")
         </div>

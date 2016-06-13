@@ -41,40 +41,7 @@
             @await Html.PartialAsync("_LoginPartial")
         </div>
     </div>
-    @if (TempData["error"] != null)
-    {
-        <div class="ui negative message">
-            <i class="close icon"></i>
-            <div class="header">
-                Sorry! Something went wrong..
-            </div>
-            <p>
-                @TempData["error"]
-            </p>
-        </div>
-    }
-    @if (TempData["warn"] != null)
-    {
-        <div class="ui warning message">
-            <i class="close icon"></i>
-            <div class="header">
-                There is something you should know
-            </div>
-            <p>
-                @TempData["warn"]
-            </p>
-        </div>
-    }
-    @if (TempData["msg"] != null)
-    {
-        <div class="ui positive message">
-            <i class="close icon"></i>
-            <div class="header">
-                @TempData["msg"]
-            </div>
-        </div>
-    }
-    <div id="sidebar">
+   <div id="sidebar">
         <h3>Sidebar</h3>
         <div class="ui secondary vertical pointing menu large">
             <div class="ui card">
@@ -123,11 +90,12 @@
 
 
     </div>
-    <div id="wrapper">
-        <div id="content" style="top: 40px">
-            @RenderBody()
-        </div>
+<div id="wrapper">
+    <div id="content" style="top: 40px">
+        @await Html.PartialAsync("_TempMessages")
+        @RenderBody()
     </div>
+</div>
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
@@ -138,28 +106,31 @@
         <script src="~/assets/js/site.js"></script>
         <script src="~/lib/bxslider/jquery.bxslider.min.js"></script>
     </environment>
-    <environment names="Staging,Production">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.3.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
-                asp-fallback-src="~/lib/semantic/semantic-ui/dist/semantic.min.js"
-                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
-        </script>
-        <script src="~/assets/js/site.min.js" asp-append-version="true"></script>
-        <script src="~/lib/bxslider/jquery.bxslider.min.js" asp-append-version="true"></script>
-    </environment>
+<environment names="Staging,Production">
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.3.min.js"
+            asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+            asp-fallback-test="window.jQuery">
+        
+    </script>
+    <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.5/bootstrap.min.js"
+            asp-fallback-src="~/lib/semantic/semantic-ui/dist/semantic.min.js"
+            asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal">
+        
+    </script>
+    <script src="~/assets/js/site.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bxslider/jquery.bxslider.min.js" asp-append-version="true"></script>
+</environment>
     @RenderSection("scripts", required: false)
     <script>
         $('#percent')
             .progress({
-                percent: 74
+                percent: 95
             });
 
-        $('.message .close').on('click', function () {
-            $(this).closest('.message')
-                  .transition('fade');
+        jQuery(document).ready(function ($) {
+            $(".close.icon").click(function () {
+                $(this).parent().transition();
+            });
         });
     </script>
 </body>

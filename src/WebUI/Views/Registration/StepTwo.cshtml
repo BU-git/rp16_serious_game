@@ -95,12 +95,11 @@
                 $("#familyForm").hide();
                 $("#userForm").show();
 
-                if (currentUser === userCount - 1) {
+                if (currentUser == userCount - 1) {
                     $('#submitUser').val("Finish");
                 }
 
                 currentUser++;
-                return true;
             }
             else {
                 return false;
@@ -108,55 +107,59 @@
         });
         $("#submitUser").click(function () {
             if ($("#userForm").valid()) {
-                var data;
-                if (window.currentUser > 0 && window.currentUser < userCount) {
-                    data = {};
+                if (currentUser > 0 && currentUser < userCount) {
+                    var data = {};
                     $.each($("#userForm").serializeArray(), function (i, field) {
                         data[field.name] = field.value;
                     });
                     regVm.Users.push(data);
                     $("#userForm")[0].reset();
-                    if (window.currentUser === userCount - 1) {
+
+                    if (currentUser == userCount - 1) {
                         $('#submitUser').val("Finish");
                     }
-                    window.currentUser++;
-                    return true;
+
+                    currentUser++;
                 }
-                else if (window.currentUser === userCount) {
+                else if (currentUser == userCount) {
                     $('#page-dimmer').addClass('active');
-                    data = {};
+
+                    var data = {};
                     $.each($("#userForm").serializeArray(), function (i, field) {
                         data[field.name] = field.value;
                     });
                     regVm.Users.push(data);
+
                     $.post({
-                        url: "/Registration/StepTwo",
+                        url: "@Url.Action("StepTwo")",
                         data: regVm,
-                        success: function () {
+                        success: function (data) {
                             $('#page-dimmer').removeClass('active');
                             $("#userForm").hide();
                             $("#successMessage").show();
                         }
-                    }).fail(function () {
+                    }).fail(function (e) {
                         $('#page-dimmer').removeClass('active');
                         alert("Something went wrong..\nPlease repeat the registration");
+                        $("#familyForm")[0].reset();
+                        userCount = 1;
+                        currentUser = 0;
+                        regVm = { Users: [] };
                         $("#userForm").hide();
                         $("#familyForm").show();
                     });
-                    return true;
                 }
             } else {
-                return false;
+                return;
             }
-            return true;
         });
+
         $('#removeUser').click(function () {
             if (userCount < 2)
-                return false;
+                return;
             else {
                 userCount--;
                 $('#usersCount').text(userCount);
-                return true;
             }
         });
         $('#addUser').click(function () {
