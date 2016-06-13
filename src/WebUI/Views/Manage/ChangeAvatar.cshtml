@@ -1,18 +1,18 @@
-﻿@model WebUI.ViewModels.Registration.AvatarsViewModel
+﻿@model List<Domain.Entities.Avatar>
 @{
-    ViewBag.Title = "Registration | Step Three";
+    ViewBag.Title = "Management | New avatar";
+    Layout = "~/Views/Shared/_PageLayout.cshtml";
 }
 
 <div class="ui text container">
     <form class="ui form segment attached" id="userForm">
-        <input asp-for="AvatarId" type="hidden" id="avatarId" />
         <div class="ui grid">
-            <div class="twelve wide centered column">
+            <div class="twelve wide centered column" id="avatar-img">
                 <ul class="ui bxslider centered aligned bxslider-unshifted">
-                    @foreach (var avatar in Model.Avatars)
+                    @foreach (var avatar in Model)
                     {
                         <li id=@avatar.AvatarId>
-                            <img src=@avatar.Media.MainPath alt="Avatar ID: @avatar.AvatarId" />
+                            <img src=@avatar.Media.MainPath alt="Avatar ID: @avatar.AvatarId" class="img-centered"/>
                         </li>
                     }
                 </ul>
@@ -50,18 +50,20 @@
                     adaptiveHeight: true,
                     slideWidth: 400,
                     useCSS: true,
-                    touchEnabled: true
+                    touchEnabled: true,
+                    pager: true,
+                    pagerType: 'short',
+                    infiniteLoop: false
                 });
             $('.bx-wrapper').css('margin-bottom', '0');
         });
         $("#successMessage").hide(0);
         $("#submitUser").click(function () {
             if ($("#userForm").valid()) {
-                var slider = $('.bxslider').bxSlider();
-                var data = slider.getCurrentSlideElement().attr('id');
+                var data = $("li:visible").attr('id');
                 $('#page-dimmer').addClass('active');
                 $.post({
-                    url: "/Task/TaskList",
+                    url: "/Manage/ChangeAvatar",
                     data: { avatarId: data },
                     success: function () {
                         $('#page-dimmer').removeClass('active');
@@ -71,7 +73,7 @@
                 }).fail(function () {
                     $('#page-dimmer').removeClass('active');
                     alert("Something went wrong..\nPlease repeat the choice!");
-                    $("#userForm").hide();
+                    $("#userForm").show();
                 });
                 return true;
             } else {

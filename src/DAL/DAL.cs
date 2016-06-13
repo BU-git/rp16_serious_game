@@ -195,6 +195,24 @@ namespace DAL
             }
         }
 
+        public async Task<List<Avatar>> FindAvailableAvatars(ApplicationUser appUser)
+        {
+            try
+            {
+                var avatars =
+                    await _context.Avatars.Include(a => a.ApplicationUser_Avatars)
+                        .Include(avatar => avatar.Media)
+                        .Where(a => a.ApplicationUser_Avatars.Any(u => u.ApplicationUserId == appUser.Id))
+                        .OrderBy(avatar => avatar.Price)
+                        .ToListAsync();
+                return avatars;
+            }
+            catch (Exception)
+            {
+                throw new Exception("There is no such User in the system");
+            }
+        }
+
         public async Task<List<Avatar>> FindNotAvailableAvatars(ApplicationUser appUser)
         {
             try
@@ -202,6 +220,7 @@ namespace DAL
                 var avatars = await
                     _context.Avatars.Include(a => a.Media)
                         .Where(a => a.ApplicationUser_Avatars.All(u => u.ApplicationUserId != appUser.Id))
+                        .OrderBy(avatar => avatar.Price)
                         .ToListAsync();
                 return avatars;
             }
@@ -487,7 +506,7 @@ namespace DAL
         {
             try
             {
-                var avatar = await _context.Avatars.FirstAsync(avatar1 => avatar1.AvatarId == id);
+                var avatar = await _context.Avatars.Include(avatar1 => avatar1.Media).FirstAsync(avatar1 => avatar1.AvatarId == id);
                 return avatar;
             }
             catch (NullReferenceException)
@@ -500,13 +519,20 @@ namespace DAL
             }
         }
 
-        public string GetAvatarPathByUserId(string userId)
+        public async Task<string> GetAvatarPathByUserId(string userId)
         {
             try
             {
-                var avatarId = _context.Users.First(user => user.Id == userId).CurrentAvatarId; //TODO: add path to default avatar if not found
-                var path = _context.Avatars.First(avatar1 => avatar1.AvatarId == avatarId).Media.MainPath;
-                return path;
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user.CurrentAvatarId != null)
+                {
+                    var avatarId = user.CurrentAvatarId.Value;
+                    var avatar =
+                        _context.Avatars.Include(av => av.Media).ToList().First(x => x.AvatarId == avatarId);
+                    var path = avatar?.Media.MainPath ?? "https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png";
+                    return path;
+                }
+                return null;
             }
             catch (NullReferenceException)
             {

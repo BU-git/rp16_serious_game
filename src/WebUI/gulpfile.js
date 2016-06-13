@@ -14,6 +14,7 @@ var paths = {
 };
 
 paths.js = "./Assets/js/**/*.js";
+paths.scripts = "./Assets/scripts/**";
 paths.css = "./Assets/css/**/*.css";
 paths.json = "./Assets/json/**/*.json";
 paths.libs = "./Libraries/**/*";
@@ -26,6 +27,7 @@ paths.libsDest = paths.webroot + "lib";
 paths.imagesDest = paths.webroot + "assets/images";
 paths.jsonDest = paths.webroot + "assets/json";
 paths.assets = paths.webroot + "assets/";
+paths.scriptsDest = paths.webroot + "assets/scripts";
 
 gulp.task("clean:js", function (cb) {
     rimraf(paths.concatJsDest, cb);
@@ -40,7 +42,7 @@ gulp.task("clean:libs", function (cb) {
 });
 
 gulp.task("clean:images", function(cb) {
-    rimraf(paths.imagesDest, cb);
+    rimraf(paths.imagesDest + "/**", cb);
 });
 
 gulp.task("min:js", function () {
@@ -74,8 +76,13 @@ gulp.task("copy:json", function () {
       .pipe(gulp.dest(paths.jsonDest));
 });
 
+gulp.task("copy:scripts", function () {
+    return gulp.src(paths.scripts)
+      .pipe(gulp.dest(paths.scriptsDest));
+});
+
 
 gulp.task("clean", ["clean:js", "clean:css", "clean:images"]);
 gulp.task("min", ["min:js", "min:css"]);
-gulp.task("copy", ["copy:libraries", "copy:images", "copy:json"]);
+gulp.task("copy", ["copy:libraries", "copy:images", "copy:json", "copy:scripts"]);
 gulp.task("default", ["clean", "min", "copy"]);

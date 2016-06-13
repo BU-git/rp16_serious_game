@@ -7,116 +7,116 @@
 
 
 <div class="ui ">
-    
-        @{
-            string color = "";
-            if (Model.TimeLeft >= 0)
-            {
-                color = "green";
-            }
-            else
-            {
-                color = "red";
-            }
 
+    @{
+        string color = "";
+        if (Model.TimeLeft >= 0)
+        {
+            color = "green";
+        }
+        else
+        {
+            color = "red";
         }
 
-
-        <div class="ui centered text segment container">
-            <form asp-action="EditTask" method="post">
-                <div class="content column" style="margin: 7px">
-                    <a class="ui header">@Html.DisplayFor(model => Model.Name)</a>
-                    <a class="author" style="float: right;">@Html.DisplayFor(x => Model.UserName)</a>
-                </div>
-                <div class="extra content" style="margin: 7px;">
-                    <div class="ui left labeled input">
-                        <div class="ui label">
-                            <i class="active star icon"></i>
-
-                            @Html.DisplayNameFor(x => x.Coins)
-                        </div>
-                        @*@Html.HiddenFor(x => x.Coins)*@
-                        @Html.EditorFor(x => x.Coins, new { placeholder = "Coins" })
-                        @Html.HiddenFor(x => x.UserTaskId)
+    }
 
 
+    <div class="ui centered text segment container">
+        <form asp-action="EditTask" method="post">
+            <div class="content column" style="margin: 7px">
+                <a class="ui header">@Html.DisplayFor(model => Model.Name)</a>
+                <a class="author" style="float: right;">@Html.DisplayFor(x => Model.UserName)</a>
+            </div>
+            <div class="extra content" style="margin: 7px;">
+                <div class="ui left labeled input">
+                    <div class="ui label">
+                        <i class="active star icon"></i>
+
+                        @Html.DisplayNameFor(x => x.Coins)
                     </div>
-                </div>
-                <div class="content" style="margin: 7px">
-                    <div class="ui form">
-                        <div class="field">
-                            @Html.TextAreaFor(m => m.Text)
-                        </div>
-                    </div>
-                </div>
+                    @*@Html.HiddenFor(x => x.Coins)*@
+                    @Html.EditorFor(x => x.Coins, new { placeholder = "Coins" })
+                    @Html.HiddenFor(x => x.UserTaskId)
 
-                <div class="content row" style="margin: 7px; float: left;">
-                    <div class="left floated">
-                        <span class="ui @color horizontal label">
-                            Due Date
-                        </span>
 
-                    </div>
-                    <div class="right floated meta">
-                        <span class="date">
-                            @Html.DisplayFor(model => model.ExpireDt)
-                        </span>
+                </div>
+            </div>
+            <div class="content" style="margin: 7px">
+                <div class="ui form">
+                    <div class="field">
+                        @Html.TextAreaFor(m => m.Text)
                     </div>
                 </div>
-                <div class="content" style="margin: 7px; float: right;">
-                    <div class="">
-                        <span class="ui green horizontal label">
-                            @Html.DisplayFor(x => Model.Status)
-                        </span>
-                    </div>
-                    <div class="right floated meta">
-                        <span class="date">
-                            @Html.DisplayFor(model => model.ResolutionDate)
-                        </span>
+            </div>
 
-                    </div>
+            <div class="content row" style="margin: 7px; float: left;">
+                <div class="left floated">
+                    <span class="ui @color horizontal label">
+                        Due Date
+                    </span>
+
                 </div>
-                <div class="extra content" style="margin: 7px">
-                    @*<div class="fluid ui green button">Send Task*@
-                    @*<a class="fluid ui green button" href="@Url.Action("SubmitTask", "Task", new {taskId = Model.TaskId, userId = Model.UserId})">
-                    Submit
-                </a>*@
-                    <div class="ui two buttons">
-                        @if (Model.Status == Status.Resolved)
-                        {
+                <div class="right floated meta">
+                    <span class="date">
+                        @Html.DisplayFor(model => model.ExpireDt)
+                    </span>
+                </div>
+            </div>
+            <div class="content" style="margin: 7px; float: right;">
+                <div class="">
+                    <span class="ui green horizontal label">
+                        @Html.DisplayFor(x => Model.Status)
+                    </span>
+                </div>
+                <div class="right floated meta">
+                    <span class="date">
+                        @Html.DisplayFor(model => model.ResolutionDate)
+                    </span>
+
+                </div>
+            </div>
+            <div class="extra content" style="margin: 7px">
+                @*<div class="fluid ui green button">Send Task*@
+                @*<a class="fluid ui green button" href="@Url.Action("SubmitTask", "Task", new {taskId = Model.TaskId, userId = Model.UserId})">
+                        Submit
+                    </a>*@
+                <div class="ui two buttons">
+                    @if (Model.Status == Status.Resolved)
+                    {
 
 
-                            <input type="submit" name="command" value="Resent" class="negative ui button">
-                            <div class=""></div>
+                        <input type="submit" name="command" value="Resent" class="negative ui button">
+                        <div class=""></div>
                             <input type="submit" name="command" value="Aprove" class="positive ui button">
 
-                        }
-                    </div>                
-    @*</div>*@
-
-
+                    }
                 </div>
+                @*</div>*@
 
-            </form>
 
-            <div class="content" id="comments">
-                @Html.React("CommentBox", new
+            </div>
+
+        </form>
+
+        <div class="content" id="comments">
+            @Html.React("CommentBox", new
            {
                initialData = Model.Comments,
                url = $"/Task/Comments/{Model.UserTaskId}",
                submitUrl = $"/Task/AddComment/{Model.UserTaskId}"
            })
-            </div>
+        </div>
 
-</div>
-    
-    
+    </div>
+
+
 </div>
 
 @section Scripts {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-    
+
 
 }

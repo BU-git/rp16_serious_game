@@ -6,6 +6,11 @@ namespace Domain.Entities
 {
     public class ApplicationUser : IdentityUser
     {
+        public ApplicationUser()
+        {
+            this.ApplicationUser_Avatars = new List<ApplicationUser_Avatar>();
+        }
+
         public override string Id { get; set; }
         public Gender Gender { get; set; }
         public string Name { get; set; }
@@ -34,7 +39,7 @@ namespace Domain.Entities
         public List<ApplicationUser_UserGroup> ApplicationUser_UserGroups { get; set; }
         public List<Customer> Customer { get; set; }
         public List<UserTask> UserTasks { get; set; }
-        public List<ApplicationUser_Avatar> ApplicationUser_Avatars { get; set; } = new List<ApplicationUser_Avatar>();
+        public List<ApplicationUser_Avatar> ApplicationUser_Avatars { get; set; }
         public virtual ICollection<Appointment_User> User_Appointments { get; set; }
     }
 

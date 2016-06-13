@@ -44,6 +44,7 @@ namespace WebUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
+            
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             { 
@@ -52,6 +53,7 @@ namespace WebUI.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
+                    ViewData["UserId"] = user.Id;
                     if (string.IsNullOrEmpty(returnUrl))
                         return RedirectToAction("TaskList", "Task");
                     return RedirectToLocal(returnUrl);

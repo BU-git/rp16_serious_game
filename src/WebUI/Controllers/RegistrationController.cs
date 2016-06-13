@@ -217,8 +217,7 @@ namespace WebUI.Controllers
             }
 
             var avatars = await _dal.GetAllAvatarsWithPrice(0);
-            var model = new AvatarsViewModel { Avatars = avatars };
-            return View(model);
+            return View(avatars);
         }
 
         [HttpPost]
