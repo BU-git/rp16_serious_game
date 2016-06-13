@@ -1,6 +1,7 @@
-﻿@model WebUI.ViewModels.Registration.AvatarsViewModel
+﻿@model List<Domain.Entities.Avatar>
 @{
     ViewBag.Title = "Registration | Step Three";
+    Layout = "_Layout";
 }
 
 <div class="ui text container">
@@ -25,11 +26,10 @@
         </div>
     </div>
     <form class="ui form segment attached" id="userForm">
-        <input asp-for="AvatarId" type="hidden" id="avatarId" />
         <div class="ui grid">
             <div class="twelve wide centered column">
                 <ul class="ui bxslider centered aligned bxslider-unshifted">
-                    @foreach (var avatar in Model?.Avatars)
+                    @foreach (var avatar in Model)
                     {
                         <li id=@avatar.AvatarId>
                             <img src=@avatar.Media.MainPath alt="Avatar ID: @avatar.AvatarId" class="img-centered"/>

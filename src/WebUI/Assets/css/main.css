@@ -83,3 +83,24 @@
     #sidebar > * {
         max-width: 250px; /* leave some space for vertical scrollbar */
     }
+
+.centered-image {
+    margin: 0 auto;
+}
+
+#money-tag {
+    -ms-border-radius: 30px !important;
+    border-radius: 30px !important;
+}
+
+.unbordered-card-image {
+    border: none !important;
+}
+
+#avatar-img > *,
+#avatar-img > *:before,
+#avatar-img > *:after {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}

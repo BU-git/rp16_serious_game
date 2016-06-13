@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
@@ -191,12 +192,8 @@ namespace WebUI.Controllers
         public async Task<IActionResult> ChangeAvatar()
         {
             var user = await GetCurrentUserAsync();
-            var avatarViewModel = new AvatarsViewModel();
-            foreach (var userAvatar in user.ApplicationUser_Avatars)
-            {
-                avatarViewModel.Avatars.Add(userAvatar.Avatar);
-            }
-            return View(avatarViewModel);
+            var avatars = await _dal.FindAvailableAvatars(user);
+            return View(avatars);
         }
 
         [HttpPost]
@@ -204,7 +201,7 @@ namespace WebUI.Controllers
         {
             var user = await GetCurrentUserAsync();
             var avatar = await _dal.GetAvatarById(avatarId);
-            await _dal.UpdateUserAvatar(avatar, user);
+            await _dal.UpdateUserAvailableAvatars(avatar, user);
             return RedirectToAction("TaskList", "Task");
         }
 

@@ -30,10 +30,9 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> TaskList()
+        public IActionResult TaskList()
         {
             var model = new TaskListViewModel();
-
             return View(model);
         }
 
@@ -54,7 +53,7 @@ namespace WebUI.Controllers
                         case "ResolvedTasks":
                             userTasks =
                                 userTasks.Where(
-                                     x => x.Status == Status.Resolved ).ToList();
+                                     x => x.Status == Status.Resolved).ToList();
                             break;
                         case "AssignedTasks":
                             userTasks =
@@ -64,7 +63,7 @@ namespace WebUI.Controllers
                         case "VerifiedTasks":
                             userTasks =
                                 userTasks.Where(
-                                     x => x.Status == Status.Closed || x.Status == Status.Completed ).ToList();
+                                     x => x.Status == Status.Closed || x.Status == Status.Completed).ToList();
                             break;
                         default:
                             userTasks =
@@ -73,7 +72,7 @@ namespace WebUI.Controllers
                             break;
                     }
 
-                    
+
                 }
             }
             else if (role.Contains("Coach"))
@@ -116,7 +115,7 @@ namespace WebUI.Controllers
             }
 
             var model = new TaskListViewModel(userTasks);
-            return PartialView("_TaskList",model);
+            return PartialView("_TaskList", model);
         }
 
         [ActionName("ViewAppTask")]
@@ -170,7 +169,7 @@ namespace WebUI.Controllers
                     var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
                     Filename = parsedContentDisposition.FileName.Trim('"');
                     string uploadPath = UploadDestination + Filename;
-                    
+
                     //save the file to upload destination
                     file.SaveAs(uploadPath);
                 }
@@ -206,7 +205,7 @@ namespace WebUI.Controllers
             }
             else
             {
-                return await TaskList();
+                return TaskList();
             }
         }
 
@@ -215,8 +214,7 @@ namespace WebUI.Controllers
         {
 
             UserTask task = _dal.FindUserTaskById(taskId);
-            TaskViewModel taskModel = new TaskViewModel(task);
-            taskModel.Comments = await GetTaskComments(task.Id);
+            TaskViewModel taskModel = new TaskViewModel(task) {Comments = await GetTaskComments(task.Id)};
             return View("ViewTask", taskModel);
         }
 
@@ -305,7 +303,7 @@ namespace WebUI.Controllers
         {
             if (!User.IsInRole("Coach"))
             {
-                return await TaskList();
+                return TaskList();
             }
 
             var currentUser = await GetCurrentUserAsync();
@@ -327,24 +325,23 @@ namespace WebUI.Controllers
                 foreach (var user in _dal.GetUserGroupUsers(userGroup)
                     .Where(u => u.Id != currentUser.Id))
                 {
-                    var stats = new UserWithStatsViewModel(user);
-                    stats.Tasks = _dal.GetUserTasks(user);
+                    var stats = new UserWithStatsViewModel(user) {Tasks = _dal.GetUserTasks(user)};
 
                     stats.CompletedTasks = stats.Tasks.Count(
-                        t => t.Status == Status.Completed || 
+                        t => t.Status == Status.Completed ||
                         t.Status == Status.Resolved);
 
                     stats.TasksLeft = stats.Tasks
-                        .Count(t => t.Status == Status.Open || 
+                        .Count(t => t.Status == Status.Open ||
                         t.Status == Status.Reopened);
 
                     List<DailyStatistics> monthlyReport = new List<DailyStatistics>();
-                    
+
                     var dailyStats = (from task in stats.Tasks
-                        where task.ResolutionDate > DateTime.Now.AddDays(-DateTime.Now.Day) //Get statistics from the beggining of the month
-                        group task by task.ResolutionDate?.Day
+                                      where task.ResolutionDate > DateTime.Now.AddDays(-DateTime.Now.Day) //Get statistics from the beggining of the month
+                                      group task by task.ResolutionDate?.Day
                         into tasksByDays
-                        select new DailyStatistics(tasksByDays.Count(), tasksByDays.Key, DateTime.Now.Month)).ToList();
+                                      select new DailyStatistics(tasksByDays.Count(), tasksByDays.Key, DateTime.Now.Month)).ToList();
 
                     for (int i = 0; i < DateTime.Now.Day; i++)
                     {
@@ -354,7 +351,7 @@ namespace WebUI.Controllers
                     }
 
                     stats.TasksByDays = monthlyReport;
-                    
+
                     groupVm.UserStats.Add(stats);
                 }
 
@@ -362,7 +359,7 @@ namespace WebUI.Controllers
                         .Count(t => t.Status == Status.Completed ||
                         t.Status == Status.Resolved);
                 groupVm.TasksLeft = groupVm.UserTasks
-                    .Count(t => t.Status == Status.Open || 
+                    .Count(t => t.Status == Status.Open ||
                     t.Status == Status.Reopened);
 
                 statistics.GroupsTasks.Add(groupVm);
@@ -374,7 +371,7 @@ namespace WebUI.Controllers
         //[HttpPost]
         //public async Task<JsonResult> GetStatistics()
         //{
-            
+
         //}
 
         //[ActionName("ViewTask")]

@@ -1,17 +1,14 @@
-﻿@model WebUI.ViewModels.AvatarMarket.AvatarViewModel
+﻿@model Domain.Entities.Avatar
 
-<div class="content content-unpadded">
-    <span class="right floated star">
-        <a class="floating ui yellow circular label">@Html.DisplayFor(m => m.Avatar.Price)</a>
-    </span>
-</div>
-<div class="blurring dimmable image">
+<a class="floating ui yellow circular label bordered-tag"  id="money-tag">@Html.DisplayFor(m => m.Price)</a>
+<div class="ui middle aligned content blurring dimmable image unbordered-card-image">
     <div class="ui dimmer">
         <div class="content">
             <div class="center">
-                <div class="ui inverted button">Unlock Avatar</div>
+                <button class="ui inverted button">Unlock Avatar</button>
             </div>
         </div>
     </div>
-    <img src="@Model.Avatar.Media.AdditionalPath">
+    <img src="@Model.Media.AdditionalPath" class="centered-image">
 </div>
+

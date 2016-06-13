@@ -1,11 +1,11 @@
-﻿using System.Security.Claims;
+﻿using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Domain.Entities;
 using Interfaces;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
-using WebUI.ViewModels.AvatarMarket;
 
 namespace WebUI.Controllers
 {
@@ -25,13 +25,10 @@ namespace WebUI.Controllers
         public async Task<IActionResult> AvatarList()
         {
             var user = await GetCurrentUserAsync();
-            var avatars = await _dal.FindNotAvailableAvatars(user);
-            var avatarsViewModel = new AvatarsManyViewModel();
-            foreach (var avatar in avatars)
-            {
-                avatarsViewModel.AvatarViewModels.Add(new AvatarViewModel { Avatar = avatar });
-            }
-            return View(avatarsViewModel);
+            var avatars =
+                await
+                    _dal.FindNotAvailableAvatars(user);
+            return View(avatars);
         }
 
         [HttpPost]

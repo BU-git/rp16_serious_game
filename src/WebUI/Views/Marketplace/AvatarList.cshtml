@@ -1,4 +1,6 @@
-﻿@model WebUI.ViewModels.AvatarMarket.AvatarsManyViewModel
+﻿@using System.Threading.Tasks
+@using Domain.Entities
+@model List<Avatar>
 @{
     ViewData["Title"] = "Avatar List";
     Layout = "~/Views/Shared/_PageLayout.cshtml";
@@ -6,9 +8,9 @@
 <div class="ui very padded segment">
     <div class="ui four column stackable center aligned page grid">
         <div class="ui four tree stackable special cards">
-            @foreach (var avatar in Model.AvatarViewModels)
+            @foreach (var avatar in Model)
             {
-                using (Html.BeginForm("AvatarList", "Marketplace", new { avatarId = avatar.Avatar.AvatarId }, FormMethod.Post, new { @class = "card" }))
+                using (Html.BeginForm("AvatarList", "Marketplace", new { avatarId = avatar.AvatarId }, FormMethod.Post, new { @class = "card" }))
                 {
                     @Html.Partial("_AvatarView", avatar)
                 }

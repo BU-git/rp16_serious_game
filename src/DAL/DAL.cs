@@ -190,6 +190,24 @@ namespace DAL
             }
         }
 
+        public async Task<List<Avatar>> FindAvailableAvatars(ApplicationUser appUser)
+        {
+            try
+            {
+                var avatars =
+                    await _context.Avatars.Include(a => a.ApplicationUser_Avatars)
+                        .Include(avatar => avatar.Media)
+                        .Where(a => a.ApplicationUser_Avatars.Any(u => u.ApplicationUserId == appUser.Id))
+                        .OrderBy(avatar => avatar.Price)
+                        .ToListAsync();
+                return avatars;
+            }
+            catch (Exception)
+            {
+                throw new Exception("There is no such User in the system");
+            }
+        }
+
         public async Task<List<Avatar>> FindNotAvailableAvatars(ApplicationUser appUser)
         {
             try
@@ -197,6 +215,7 @@ namespace DAL
                 var avatars = await
                     _context.Avatars.Include(a => a.Media)
                         .Where(a => a.ApplicationUser_Avatars.All(u => u.ApplicationUserId != appUser.Id))
+                        .OrderBy(avatar => avatar.Price)
                         .ToListAsync();
                 return avatars;
             }
