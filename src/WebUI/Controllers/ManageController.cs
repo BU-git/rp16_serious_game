@@ -201,7 +201,7 @@ namespace WebUI.Controllers
         {
             var user = await GetCurrentUserAsync();
             var avatar = await _dal.GetAvatarById(avatarId);
-            await _dal.UpdateUserAvailableAvatars(avatar, user);
+            await _dal.UpdateUserAvatar(avatar, user);
             return RedirectToAction("TaskList", "Task");
         }
 

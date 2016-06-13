@@ -70,15 +70,15 @@
                     adaptiveHeight: true,
                     slideWidth: 400,
                     useCSS: true,
-                    touchEnabled: true
+                    touchEnabled: true,
+                    infiniteLoop: false
                 });
             $('.bx-wrapper').css('margin-bottom', '0');
         });
         $("#successMessage").hide(0);
         $("#submitUser").click(function () {
             if ($("#userForm").valid()) {
-                var slider = $('.bxslider').bxSlider();
-                var data = slider.getCurrentSlideElement().attr('id');
+                var data = $("li:visible").attr('id');
                 $('#page-dimmer').addClass('active');
                 $.post({
                     url: "/Registration/StepThree",
@@ -91,8 +91,7 @@
                 }).fail(function () {
                     $('#page-dimmer').removeClass('active');
                     alert("Something went wrong..\nPlease repeat the registration");
-                    $("#userForm").hide();
-                    $("#familyForm").show();
+                    $("#userForm").show();
                 });
                 return true;
             } else {

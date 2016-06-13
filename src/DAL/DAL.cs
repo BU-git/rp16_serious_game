@@ -501,7 +501,7 @@ namespace DAL
         {
             try
             {
-                var avatar = await _context.Avatars.FirstAsync(avatar1 => avatar1.AvatarId == id);
+                var avatar = await _context.Avatars.Include(avatar1 => avatar1.Media).FirstAsync(avatar1 => avatar1.AvatarId == id);
                 return avatar;
             }
             catch (NullReferenceException)
