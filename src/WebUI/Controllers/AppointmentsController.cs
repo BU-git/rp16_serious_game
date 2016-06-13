@@ -26,7 +26,10 @@ namespace WebUI.Controllers
             var apps = (await _dal.GetUserAppointments(HttpContext.User.GetUserId())).OrderBy(a => a.Start);//.Where(a=>a.Start >= DateTime.Now);
             var avm = apps.Select(appointment => new AppointmentViewModel()
             {
-                Id = appointment.Id, Description = appointment.Description, Start = appointment.Start, End = appointment.End
+                Id = appointment.Id,
+                Description = appointment.Description,
+                Start = appointment.Start,
+                End = appointment.End
             }).ToList();
             return View(avm);
         }

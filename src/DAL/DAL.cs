@@ -514,13 +514,20 @@ namespace DAL
             }
         }
 
-        public string GetAvatarPathByUserId(string userId)
+        public async Task<string> GetAvatarPathByUserId(string userId)
         {
             try
             {
-                var avatarId = _context.Users.First(user => user.Id == userId).CurrentAvatarId; //TODO: add path to default avatar if not found
-                var path = _context.Avatars.First(avatar1 => avatar1.AvatarId == avatarId).Media.MainPath;
-                return path;
+                var user = await _userManager.FindByIdAsync(userId);
+                if (user.CurrentAvatarId != null)
+                {
+                    var avatarId = user.CurrentAvatarId.Value;
+                    var avatar =
+                        _context.Avatars.Include(av => av.Media).ToList().First(x => x.AvatarId == avatarId);
+                    var path = avatar?.Media.MainPath ?? "https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png";
+                    return path;
+                }
+                return null;
             }
             catch (NullReferenceException)
             {

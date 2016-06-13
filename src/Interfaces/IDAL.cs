@@ -90,7 +90,7 @@ namespace Interfaces
         UserTask FindUserTaskById(int id);
         Avatar GetUserAvatarFromContext(ApplicationUser user);
         Avatar GetUserAvatarByUserId(string userId);
-        string GetAvatarPathByUserId(string userId);
+        Task<string> GetAvatarPathByUserId(string userId);
         Task<Avatar> GetAvatarById(int id);
         Task<IdentityResult> UpdateUserAvatar(Avatar avatar, ApplicationUser appUser);
         Task<List<Avatar>> GetAllAvatarsAsync();

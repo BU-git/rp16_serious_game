@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+@using Microsoft.AspNet.Http
+<!DOCTYPE html>
 <html class="unpadded">
 <head>
     <meta charset="utf-8" />
@@ -79,7 +81,8 @@
         <div class="ui secondary vertical pointing menu large">
             <div class="ui card">
                 <div class="image">
-                    <img style="width: 100%" src="https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png" alt="Avatar">
+                    <avatar class="avatar-wide" user-id="@Context.User.GetUserId()" alt="avatar"/>
+                    @*<img style="width: 100%" src="https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png" alt="Avatar">*@
                 </div>
                 <div class="content">
                     <a class="header">Name</a>
