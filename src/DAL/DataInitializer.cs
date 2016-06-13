@@ -17,7 +17,7 @@ namespace DAL
         private readonly IDAL _dal;
 
         public DataInitializer(ApplicationDbContext context, UserManager<ApplicationUser> userManager,
-            RoleManager<IdentityRole> roleManager , IDAL dal)
+            RoleManager<IdentityRole> roleManager, IDAL dal)
         {
             _context = context;
             _userManager = userManager;
@@ -39,28 +39,28 @@ namespace DAL
             var role1 = await _roleManager.FindByNameAsync("Admin");
             if (role1 == null)
             {
-                var adminRole = new IdentityRole {Name = "Admin"};
+                var adminRole = new IdentityRole { Name = "Admin" };
                 await _roleManager.CreateAsync(adminRole);
             }
 
             var role2 = await _roleManager.FindByNameAsync("Participant");
             if (role2 == null)
             {
-                var participant = new IdentityRole {Name = "Participant"};
+                var participant = new IdentityRole { Name = "Participant" };
                 await _roleManager.CreateAsync(participant);
             }
 
             var role3 = await _roleManager.FindByNameAsync("Coach");
             if (role3 == null)
             {
-                var coach = new IdentityRole {Name = "Coach"};
+                var coach = new IdentityRole { Name = "Coach" };
                 await _roleManager.CreateAsync(coach);
             }
 
             var role4 = await _roleManager.FindByNameAsync("Governor");
             if (role4 == null)
             {
-                var governor = new IdentityRole {Name = "Governor"};
+                var governor = new IdentityRole { Name = "Governor" };
                 await _roleManager.CreateAsync(governor);
             }
 
@@ -69,6 +69,7 @@ namespace DAL
 
         private async Task CreateUsersAsync()
         {
+            var avatar = await _dal.GetAvatarById(1);
             var user1 = await _userManager.FindByEmailAsync("Admin@admin.com");
             if (user1 == null)
             {
@@ -108,8 +109,6 @@ namespace DAL
                 };
                 await _userManager.CreateAsync(firstCoach, "User2016!");
                 await _userManager.AddToRoleAsync(firstCoach, "Coach");
-
-
             }
 
             var user4 = await _userManager.FindByEmailAsync("SecondCoach@coach.com");
@@ -137,6 +136,8 @@ namespace DAL
                 };
                 await _userManager.CreateAsync(participant, "User2016!");
                 await _userManager.AddToRoleAsync(participant, "Participant");
+                await _dal.UpdateUserAvailableAvatars(avatar, participant);
+                await _dal.UpdateUserAvatar(avatar, participant);
             }
 
             var user6 = await _userManager.FindByEmailAsync("SecondParticipant@participant.com");
@@ -150,6 +151,8 @@ namespace DAL
                 };
                 await _userManager.CreateAsync(secondParticipant, "User2016!");
                 await _userManager.AddToRoleAsync(secondParticipant, "Participant");
+                await _dal.UpdateUserAvailableAvatars(avatar, secondParticipant);
+                await _dal.UpdateUserAvatar(avatar, secondParticipant);
             }
 
             var user7 = await _userManager.FindByEmailAsync("Governor@governor.com");
@@ -269,7 +272,7 @@ namespace DAL
                         ExpireDt = new DateTime(2016, 08, 08),
                         Status = Status.Open,
                         TaskId = firstTask.Id,
-                        Text =   firstTask.Text,
+                        Text = firstTask.Text,
                         UserId = user.Id,
                     };
                     _context.Add(userTask1);
@@ -330,158 +333,158 @@ namespace DAL
         {
             if (!_context.Avatars.Any())
             {
-                var avatar = new Avatar
-                {
-                    Price = 0,
-                };
                 var media = new Media
                 {
                     Type = Type.Image,
                     MainPath = "~/assets/images/Level_0.png",
-                    Avatar = avatar,
+                };
+                var avatar = new Avatar
+                {
+                    Price = 0,
+                    Media = media
                 };
                 _context.Medias.Add(media);
                 _context.Avatars.Add(avatar);
-                var avatar1 = new Avatar
-                {
-                    Price = 0,
-                };
                 var media1 = new Media
                 {
                     Type = Type.Image,
                     MainPath = "~/assets/images/Level_1.png",
                     AdditionalPath = "~/assets/images/Level_1_blocked.png",
-                    Avatar = avatar1,
+                };
+                var avatar1 = new Avatar
+                {
+                    Price = 0,
+                    Media = media1
                 };
                 _context.Medias.Add(media1);
                 _context.Avatars.Add(avatar1);
-                var avatar2 = new Avatar
-                {
-                    Price = 20,
-                };
                 var media2 = new Media
                 {
                     Type = Type.Image,
                     MainPath = "~/assets/images/Level_2.png",
                     AdditionalPath = "~/assets/images/Level_2_blocked.png",
-                    Avatar = avatar2,
+                };
+                var avatar2 = new Avatar
+                {
+                    Price = 10,
+                    Media = media2
                 };
                 _context.Medias.Add(media2);
                 _context.Avatars.Add(avatar2);
-                var avatar3 = new Avatar
-                {
-                    Price = 30,
-                };
                 var media3 = new Media
                 {
                     Type = Type.Image,
                     MainPath = "~/assets/images/Level_3.png",
                     AdditionalPath = "~/assets/images/Level_3_blocked.png",
-                    Avatar = avatar3,
+                };
+                var avatar3 = new Avatar
+                {
+                    Price = 20,
+                    Media = media3
                 };
                 _context.Medias.Add(media3);
                 _context.Avatars.Add(avatar3);
-                var avatar4 = new Avatar
-                {
-                    Price = 40,
-                };
                 var media4 = new Media
                 {
                     Type = Type.Image,
                     MainPath = "~/assets/images/Level_4.png",
                     AdditionalPath = "~/assets/images/Level_4_blocked.png",
-                    Avatar = avatar4,
+                };
+                var avatar4 = new Avatar
+                {
+                    Price = 30,
+                    Media = media4
                 };
                 _context.Medias.Add(media4);
                 _context.Avatars.Add(avatar4);
-                var avatar5 = new Avatar
-                {
-                    Price = 50,
-                };
                 var media5 = new Media
                 {
                     Type = Type.Image,
                     MainPath = "~/assets/images/Level_5.png",
                     AdditionalPath = "~/assets/images/Level_5_blocked.png",
-                    Avatar = avatar5,
+                };
+                var avatar5 = new Avatar
+                {
+                    Price = 40,
+                    Media = media5
                 };
                 _context.Medias.Add(media5);
                 _context.Avatars.Add(avatar5);
-                var avatar6 = new Avatar
-                {
-                    Price = 60,
-                };
                 var media6 = new Media
                 {
                     Type = Type.Image,
                     MainPath = "~/assets/images/Level_6.png",
                     AdditionalPath = "~/assets/images/Level_6_blocked.png",
-                    Avatar = avatar6,
+                };
+                var avatar6 = new Avatar
+                {
+                    Price = 50,
+                    Media = media6
                 };
                 _context.Medias.Add(media6);
                 _context.Avatars.Add(avatar6);
-                var avatar7 = new Avatar
-                {
-                    Price = 70,
-                };
                 var media7 = new Media
                 {
                     Type = Type.Image,
                     MainPath = "~/assets/images/Level_7.png",
                     AdditionalPath = "~/assets/images/Level_7_blocked.png",
-                    Avatar = avatar7,
+                };
+                var avatar7 = new Avatar
+                {
+                    Price = 60,
+                    Media = media7
                 };
                 _context.Medias.Add(media7);
                 _context.Avatars.Add(avatar7);
-                var avatar8 = new Avatar
-                {
-                    Price = 80,
-                };
                 var media8 = new Media
                 {
                     Type = Type.Image,
                     MainPath = "~/assets/images/Level_8.png",
                     AdditionalPath = "~/assets/images/Level_8_blocked.png",
-                    Avatar = avatar8,
+                };
+                var avatar8 = new Avatar
+                {
+                    Price = 70,
+                    Media = media8
                 };
                 _context.Medias.Add(media8);
                 _context.Avatars.Add(avatar8);
-                var avatar9 = new Avatar
-                {
-                    Price = 90,
-                };
                 var media9 = new Media
                 {
                     Type = Type.Image,
                     MainPath = "~/assets/images/Level_9.png",
                     AdditionalPath = "~/assets/images/Level_9_blocked.png",
-                    Avatar = avatar9,
+                };
+                var avatar9 = new Avatar
+                {
+                    Price = 80,
+                    Media = media9
                 };
                 _context.Medias.Add(media9);
                 _context.Avatars.Add(avatar9);
-                var avatar10 = new Avatar
-                {
-                    Price = 100,
-                };
                 var media10 = new Media
                 {
                     Type = Type.Image,
                     MainPath = "~/assets/images/Level_10.png",
                     AdditionalPath = "~/assets/images/Level_10_blocked.png",
-                    Avatar = avatar10,
+                };
+                var avatar10 = new Avatar
+                {
+                    Price = 90,
+                    Media = media10
                 };
                 _context.Medias.Add(media10);
                 _context.Avatars.Add(avatar10);
-                var avatar6_2 = new Avatar
-                {
-                    Price = 60,
-                };
                 var media6_2 = new Media
                 {
                     Type = Type.Image,
                     MainPath = "~/assets/images/Level_6(2).png",
                     AdditionalPath = "~/assets/images/Level_6(2)_blocked.png",
-                    Avatar = avatar6_2
+                };
+                var avatar6_2 = new Avatar
+                {
+                    Price = 60,
+                    Media = media6_2
                 };
                 _context.Medias.Add(media6_2);
                 _context.Avatars.Add(avatar6_2);
