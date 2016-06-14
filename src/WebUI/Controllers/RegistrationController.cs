@@ -30,18 +30,14 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Coach")]
         public IActionResult StepOne()
         {
-            if (!User.IsInRole("Coach"))
-            {
-                TempData["warn"] = "Access denied.";
-                return RedirectToAction("TaskList", "Task");
-            }
-
             return View(new MainFamilyData());
         }
 
         [HttpPost]
+        [Authorize(Roles = "Coach")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> StepOne([FromForm]MainFamilyData regVm)
         {
@@ -88,9 +84,9 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> StepTwo(int id)
+        public async Task<IActionResult> StepTwo(int familyId)
         {
-            var userGroup = await _dal.GetUserGroupById(id);
+            var userGroup = await _dal.GetUserGroupById(familyId);
             var currentUser = await GetCurrentUserAsync();
 
             if (User.IsInRole("Coach") || userGroup == null)

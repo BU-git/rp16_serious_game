@@ -153,6 +153,30 @@ namespace WebUI
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                    name: "ResetPassword",
+                    template: "Account/ResetPassword/{code?}",
+                    defaults: new { controller = "Account", action = "ResetPassword"});
+                routes.MapRoute(
+                    name: "ManageMessage",
+                    template: "Manage/{message?}",
+                    defaults: new { controller = "Manage", action = "Index" });
+                routes.MapRoute(
+                    name: "AvatarList",
+                    template: "Marketplace/{avatarId?}",
+                    defaults: new { controller = "Marketplace", action = "AvatarList" });
+                routes.MapRoute(
+                    name: "RegStep1",
+                    template: "Registration/Step/1",
+                    defaults: new { controller = "Registration", action = "StepOne" });
+                routes.MapRoute(
+                    name: "RegStep2",
+                    template: "Registration/Step/2/{familyId}",
+                    defaults: new { controller = "Registration", action = "StepTwo" });
+                routes.MapRoute(
+                    name: "RegStep3",
+                    template: "Registration/Step/3/{avatarId?}",
+                    defaults: new { controller = "Registration", action = "StepThree" });
+                routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
