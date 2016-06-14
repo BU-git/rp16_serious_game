@@ -5,26 +5,7 @@
 }
 
 <div class="ui text container">
-    <div class="ui steps top attached center aligned">
-        <div class="step">
-            <div class="content">
-                <div class="title">Step 1</div>
-                <div class="description">Create new family</div>
-            </div>
-        </div>
-        <div class="step">
-            <div class="content">
-                <div class="title">Step 2</div>
-                <div class="description">Enter information about family members</div>
-            </div>
-        </div>
-        <div class="active step">
-            <div class="content">
-                <div class="title">Step 3</div>
-                <div class="description">Choose an avatar</div>
-            </div>
-        </div>
-    </div>
+    @{ await Html.RenderPartialAsync("_RegistrationSteps", 3);}
     <form class="ui form segment attached" id="userForm">
         <div class="ui grid">
             <div class="twelve wide centered column">
