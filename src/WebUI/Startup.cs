@@ -158,8 +158,24 @@ namespace WebUI
                     defaults: new { controller = "Account", action = "ResetPassword"});
                 routes.MapRoute(
                     name: "ManageMessage",
-                    template: "Manage/{message?}",
+                    template: "Manage/Index/{message?}",
                     defaults: new { controller = "Manage", action = "Index" });
+                routes.MapRoute(
+                    name: "ManageInfo",
+                    template: "Manage/Edit/Info",
+                    defaults: new { controller = "Manage", action = "EditPersonalInformation" });
+                routes.MapRoute(
+                    name: "ManagePassword",
+                    template: "Manage/Edit/Password",
+                    defaults: new { controller = "Manage", action = "ChangePassword" });
+                routes.MapRoute(
+                    name: "SetPassword",
+                    template: "Manage/Edit/SetPass",
+                    defaults: new { controller = "Manage", action = "SetPassword" });
+                routes.MapRoute(
+                    name: "ManageAvatar",
+                    template: "Manage/Edit/Avatar",
+                    defaults: new { controller = "Manage", action = "ChangeAvatar" });
                 routes.MapRoute(
                     name: "AvatarList",
                     template: "Marketplace/{avatarId?}",

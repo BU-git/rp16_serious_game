@@ -3,11 +3,12 @@
     ViewData["Title"] = "Manage your account";
 }
 
-<div class="ui text container" style="bottom: 5px; top: 10px">
-    <h2 class="ui header bottom attached center aligned">Change your account settings</h2>
-    <div class="ui text container center aligned">
+
+<div class="ui text container">
+    <h2 class="ui header top attached center aligned">Manage your account</h2>
+    <div class="ui text attached container segment center aligned">
         @if (ViewData["StatusMessage"] != null && ViewData["StatusMessage"]?.ToString() != "")
-        {
+            {
             <div class="ui info message large">
                 <i class="close icon"></i>
                 <div class="header">
@@ -15,24 +16,29 @@
                 </div>
             </div>
         }
-        <div class="ui two buttons">
-            <div class="button">
-                <a asp-action="EditPersonalInformation" class="ui button">Edit personal information</a>
-            </div>
-            <div class="button">
-                @if (Model.HasPassword)
-                {
-                    <a asp-controller="Manage" asp-action="ChangePassword" class="ui button blue">Change password</a>
-                }
-                else
-                {
-                    <a asp-controller="Manage" asp-action="SetPassword" class="ui button green">Create password</a>
-                }
-            </div>
-            <div class="field eight wide">
-                <a asp-action="ChangeAvatar" class="ui button">Change Avatar</a>
-            </div>
+        <div class="ui top attached tabular menu three buttons">
+            <a asp-action="EditPersonalInformation" class="item button">Personal information</a>
+            @if (Model.HasPassword)
+            {
+                <a asp-controller="Manage" asp-action="ChangePassword" class="item button">Password</a>
+            }
+            else
+            {
+                <a asp-controller="Manage" asp-action="SetPassword" class="item button">Create password</a>
+            }
+            <a asp-action="ChangeAvatar" class="item button">Avatar</a>
         </div>
+        @*<div class="ui two buttons">
+                <div class="button">
+                    <a asp-action="EditPersonalInformation" class="ui button">Edit personal information</a>
+                </div>
+                <div class="button">
+
+                </div>
+                <div class="field eight wide">
+                    <a asp-action="ChangeAvatar" class="ui button">Change Avatar</a>
+                </div>
+            </div>*@
     </div>
 </div>
 

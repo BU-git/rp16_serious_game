@@ -32,6 +32,8 @@ namespace WebUI.Controllers
         public IActionResult Login(string returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+
+            
             if (string.IsNullOrEmpty(returnUrl))
                 return RedirectToAction("TaskList", "Task");
             return View();
@@ -175,6 +177,12 @@ namespace WebUI.Controllers
         [HttpGet]
         [AllowAnonymous]
         public IActionResult ResetPasswordConfirmation()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult AccessDenied()
         {
             return View();
         }
