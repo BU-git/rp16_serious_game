@@ -205,7 +205,8 @@ namespace WebUI.Controllers
             }
             else
             {
-                return TaskList();
+                TempData["warn"] = $"There is no such region: {region}";
+                return RedirectToAction("TaskList");
             }
         }
 

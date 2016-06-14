@@ -532,7 +532,7 @@ namespace DAL
                     var path = avatar?.Media.MainPath ?? "https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png";
                     return path;
                 }
-                return null;
+                return "https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png";
             }
             catch (NullReferenceException)
             {
