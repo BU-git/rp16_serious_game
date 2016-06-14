@@ -42,10 +42,6 @@
         right: 55px;
         bottom: 40px;
     }
-
-    #mapDiv {
-        top: -20px;
-    }
 </style>
 
 <div class="ui segments" id="mapDiv">
@@ -166,7 +162,7 @@
                 else if (row >= 19 && row < 22) row = 7;
                 else return;
 
-                window.location.replace('@Url.Action("ViewTasksByRegion", "Task")?region=' + regions[row]);
+                window.location.replace('Region/' + regions[row]);
                 return;
             }
         };

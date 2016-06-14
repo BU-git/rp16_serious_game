@@ -192,7 +192,7 @@ namespace WebUI.Controllers
             return Content("Success :)");
         }
 
-        // GET: /Task/Region/
+        // GET: /Task/Region/region
         public async Task<IActionResult> ViewTasksByRegion(string region)
         {
             var user = await GetCurrentUserAsync();

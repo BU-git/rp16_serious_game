@@ -193,6 +193,10 @@ namespace WebUI
                     template: "Registration/Step/3/{avatarId?}",
                     defaults: new { controller = "Registration", action = "StepThree" });
                 routes.MapRoute(
+                    name: "TasksByRegion",
+                    template: "Task/Region/{region}",
+                    defaults: new { controller = "Task", action = "ViewTasksByRegion" });
+                routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
