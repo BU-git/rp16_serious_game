@@ -283,17 +283,19 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AsignTask(string userId, int appTaskId, string expireDt, string text, int coins)
+        public async Task<IActionResult> AsignTask(string name,string userId, int appTaskId, string expireDt, string text, int coins, string region)
         {
             DateTime expire = DateTime.Parse(expireDt);
             UserTask task = new UserTask()
             {
+                Name =name,
                 Coins = coins,
                 Status = Status.Open,
                 TaskId = appTaskId,
                 Text = text,
                 UserId = userId,
-                ExpireDt = expire
+                ExpireDt = expire,
+                Region = (Region)Enum.Parse(typeof(Region),region,false)
             };
             await _dal.AssignTaskAsync(task);
             return RedirectToAction("TaskList");

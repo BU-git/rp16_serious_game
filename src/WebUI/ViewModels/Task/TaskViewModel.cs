@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace WebUI.ViewModels.Task
 {
@@ -14,6 +15,8 @@ namespace WebUI.ViewModels.Task
         public string Text { get; set; }
         public DateTime Recurency { get; set; }
         public int Coins { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
         public DateTime? ExpireDt { get; set; }
         public Status Status { get; set; }
         public DateTime? ResolutionDate { get; set; }
@@ -45,10 +48,14 @@ namespace WebUI.ViewModels.Task
 
         public TaskViewModel(UserTask userTask)
         {
-            if (userTask.ApplicationTask != null)
+            if (userTask.ApplicationTask != null & userTask.Name == null)
             {
                 Name = userTask.ApplicationTask.Name;
-                
+
+            }
+            else
+            {
+                this.Name = userTask.Name;
             }
 
             if (userTask.User != null) this.UserName = userTask.User.UserName;

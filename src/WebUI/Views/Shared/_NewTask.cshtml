@@ -21,7 +21,11 @@
                     @Html.DisplayNameFor(x => x.Coins)
                 </div>
                 @*@Html.HiddenFor(x => x.Coins)*@
-                @Html.EditorFor(x=>x.Coins,new { placeholder = "Coins" })
+                @Html.EditorFor(x=>x.Coins,new { htmlAttributes = new { placeholder = "Coins", id = "coins", min = "0", max = "100" } })
+
+                @Html.HiddenFor(x => x.Region)
+
+
                 @Html.HiddenFor(x=>x.UserId)
                 @Html.HiddenFor(x=>x.AppTaskId)
                 @Html.HiddenFor(x => x.Name)
@@ -39,12 +43,22 @@
 
         <div class="content"  style="margin: 7px">
                    <div class="ui fluid icon input">
-                        <i class="calendar icon"></i>
-                       
-                        @*@Html.HiddenFor(x => x.ExpireDt)*@
-                       
-                        <input id="expireDt" type="text" name="expireDt" value="@DateTime.Today.ToString()" validate="RequiredField">
-                    </div>
+
+                       <div class="field">
+                           <div class="ui calendar" id="ExpireDt">
+                               <div class="ui input left icon">
+                                   <i class="calendar icon"></i>
+                                   <input asp-for="ExpireDt" placeholder="Start" required>
+                               </div>
+                               <span asp-validation-for="ExpireDt"></span>
+                           </div>
+                       </div>
+
+                       @*@Html.HiddenFor(x => x.ExpireDt)*@
+
+                       @*<div class="ui calendar" id="expireDt" type="text" name="expireDt" value="@DateTime.Today.ToString()" validate="RequiredField">
+                           </div>*@
+                       </div>
                
                 
         </div >
