@@ -27,24 +27,31 @@
     }
 
     #geochart-colors {
-        width: 100%;
-        height: 100%;
+        margin-left: -1.5%;
+        width: 101%;
     }
 
     #circularButton {
-        position: fixed; 
-        right: 50px; 
+        position: fixed;
+        right: 50px;
         bottom: 40px;
+    }
+
+    #toTasks {
+        position: fixed;
+        right: 55px;
+        bottom: 40px;
+    }
+
+    #mapDiv {
+        top: -20px;
     }
 </style>
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-
-<div class="ui segments">
+<div class="ui segments" id="mapDiv">
     @if (isCoach)
     {
-        <input type="hidden" value="ResolvedTasks" id="InitialTaskType"/>
+        <input type="hidden" value="ResolvedTasks" id="InitialTaskType" />
     }
     else
     {
@@ -61,6 +68,10 @@
     {
         <!--Google chart-->
         <div id="geochart-colors"></div>
+
+        <a class="ui icon button large inverted green" id="toTasks" href="#TaskTypeMenu">
+            <i class="dropdown icon"></i>
+        </a>
     }
 
 
@@ -83,6 +94,9 @@
 </div>
 
 @section Scripts{
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
     <script type="text/javascript">
         google.charts.load('current', { 'packages': ['geochart'] });
         google.charts.setOnLoadCallback(drawRegionsMap);
@@ -157,7 +171,7 @@
             }
         };
 
-        $('#TaskTypeMenu').on('click', 'a', function() {
+        $('#TaskTypeMenu').on('click', 'a', function () {
             var $j = jQuery.noConflict();
 
             $j(this).addClass('active').siblings().removeClass('active');
@@ -169,7 +183,7 @@
             var $j = jQuery.noConflict();
 
             var TaskType = $j('#InitialTaskType').val();
-            $j('#'+TaskType).addClass('active').siblings().removeClass('active');
+            $j('#' + TaskType).addClass('active').siblings().removeClass('active');
 
             ChangeTaskType(TaskType);
         });
@@ -178,7 +192,7 @@
             var $j = jQuery.noConflict();
 
             $j.get('/Task/PartialTaskList?type=' + taskType,
-                function(data) {
+                function (data) {
 
                     $j('#TaskListSection').html(data);
                     $j('#TaskListSection').fadeIn('fast');

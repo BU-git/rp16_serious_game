@@ -90,32 +90,22 @@ namespace WebUI.Controllers
         [HttpGet]
         public async Task<IActionResult> StepTwo(int id)
         {
-            if (User.IsInRole("Coach"))
-            {
-                TempData["warn"] = "Access denied.";
-                return RedirectToAction("TaskList", "Task");
-            }
-
             var userGroup = await _dal.GetUserGroupById(id);
-            if (userGroup == null)
+            var currentUser = await GetCurrentUserAsync();
+
+            if (User.IsInRole("Coach") || userGroup == null)
             {
                 TempData["warn"] = "Access denied.";
                 return RedirectToAction("TaskList", "Task");
             }
 
-            //var user = await GetCurrentUserAsync();
-            //if (user.ApplicationUser_UserGroups.Any(g => g.UserGroupId == userGroup.UserGroupId))
-            //{
-            //    TempData["warn"] = "Access denied.";
-            //    return RedirectToAction("TaskList", "Task");
-            //}
-
-            var familyInfo = new FamilyViewModel(userGroup)
+            if (!_dal.GetUserGroupUsers(userGroup).Contains(currentUser))
             {
-                Users = new List<UserViewModel>()
-            };
+                TempData["warn"] = "Access denied.";
+                return RedirectToAction("TaskList", "Task");
+            }
 
-            return View(familyInfo);
+            return View(new FamilyViewModel(userGroup));
         }
 
         [HttpPost]
@@ -192,7 +182,8 @@ namespace WebUI.Controllers
                     {
                         Login = u.Email,
                         Name = u.Name,
-                        Password = randomPass
+                        Password = randomPass,
+                        LinkUrl = $"{Url.Action("StepThree")}"
                     };
                     await _mailManager.SendRegistrationMailAsync(registrationMessage, u.Email);
                 }
