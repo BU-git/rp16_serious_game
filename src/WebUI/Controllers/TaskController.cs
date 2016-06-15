@@ -11,6 +11,8 @@ using Microsoft.AspNet.Identity;
 using System.Security.Claims;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNet.Http;
+using Microsoft.Extensions.PlatformAbstractions;
+using System.IO;
 
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -22,11 +24,13 @@ namespace WebUI.Controllers
     {
         private readonly IDAL _dal;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IApplicationEnvironment _appEnvironment;
 
-        public TaskController(IDAL dal, UserManager<ApplicationUser> userManager)
+        public TaskController(IDAL dal, UserManager<ApplicationUser> userManager, IApplicationEnvironment appEnvironment)
         {
             _dal = dal;
             _userManager = userManager;
+            _appEnvironment = appEnvironment;
         }
 
         [HttpGet]
@@ -126,6 +130,34 @@ namespace WebUI.Controllers
             return View(taskModel);
         }
 
+        public async Task<FileResult> GetImage(int id)
+        {
+            var imagePath = (await _dal.GetComment(id)).Image.MainPath;
+            string path = Path.Combine(_appEnvironment.ApplicationBasePath, imagePath);
+            byte[] mas = System.IO.File.ReadAllBytes(path);
+            string file_type = "application/octet-stream";
+            string file_name = Path.GetFileName(imagePath);
+            return File(mas, file_type, file_name);
+        }
+
+        public string GetImagePath(int commentId)
+        {
+            string src;
+            var imagePath = _dal.GetComment(commentId).Result.Image.MainPath;
+
+            if (Path.GetExtension(imagePath).ToLower() == ".jpg")
+            {
+                string path = Path.Combine(_appEnvironment.ApplicationBasePath, imagePath);
+                byte[] mas = System.IO.File.ReadAllBytes(path);
+
+                src = "data:image/jpeg;base64," + Convert.ToBase64String(mas);
+            }
+            else
+                src = $"/Task/GetImage/{commentId}";
+
+            return src;
+        }
+
         public List<CommentViewModel> CommentsToModel(List<Comment> comments)
         {
             return comments?.Select(c =>
@@ -136,13 +168,16 @@ namespace WebUI.Controllers
                     Author = c.Author.Name,
                     Text = c.Text,
                     Date = c.EditDate.ToString("dd.MM.yy HH:mm"),
+                    ImagePath = c.Image == null ? "" : GetImagePath(c.Id),
                     Children = CommentsToModel(c.Replies) ?? new List<CommentViewModel>()
                 }).ToList();
         }
 
         public async Task<List<CommentViewModel>> GetTaskComments(int taskId)
         {
-            var comments = (await _dal.GetTaskComments(taskId)).Where(c => c.ParentId == null).ToList();//get root level comments
+            var comments = (await _dal.GetTaskComments(taskId))
+                .Where(c => c.ParentId == null) //get root level comments
+                .ToList();
 
             return CommentsToModel(comments);
         }
@@ -155,39 +190,48 @@ namespace WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddComment(CommentViewModel commentModel, int id)
         {
-
+            var imageFolder = "Upload";
             var file = Request.Form.Files.GetFile("Image");
+            Media commentImage = null;
 
-            if (file != null)
+            if (file != null && file.ContentDisposition != null)
             {
-                string UploadDestination = $"upload/";
-                string Filename = "";
+                //parse uploaded file
+                var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+                string Filename = parsedContentDisposition.FileName.Trim('"');
+                string relativePath = Path.Combine(imageFolder, Filename);
+                string uploadPath = Path.Combine(_appEnvironment.ApplicationBasePath, relativePath);
 
-                if (file.ContentDisposition != null)
+                //check for folder existence
+                string dirPath = Path.Combine(_appEnvironment.ApplicationBasePath, imageFolder);
+                if (!Directory.Exists(dirPath))
+                    Directory.CreateDirectory(dirPath);
+
+                //check for duplicated filename
+                int n = 1;
+                while (System.IO.File.Exists(uploadPath))
                 {
-                    //parse uploaded file
-                    var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
-                    Filename = parsedContentDisposition.FileName.Trim('"');
-                    string uploadPath = UploadDestination + Filename;
-
-                    //save the file to upload destination
-                    file.SaveAs(uploadPath);
+                    string newFilename = Path.GetFileNameWithoutExtension(Filename) + $"({n})" + Path.GetExtension(Filename);
+                    relativePath = Path.Combine(imageFolder, newFilename);
+                    uploadPath = Path.Combine(_appEnvironment.ApplicationBasePath, relativePath);
+                    n++;
                 }
 
-                string Photo = Filename;
+                //save the file to upload destination
+                file.SaveAs(uploadPath);
 
-                if (Photo != "")
-                {
-                    Photo = Url.Content($"~/upload/{Photo}");
-                }
+                commentImage = new Media { Type = Domain.Entities.Type.Image, MainPath = relativePath };
             }
+
             var comment = new Comment
             {
                 ParentId = commentModel.ParentId,
                 Author = await _dal.GetUserById(HttpContext.User.GetUserId()),
                 Text = commentModel.Text,
-                EditDate = DateTime.Now
+                EditDate = DateTime.Now,
+                Image = commentImage
             };
+
             await _dal.AddComment(comment, id);
             return Content("Success :)");
         }

@@ -91,6 +91,9 @@ namespace DAL
             builder.Entity<Comment>()
                 .HasOne(c => c.Author);
 
+            builder.Entity<Comment>()
+                .HasOne(c => c.Image);
+
             builder.Entity<Task_Comment>()
                 .HasKey(t => new { t.TaskId, t.CommentId });
 
