@@ -21,6 +21,7 @@ namespace WebUI.ViewModels.Task
         public Status Status { get; set; }
         public DateTime? ResolutionDate { get; set; }
         public Region Region { get; set; }
+        public string Country { get; set; }
         public List<CommentViewModel> Comments { get; set; }
 
         public int TimeLeft
@@ -68,6 +69,7 @@ namespace WebUI.ViewModels.Task
             this.UserTaskId = userTask.Id;
             this.ResolutionDate = userTask.ResolutionDate;
             this.Region = userTask.Region;
+            
         }
     }
 }

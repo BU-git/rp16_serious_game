@@ -73,51 +73,76 @@
                         </div>
                     </td>
                 </tr>
+                <tr>
+
+                    <td>
+                        <div class="header">
+
+                            <h3>
+                                <i class="world icont"></i>Region
+                            </h3>
+
+                        </div>
+                        Select Region of the task
+                    </td>
+                    <td>
+                        <div id="TRegionList" class="ui fluid selection dropdown">
+                            <input id="region" type="hidden" name="region">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Select Region</div>
+                            <div class="menu">
+
+                                <div class="item" data-value="NorthAmerica">
+                                    Northern America
+                                </div>
+                                <div class="item" data-value="SouthAmerica">
+                                    Southern America
+                                </div>
+                                <div class="item" data-value="Africa">
+                                    Africa
+                                </div>
+                                <div class="item" data-value="Europe">
+                                    Europe
+                                </div>
+                                <div class="item" data-value="Australia">
+                                    Australia
+                                </div>
+                                <div class="item" data-value="NorthAsia">
+                                    Northern Asia
+                                </div>
+                                <div class="item" data-value="NearEast">
+                                    Near East
+                                </div>
+
+                                <div class="item" data-value="SouthAsia">
+                                    Southern Asia
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </td>
+                </tr>
                     <tr>
 
                         <td>
                             <div class="header">
 
                                 <h3>
-                                    <i class="list layout icon"></i>Region
+                                    <i class="list layout icon"></i>Country
                                 </h3>
 
                             </div>
-                            Select Region of the task
+                            Select Country
                         </td>
                         <td>
-                            <div id="TRegionList" class="ui fluid selection dropdown">
-                                <input id="region" type="hidden" name="region">
+                            <div id="CountryList" class="ui fluid selection dropdown">
+                                <input id="country" type="hidden" name="country">
                                 <i class="dropdown icon"></i>
-                                <div class="default text">Select Region</div>
-                                <div class="menu">
+                                <div class="default text">Select Task</div>
+                                <div class="menu" id="countryitems">
+                                   
 
-                                    <div class="item" data-value="NorthAmerica">
-                                        North America
-                                    </div>
-                                    <div class="item" data-value="SouthAmerica">
-                                        South America
-                                    </div>
-                                    <div class="item" data-value="Africa">
-                                        Africa
-                                    </div>
-                                    <div class="item" data-value="Europe">
-                                        Europe
-                                    </div>
-                                    <div class="item" data-value="Australia">
-                                        Australia
-                                    </div>
-                                    <div class="item" data-value="NorthAsia">
-                                        North Asia
-                                    </div>
-                                    <div class="item" data-value="NearEast">
-                                        Near East
-                                    </div>
-
-                                    <div class="item" data-value="SouthAsia">
-                                        South Asia
-                                    </div>
-                                    
 
                                 </div>
                             </div>
@@ -148,7 +173,33 @@
         
         $('#ExpireDt').calendar();
        
-       
+        $('#TRegionList').change(function () {
+            var $j = jQuery.noConflict();
+            var userId = $j('#userId').val();
+            var region = $j('#region').val();
+
+            var stateId = $j('#country').val();
+
+            $j.ajax({
+                url: '/Task/GetCountries?region=' + region + '&userId=' + userId,
+                type: "GET",
+                dataType: "JSON",
+               success: function (countries) {
+                   $j("#countryitems").html(""); // clear before appending new list 
+                   $j.each(countries, function (i, country) {
+                       $j("#countryitems").append(
+                            $j('<div class=\"item\" >'+country+'</div>').val(country).html(country));
+                       $j('#CountryList.ui.fluid.selection.dropdown')
+                           .dropdown();
+                   });
+                }
+            });
+
+
+
+
+
+        });
 
 
 
@@ -158,8 +209,9 @@
             var taskId = $j('#taskId').val();
             var userId = $j('#userId').val();
             var region = $j('#region').val();
-            if (!isEmpty(taskId) && !isEmpty(userId) && !isEmpty(region)) {
-                $j.get('/Task/RenderTask?id=' + taskId + '&userId=' + userId, function (data) {
+            var country = $j('#country').val();
+            if (!isEmpty(taskId) && !isEmpty(userId) && !isEmpty(region) && !isEmpty(country)) {
+                $j.get('/Task/RenderTask?id=' + taskId + '&userId=' + userId + '&region=' + region + '&country=' + country, function (data) {
 
                     $j('#ViewTask').html(data);
                     $j('#ViewTask').fadeIn('fast');
@@ -177,6 +229,8 @@
             .dropdown();
         $('#TRegionList.ui.fluid.selection.dropdown')
             .dropdown();
+        $('#CountryList.ui.fluid.selection.dropdown')
+           .dropdown();
 
         
 

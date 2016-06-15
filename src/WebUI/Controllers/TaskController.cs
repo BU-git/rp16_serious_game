@@ -11,6 +11,9 @@ using Microsoft.AspNet.Identity;
 using System.Security.Claims;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNet.Http;
+using WebUI.Services.Abstract;
+using WebUI.Services.Concrete;
+using Region = Domain.Entities.Region;
 
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -22,11 +25,14 @@ namespace WebUI.Controllers
     {
         private readonly IDAL _dal;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ICountryListProvider _countryProvider;
 
-        public TaskController(IDAL dal, UserManager<ApplicationUser> userManager)
+
+        public TaskController(IDAL dal, UserManager<ApplicationUser> userManager, ICountryListProvider  countryProvider)
         {
             _dal = dal;
             _userManager = userManager;
+            _countryProvider = countryProvider;
         }
 
         [HttpGet]
@@ -251,13 +257,83 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> RenderTask(int id, string userId)
+        public async Task<ActionResult> RenderTask(int id, string userId, string region, string country)
         {
             var appTask = _dal.FindTaskbyId(id);
             var user = await _dal.GetUserById(userId);
-            TaskViewModel task = new TaskViewModel(appTask) { UserId = user.Id, UserName = user.UserName };
+            var _region = (Region)Enum.Parse(typeof(Region), region.Replace(" ",""), false);
+
+            TaskViewModel task = new TaskViewModel(appTask) { UserId = user.Id, UserName = user.UserName, Region = _region ,Country = country };
             return PartialView("_NewTask", task);
         }
+
+
+        [HttpGet]
+        public async Task<JsonResult> GetCountries(string userId, string region)
+        {
+            List<string> subRegions = new List<string>();
+            List<string> countries = new List<string>();
+
+            switch (region)
+            {
+                case "NorthAmerica":
+                    subRegions.Add("Northern America");
+                    subRegions.Add("Caribbean");
+                    subRegions.Add("Central America");
+                    break;
+                case "SouthAmerica":
+                    subRegions.Add("South America");
+                    break;
+                case "Africa":
+                    subRegions.Add("Northern Africa");
+                    subRegions.Add("Western Africa");
+                    subRegions.Add("Middle Africa");
+                    subRegions.Add("Eastern Africa");
+                    subRegions.Add("Southern Africa");
+                    break;
+                case "Europe":
+                    subRegions.Add("Northern Europe");
+                    subRegions.Add("Western Europe");
+                    subRegions.Add("Southern Europe");
+                    
+                    break;
+                case "Australia":
+                    subRegions.Add("Australia and New Zealand");
+                    subRegions.Add("Melanesia");
+                    subRegions.Add("Micronesia");
+                    subRegions.Add("Polynesia");
+                    break;
+                case "NorthAsia":
+                    subRegions.Add("Eastern Europe");
+                    break;
+                case "NearEast":
+                    subRegions.Add("Central Asia");
+                    subRegions.Add("Eastern Asia");
+                    subRegions.Add("South-Eastern Asia");
+                    break;
+                case "SouthAsia":
+                    subRegions.Add("Southern Asia");
+                    subRegions.Add("Western Asia");
+                    break;
+                default:
+                    subRegions.Add("Western Europe");
+                    break;
+            }
+
+            foreach ( var subregion in subRegions)
+            {
+                var _countries = await _countryProvider.GetCountries(subregion);
+                countries.AddRange(_countries);
+            }
+
+            var _region = (Region)Enum.Parse(typeof(Region), region.Replace(" ", ""), false);
+            var user = await _dal.GetUserById(userId);
+            
+            
+
+            return Json(countries);
+        }
+        
 
         [HttpPost]
         public async Task<IActionResult> EditTask(string text, int coins, string command, int userTaskId)
@@ -283,9 +359,10 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AsignTask(string name,string userId, int appTaskId, string expireDt, string text, int coins, string region)
+        public async Task<IActionResult> AsignTask(string name,string userId, int appTaskId, string expireDt, string text, int coins, string region,string country)
         {
             DateTime expire = DateTime.Parse(expireDt);
+            var _region = (Region) Enum.Parse(typeof (Region), region, false);
             UserTask task = new UserTask()
             {
                 Name =name,
@@ -295,7 +372,8 @@ namespace WebUI.Controllers
                 Text = text,
                 UserId = userId,
                 ExpireDt = expire,
-                Region = (Region)Enum.Parse(typeof(Region),region,false)
+                Region = _region,
+                Country = country
             };
             await _dal.AssignTaskAsync(task);
             return RedirectToAction("TaskList");
