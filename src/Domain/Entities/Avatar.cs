@@ -6,7 +6,7 @@ namespace Domain.Entities
     {
         public Avatar()
         {
-            this.ApplicationUser_Avatars = new List<ApplicationUser_Avatar>();
+            ApplicationUser_Avatars = new List<ApplicationUser_Avatar>();
         }
 
         public int AvatarId { get; set; }

@@ -82,11 +82,6 @@ namespace DAL
                 .WithMany(avatar => avatar.ApplicationUser_Avatars)
                 .HasForeignKey(avatar => avatar.ApplicationUserId);
 
-            builder.Entity<Media>()
-                .HasOne(media => media.Avatar)
-                .WithOne(avatar => avatar.Media)
-                .HasForeignKey<Media>(media => media.AvatarId);
-
             builder.Entity<Comment>()
                 .HasOne(c => c.Parent)
                 .WithMany(c => c.Replies)
