@@ -154,6 +154,50 @@ namespace WebUI
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                    name: "ResetPassword",
+                    template: "Account/ResetPassword/{code?}",
+                    defaults: new { controller = "Account", action = "ResetPassword"});
+                routes.MapRoute(
+                    name: "ManageMessage",
+                    template: "Manage/Index/{message?}",
+                    defaults: new { controller = "Manage", action = "Index" });
+                routes.MapRoute(
+                    name: "ManageInfo",
+                    template: "Manage/Edit/Info",
+                    defaults: new { controller = "Manage", action = "EditPersonalInformation" });
+                routes.MapRoute(
+                    name: "ManagePassword",
+                    template: "Manage/Edit/Password",
+                    defaults: new { controller = "Manage", action = "ChangePassword" });
+                routes.MapRoute(
+                    name: "SetPassword",
+                    template: "Manage/Edit/SetPass",
+                    defaults: new { controller = "Manage", action = "SetPassword" });
+                routes.MapRoute(
+                    name: "ManageAvatar",
+                    template: "Manage/Edit/Avatar",
+                    defaults: new { controller = "Manage", action = "ChangeAvatar" });
+                routes.MapRoute(
+                    name: "AvatarList",
+                    template: "Marketplace/{avatarId?}",
+                    defaults: new { controller = "Marketplace", action = "AvatarList" });
+                routes.MapRoute(
+                    name: "RegStep1",
+                    template: "Registration/Step/1",
+                    defaults: new { controller = "Registration", action = "StepOne" });
+                routes.MapRoute(
+                    name: "RegStep2",
+                    template: "Registration/Step/2/{familyId}",
+                    defaults: new { controller = "Registration", action = "StepTwo" });
+                routes.MapRoute(
+                    name: "RegStep3",
+                    template: "Registration/Step/3/{avatarId?}",
+                    defaults: new { controller = "Registration", action = "StepThree" });
+                routes.MapRoute(
+                    name: "TasksByRegion",
+                    template: "Task/Region/{region}",
+                    defaults: new { controller = "Task", action = "ViewTasksByRegion" });
+                routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });

@@ -198,7 +198,7 @@ namespace WebUI.Controllers
             return Content("Success :)");
         }
 
-        // GET: /Task/Region/
+        // GET: /Task/Region/region
         public async Task<IActionResult> ViewTasksByRegion(string region)
         {
             var user = await GetCurrentUserAsync();
@@ -211,7 +211,8 @@ namespace WebUI.Controllers
             }
             else
             {
-                return TaskList();
+                TempData["warn"] = $"There is no such region: {region}";
+                return RedirectToAction("TaskList");
             }
         }
 

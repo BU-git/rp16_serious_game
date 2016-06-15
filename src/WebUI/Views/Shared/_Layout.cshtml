@@ -33,9 +33,10 @@
             @await Html.PartialAsync("_LoginPartial")
         </div>
     </div>
-    <div class="fluid container container-padded">
-        @RenderBody()
-    </div>
+<div class="fluid container container-padded">
+    @await Html.PartialAsync("_TempMessages")
+    @RenderBody()
+</div>
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>

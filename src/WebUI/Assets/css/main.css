@@ -61,17 +61,17 @@
 
 #content {
     position: relative;
-    left: 35vw;
-    margin-left: -14vw;
-    width: 75vw;
+    left: 35%;
+    margin-left: -14%;
+    width: 75%;
 }
 
 #sidebar {
     position: absolute;
     top: 0;
-    left: -5vw;
-    margin-left: 5vw;
-    width: 20vw;
+    left: -5%;
+    margin-left: 5%;
+    width: 20%;
     max-height: 100%;
     overflow: hidden;
 }

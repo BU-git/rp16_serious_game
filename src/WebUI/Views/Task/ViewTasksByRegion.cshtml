@@ -15,28 +15,46 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 <style>
-    #geochart-colors {
-        margin-left: -2.25vw;
-        margin-top: -4vh;
+    svg > g > g > path {
+        display: none;
+    }
+
+    svg > g > g > rect {
+        display: none;
+    }
+
+    svg > g > g > g > text {
+        display: none;
+    }
+
+    #toTasks {
+        position: fixed;
+        right: 55px;
+        bottom: 40px;
     }
 </style>
 
-<div class="ui segments">
-    
+<div class="ui segments" id="mapDiv">
 
-    <!--Google chart-->
-    <div id="geochart-colors" style="width: 79.3vw; height: 97vh"></div>
+    @if (!isCoach)
+    {
+        <!--Google chart-->
+        <div id="geochart-colors"></div>
+
+        @*<a class="ui icon button large" id="toTasks" href="#tasks">
+            <i class="dropdown icon"></i>
+        </a>*@
+    }
+
     @if (isCoach)
     {
         <div class="ui padded segment">
             <div id="AddTaskStepsButton" class="ui one column stackable center aligned page grid">
                 <a class="ui positive button active" href="@Url.Action("AddTask", "Task", new {coachId =userId })">Add Task</a>
-
             </div>
         </div>
-
     }
-    <div class="ui very padded segment">
+    <div class="ui very padded segment" id="tasks">
         <div class="ui one column stackable center aligned page grid">
             <div class="ui tree stackable cards">
 
@@ -123,66 +141,65 @@
                             <i class="zoom icon"></i>
                             View
                         </button>
-
-
                     }
-
                 }
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    google.charts.load('current', { 'packages': ['geochart'] });
-    google.charts.setOnLoadCallback(drawRegionsMap);
+@section Scripts{
+    <script>
+        google.charts.load('current', { 'packages': ['geochart'] });
+        google.charts.setOnLoadCallback(drawRegionsMap);
 
-    var regions = {
-        NorthAmerica: { code: '021', color: 'green' },
-        SouthAmerica: { code: '005', color: '#FFA703' },
-        Africa: { code: '002', color: 'yellow' },
-        Europe: { code: '150', color: '#07B6F0' },
-        Australia: { code: '009', color: 'red' },
-        NorthAsia: { code: '151', color: '#ED6F2F' },
-        NearEast: { code: '145', color: '#A509AB' },
-        SouthAsia: { code: '030', color: '#060CBF' }
-    };
-
-    var currentRegion = regions['@Model.Region.ToString()'].code;
-    var regionColor = regions['@Model.Region.ToString()'].color;
-
-    var dataArray = [['Country', 'Coins']];
-
-    @foreach (var t in Model.Tasks)
-    {
-        @:dataArray.push(['@t.Country', @t.Coins]);
-    }
-
-    function drawRegionsMap() {
-        var data = google.visualization.arrayToDataTable(dataArray);
-
-        var options = {
-            region: currentRegion,
-            displayMode: 'markers',
-            backgroundColor: 'transparent',
-            datalessRegionColor: regionColor,
-            defaultRegionColor: '#00ffff',
-            defaultColor: '#f5f5f5',
-            keepAspectRation: false,
-            tooltip: {
-                trigger: 'focus'
-            },
-            colorAxis: {
-                colors: ['green', '#FFA703']
-            }
+        var regions = {
+            NorthAmerica: { code: '021', color: 'green' },
+            SouthAmerica: { code: '005', color: '#FFA703' },
+            Africa: { code: '002', color: 'yellow' },
+            Europe: { code: '150', color: '#07B6F0' },
+            Australia: { code: '009', color: 'red' },
+            NorthAsia: { code: '151', color: '#ED6F2F' },
+            NearEast: { code: '145', color: '#A509AB' },
+            SouthAsia: { code: '030', color: '#060CBF' }
         };
 
-        var chart = new google.visualization.GeoChart(document.getElementById('geochart-colors'));
-        chart.draw(data, options);
-        google.visualization.events.addListener(chart, 'regionClick', mapClick);
+        var currentRegion = regions['@Model.Region.ToString()'].code;
+        var regionColor = regions['@Model.Region.ToString()'].color;
 
-        function mapClick(e) {
-            
+        var dataArray = [['Country', 'Coins']];
+
+        @foreach (var t in Model.Tasks)
+        {
+            @:dataArray.push(['@t.Country', @t.Coins]);
         }
-    };
-</script>
+
+        function drawRegionsMap() {
+            var data = google.visualization.arrayToDataTable(dataArray);
+
+            var options = {
+                region: currentRegion,
+                displayMode: 'markers',
+                backgroundColor: 'transparent',
+                datalessRegionColor: regionColor,
+                defaultRegionColor: '#00ffff',
+                defaultColor: '#f5f5f5',
+                keepAspectRation: false,
+                tooltip: {
+                    trigger: 'focus'
+                },
+                colorAxis: {
+                    colors: ['green', '#FFA703']
+                }
+            };
+
+            var chart = new google.visualization.GeoChart(document.getElementById('geochart-colors'));
+            chart.draw(data, options);
+            google.visualization.events.addListener(chart, 'regionClick', mapClick);
+
+            function mapClick(e) {
+
+            }
+        };
+    </script>
+}

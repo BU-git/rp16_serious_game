@@ -9,26 +9,8 @@
 
 
 <div class="ui text container">
-    <div class="ui steps top attached center aligned">
-        <div class="step">
-            <div class="content">
-                <div class="title">Step 1</div>
-                <div class="description">Create new family</div>
-            </div>
-        </div>
-        <div class="active step">
-            <div class="content">
-                <div class="title">Step 2</div>
-                <div class="description">Enter information about family members</div>
-            </div>
-        </div>
-        <div class="step">
-            <div class="content">
-                <div class="title">Step 3</div>
-                <div class="description">Choose an avatar</div>
-            </div>
-        </div>
-    </div>
+    @{ await Html.RenderPartialAsync("_RegistrationSteps", 2);}
+
     <form class="ui form segment attached" id="familyForm">
         <div>
             @{ await Html.RenderPartialAsync("_FamilyDetails", Model); }
@@ -37,33 +19,36 @@
         <div class="ui grid">
             <div class="two column row">
                 <div class="column">
-                    <input type="reset" value="Reset" class="ui button red fluid" />
+                    <input type="reset" value="Reset" class="ui button red fluid"/>
                 </div>
                 <div class="column">
-                    <input type="button" value="Next" class="ui button blue fluid" id="submitFamily" />
+                    <input type="button" value="Next" class="ui button blue fluid" id="submitFamily"/>
                 </div>
             </div>
         </div>
     </form>
+
     <form class="ui form segment attached" id="userForm">
         <div>
-            @{ await Html.RenderPartialAsync("_UserDetails", new UserViewModel { LastName = Model.FamilyName }); }
+            @{ await Html.RenderPartialAsync("_UserDetails", new UserViewModel {LastName = Model.FamilyName}); }
         </div>
         <div class="ui divider hidden"></div>
         <div class="ui grid">
             <div class="two column row">
                 <div class="column">
-                    <input type="reset" value="Reset" class="ui button red fluid" />
+                    <input type="reset" value="Reset" class="ui button red fluid"/>
                 </div>
                 <div class="column">
-                    <input type="button" value="Next" class="ui button blue fluid" id="submitUser" />
+                    <input type="button" value="Next" class="ui button blue fluid" id="submitUser"/>
                 </div>
             </div>
         </div>
     </form>
+
     <div class="ui page dimmer" id="page-dimmer">
         <div class="ui text loader">Loading</div>
     </div>
+
     <div id="successMessage" class="ui segment attached">
         <div class="ui divider hidden"></div>
         <h1 class="ui header center aligned">Your family was successfully registered</h1>

@@ -1,0 +1,48 @@
+﻿@model int
+
+@{
+    string step1Class = "";
+    string step2Class = "";
+    string step3Class = "";
+
+    switch (Model)
+    {
+        case 1:
+            step1Class = "active";
+            break;
+        case 2:
+            step1Class = "completed";
+            step2Class = "active";
+            break;
+        case 3:
+            step1Class = "completed";
+            step2Class = "completed";
+            step3Class = "active";
+            break;
+        default:
+            break;
+
+    }
+}
+
+<div class="ui ordered steps top attached center aligned">
+    
+        <div class="step @step1Class">
+            <div class="content">
+                <div class="title">Family</div>
+                <div class="description">Create new family</div>
+            </div>
+        </div>
+        <div class="step @step2Class">
+            <div class="content">
+                <div class="title">Users</div>
+                <div class="description">Enter information about family</div>
+            </div>
+        </div>
+        <div class="step @step3Class">
+            <div class="content">
+                <div class="title">Avatar</div>
+                <div class="description">Choose an avatar</div>
+            </div>
+        </div>
+</div>

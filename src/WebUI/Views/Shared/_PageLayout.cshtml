@@ -96,7 +96,7 @@
 
     </div>
     <div id="wrapper">
-        <div id="content" style="top: 40px">
+        <div id="content" class="fluid container container-padded">
             @await Html.PartialAsync("_TempMessages")
             @RenderBody()
         </div>
@@ -129,7 +129,7 @@
     <script>
         $('#percent')
             .progress({
-                percent: 95
+                percent: 100
             });
 
         jQuery(document).ready(function ($) {
