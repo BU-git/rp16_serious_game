@@ -140,7 +140,7 @@
                             <div id="CountryList" class="ui fluid selection dropdown">
                                 <input id="country" type="hidden" name="country">
                                 <i class="dropdown icon"></i>
-                                <div class="default text">Select Task</div>
+                                <div class="default text">Select Country</div>
                                 <div class="menu" id="countryitems">
 
 
@@ -160,8 +160,9 @@
 
 @section Scripts{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
-    <script>        
+    <script>
         var today = new Date();
+
         function SetUpPickers() {
             var $j = jQuery.noConflict();
             $j('#ExpireDt').calendar({
@@ -169,28 +170,8 @@
                 minDate: new Date(today.getFullYear(), today.getMonth(), today.getDate())
             });
         };
-        $('#TRegionList').change(function () {
-            var $j = jQuery.noConflict();
-            var userId = $j('#userId').val();
-            var region = $j('#region').val();
-            var stateId = $j('#country').val();
-            $j.ajax({
-                url: '/Task/GetCountries?region=' + region + '&userId=' + userId,
-                type: "GET",
-                dataType: "JSON",
-                success: function (countries) {
-                    $j("#countryitems").html(""); // clear before appending new list
-                    $j.each(countries, function (i, country) {
-                        $j("#countryitems").append(
-                             $j('<div class=\"item\" >' + country + '</div>').val(country).html(country));
-                        $j('#CountryList.ui.fluid.selection.dropdown')
-                            .dropdown();
-                    });
-                }
-            });
-        });
 
-        $('#UsersList').change(function () {
+        $('#TRegionList').change(function() {
             var $j = jQuery.noConflict();
             var userId = $j('#userId').val();
             var region = $j('#region').val();
@@ -200,31 +181,52 @@
                     url: '/Task/GetCountries?region=' + region + '&userId=' + userId,
                     type: "GET",
                     dataType: "JSON",
-                    success: function (countries) {
+                    success: function(countries) {
                         $j("#countryitems").html(""); // clear before appending new list
-                        $j.each(countries, function (i, country) {
+                        $j.each(countries, function(i, country) {
                             $j("#countryitems").append(
-                                 $j('<div class=\"item\" >' + country + '</div>').val(country).html(country));
+                                $j('<div class=\"item\" >' + country + '</div>').val(country).html(country));
                             $j('#CountryList.ui.fluid.selection.dropdown')
                                 .dropdown();
                         });
                     }
                 });
             }
-           
+        });
+
+        $('#UsersList').change(function() {
+            var $j = jQuery.noConflict();
+            var userId = $j('#userId').val();
+            var region = $j('#region').val();
+            var stateId = $j('#country').val();
+            if (!isEmpty(userId) && !isEmpty(region)) {
+                $j.ajax({
+                    url: '/Task/GetCountries?region=' + region + '&userId=' + userId,
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function(countries) {
+                        $j("#countryitems").html(""); // clear before appending new list
+                        $j.each(countries, function(i, country) {
+                            $j("#countryitems").append(
+                                $j('<div class=\"item\" >' + country + '</div>').val(country).html(country));
+                            $j('#CountryList.ui.fluid.selection.dropdown')
+                                .dropdown();
+                        });
+                    }
+                });
+            }
+
         });
 
 
-
-
-        $('#TaskUserSelection').change(function () {
+        $('#TaskUserSelection').change(function() {
             var $j = jQuery.noConflict();
             var taskId = $j('#taskId').val();
             var userId = $j('#userId').val();
             var region = $j('#region').val();
             var country = $j('#country').val();
             if (!isEmpty(taskId) && !isEmpty(userId) && !isEmpty(region) && !isEmpty(country)) {
-                $j.get('/Task/RenderTask?id=' + taskId + '&userId=' + userId + '&region=' + region + '&country=' + country, function (data) {
+                $j.get('/Task/RenderTask?id=' + taskId + '&userId=' + userId + '&region=' + region + '&country=' + country, function(data) {
 
                     $j('#ViewTask').html(data);
                     $j('#ViewTask').fadeIn('fast');
@@ -239,7 +241,8 @@
         $('#TRegionList.ui.fluid.selection.dropdown')
             .dropdown();
         $('#CountryList.ui.fluid.selection.dropdown')
-           .dropdown();
+            .dropdown();
+
         function isEmpty(str) {
             return (!str || 0 === str.length);
         }
