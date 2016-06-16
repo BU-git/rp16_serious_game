@@ -80,7 +80,7 @@
                             <div class="header">
 
                                 <h3>
-                                    <i class="world icont"></i>Region
+                                    <i class="world icon"></i>Region
                                 </h3>
 
                             </div>
@@ -130,7 +130,7 @@
                             <div class="header">
 
                                 <h3>
-                                    <i class="list layout icon"></i>Country
+                                    <i class="location arrow icon"></i>Country
                                 </h3>
 
                             </div>
@@ -188,6 +188,30 @@
                     });
                 }
             });
+        });
+
+        $('#UsersList').change(function () {
+            var $j = jQuery.noConflict();
+            var userId = $j('#userId').val();
+            var region = $j('#region').val();
+            var stateId = $j('#country').val();
+            if (!isEmpty(userId) && !isEmpty(region)) {
+                $j.ajax({
+                    url: '/Task/GetCountries?region=' + region + '&userId=' + userId,
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (countries) {
+                        $j("#countryitems").html(""); // clear before appending new list
+                        $j.each(countries, function (i, country) {
+                            $j("#countryitems").append(
+                                 $j('<div class=\"item\" >' + country + '</div>').val(country).html(country));
+                            $j('#CountryList.ui.fluid.selection.dropdown')
+                                .dropdown();
+                        });
+                    }
+                });
+            }
+           
         });
 
 

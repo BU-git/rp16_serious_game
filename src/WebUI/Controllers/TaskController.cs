@@ -370,11 +370,13 @@ namespace WebUI.Controllers
                 var _countries = await _countryProvider.GetCountries(subregion);
                 countries.AddRange(_countries);
             }
-
-            var _region = (Region)Enum.Parse(typeof(Region), region.Replace(" ", ""), false);
             var user = await _dal.GetUserById(userId);
-            
-            
+            var usedCountries = _dal.GetUserTasksCountries(user);
+
+
+            countries = countries.Except(usedCountries, StringComparer.OrdinalIgnoreCase).ToList();
+        
+
 
             return Json(countries);
         }
