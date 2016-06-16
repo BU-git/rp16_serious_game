@@ -5,6 +5,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.Logging;
 using WebUI.ViewModels.Account;
 using Domain.Entities;
+using Interfaces;
 
 namespace WebUI.Controllers
 {
@@ -14,15 +15,18 @@ namespace WebUI.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
+        private readonly IDAL _dal;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IDAL dal)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _dal = dal;
         }
 
         //
@@ -185,6 +189,20 @@ namespace WebUI.Controllers
         public IActionResult AccessDenied()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SidebarMenu()
+        {
+            var user = await GetCurrentUserAsync();
+            var userVm = new AccountViewModel(user);
+
+            return View("_SidebarMenu", userVm);
+        }
+
+        private async Task<ApplicationUser> GetCurrentUserAsync()
+        {
+            return await _dal.GetUserByEmail(HttpContext.User.Identity.Name);
         }
 
         #region Helpers

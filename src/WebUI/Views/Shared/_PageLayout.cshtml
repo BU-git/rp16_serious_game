@@ -43,58 +43,11 @@
             @await Html.PartialAsync("_LoginPartial")
         </div>
     </div>
-    <div id="sidebar">
-        <h3>Sidebar</h3>
-        <div class="ui secondary vertical pointing menu large">
-            <div class="ui card">
-                @if (User.IsInRole("Participant"))
-                {
-                    <div class="image">
-                        <avatar class="avatar-wide" user-id="@Context.User.GetUserId()" alt="avatar" />
-                    </div>
-                }
-                <div class="content">
-                    <a class="header">Name</a>
-                    <div class="description">
-                        Description
-                    </div>
-                    <div class="meta">
-                    </div>
-                </div>
-                <div class="extra content">
-                    <a>
-                        <i class="user icon"></i>
-                        22 Friends
-                    </a>
-                </div>
-                <div class="ui bottom attached indincating progress" id="percent" style="width: 20vw">
-                    <div class="bar"></div>
-                </div>
-            </div>
-            <a class="item" href="@Url.Action("Index", "Home")">
-                <i class="large home icon"></i>
-                Home
-            </a>
-            @if (User.IsInRole("Coach"))
-            {
-                <a class="item" href="@Url.Action("UserStatistics", "Task")">
-                    <i class="large bar chart icon"></i>
-                    Users' statistics
-                </a>
-            }
-            <a class="item" href="@Url.Action("Index", "Appointments")">
-                <i class="large calendar icon"></i>
-                Meetings
-            </a>
-            <a class="item" href="@Url.Action("Index", "Manage")">
-                <i class="large options icon"></i>
-                Profile settings
-            </a>
-            <div class="ui divider"></div>
-        </div>
 
+    <div id="sidebar">
 
     </div>
+
     <div id="wrapper">
         <div id="content" class="fluid container container-padded">
             @await Html.PartialAsync("_TempMessages")
@@ -126,17 +79,21 @@
         <script src="~/lib/bxslider/jquery.bxslider.min.js" asp-append-version="true"></script>
     </environment>
     @RenderSection("scripts", required: false)
-    <script>
-        $('#percent')
-            .progress({
-                percent: 100
-            });
+<script>
 
-        jQuery(document).ready(function ($) {
-            $(".close.icon").click(function () {
-                $(this).parent().transition();
-            });
+    $.post({
+    
+    });
+
+    function postSuccess(data) {
+        
+    }
+
+    jQuery(document).ready(function ($) {
+        $(".close.icon").click(function () {
+            $(this).parent().transition();
         });
-    </script>
+    });
+</script>
 </body>
 </html>
