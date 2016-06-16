@@ -418,6 +418,15 @@ namespace DAL
             return userTasks;
         }
 
+        public List<string> GetUserTasksCountries(ApplicationUser user)
+        {
+            List<UserTask> tasks = GetUserTasks(user);
+            List<string> countries = tasks.Select(x => x.Country).Where(x=>!string.IsNullOrEmpty(x)).Distinct().ToList();
+            countries = countries.Select(x => x.ToLower()).Distinct().ToList();
+
+            return countries;
+        }
+
         public List<UserTask> GetUserGroupTasks(UserGroup group)
         {
             var users = _context.Users.SelectMany(x => x.ApplicationUser_UserGroups.Where(e => e.UserGroupId == group.UserGroupId).Select(s => s.ApplicationUser)).Distinct();
