@@ -72,13 +72,17 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 
     <script>
+        var today = new Date();
         $('.ui.dropdown').dropdown();
         $('#rangestart').calendar({
-            endCalendar: $('#rangeend')
+            endCalendar: $('#rangeend'),
+            ampm: false,
+            minDate: new Date(today.getFullYear(), today.getMonth(), today.getDate())
         });
         $('#rangeend').calendar({
             type: 'time',
-            startCalendar: $('#rangestart')
+            startCalendar: $('#rangestart'),
+            ampm: false
         });
     </script>
 
