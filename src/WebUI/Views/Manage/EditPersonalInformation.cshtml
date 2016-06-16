@@ -28,11 +28,21 @@
 </style>
 
 <div class="ui text container">
-    <div class="ui top attached tabular menu three buttons">
-        <a asp-action="EditPersonalInformation" class="item active button">Personal information</a>
-        <a asp-controller="Manage" asp-action="ChangePassword" class="item button">Password</a>
-        <a asp-action="ChangeAvatar" class="item button">Avatar</a>
-    </div>
+    @if (User.IsInRole("Participant"))
+    {
+        <div class="ui top attached tabular menu three buttons">
+            <a asp-action="EditPersonalInformation" class="ui fluid active button">Personal information</a>
+            <a asp-controller="Manage" asp-action="ChangePassword" class="ui fluid basic button">Password</a>
+            <a asp-action="ChangeAvatar" class="ui fluid basic button">Avatar</a>
+        </div>
+    }
+    else
+    {
+        <div class="ui top attached tabular menu two buttons">
+            <a asp-action="EditPersonalInformation" class="ui fluid active button">Personal information</a>
+            <a asp-controller="Manage" asp-action="ChangePassword" class="ui fluid basic button">Password</a>
+        </div>
+    }
     <h2 class="ui header attached center aligned">Edit personal information</h2>
     <form asp-action="EditPersonalInformation" class="ui form segment bottom attached">
         <div class="fields">
