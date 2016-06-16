@@ -1,102 +1,54 @@
 @model WebUI.ViewModels.Task.TaskViewModel
-
 <form asp-action="AsignTask" method="post">
-   
     <div class="ui centered segment text container">
         <div class="content" style="margin: 7px">
             <!--<a class="header">@Html.DisplayFor(model => Model.Name)</a>-->
             <div class="ui transparent input">
-             
-                <h3>@Html.EditorFor(x => x.Name, new { placeholder = Model.Name})</h3>
-               
+                <h3>@Html.EditorFor(x => x.Name, new { placeholder = Model.Name })</h3>
             </div>
-                <a class="author">@Html.DisplayFor(x => Model.UserName)</a>
-
-            </div>
+            <a class="author">@Html.DisplayFor(x => Model.UserName)</a>
+        </div>
         <div class="extra content" style="margin: 7px">
             <div class="ui left labeled input">
                 <div class="ui label">
                     <i class="active star icon"></i>
-                    
                     @Html.DisplayNameFor(x => x.Coins)
                 </div>
-                @*@Html.HiddenFor(x => x.Coins)*@
-                @Html.EditorFor(x=>x.Coins,new { htmlAttributes = new { placeholder = "Coins", id = "coins", min = "0", max = "100" } })
-
+                @Html.EditorFor(x => x.Coins, new { htmlAttributes = new { placeholder = "Coins", id = "coins", min = "0", max = "100" } })
                 @Html.HiddenFor(x => x.Region)
                 @Html.HiddenFor(x => x.Country)
-
-
-
-
-
-
-                @Html.HiddenFor(x=>x.UserId)
-                @Html.HiddenFor(x=>x.AppTaskId)
+                @Html.HiddenFor(x => x.UserId)
+                @Html.HiddenFor(x => x.AppTaskId)
                 @Html.HiddenFor(x => x.Name)
             </div>
         </div>
-        <div class="content"  style="margin: 7px">
-            
-
+        <div class="content" style="margin: 7px">
             <div class="ui form">
                 <div class="field">
                     @Html.TextAreaFor(m => m.Text)
                 </div>
             </div>
         </div>
-
-        <div class="content"  style="margin: 7px">
-                   <div class="ui fluid icon input">
-
-                       <div class="field">
-                           <div class="ui calendar" id="ExpireDt">
-                               <div class="ui input left icon">
-                                   <i class="calendar icon"></i>
-                                   <input asp-for="ExpireDt" placeholder="Start" required>
-                               </div>
-                               <span asp-validation-for="ExpireDt"></span>
-                           </div>
-                       </div>
-
-                       @*@Html.HiddenFor(x => x.ExpireDt)*@
-
-                       @*<div class="ui calendar" id="expireDt" type="text" name="expireDt" value="@DateTime.Today.ToString()" validate="RequiredField">
-                           </div>*@
-                       </div>
-               
-                
-        </div >
-        <div class="extra content"  style="margin: 7px">
-            @*<div class="fluid ui green button">Send Task*@
-            @*<a class="fluid ui green button" href="@Url.Action("SubmitTask", "Task", new {taskId = Model.TaskId, userId = Model.UserId})">
-                Submit
-            </a>*@
-            <input type="submit" class="fluid ui green button" value="Assign">
-                
-            
-            @*</div>*@
-
-
+        <div class="content" style="margin: 7px">
+            <div class="ui fluid icon input">
+                <div class="field">
+                    <div class="ui calendar" id="ExpireDt">
+                        <div class="ui input left icon">
+                            <i class="calendar icon"></i>
+                            <input asp-for="ExpireDt" placeholder="Start" required>
+                        </div>
+                        <span asp-validation-for="ExpireDt"></span>
+                    </div>
+                </div>
+            </div>
         </div>
-
-      
-
+        <div class="extra content" style="margin: 7px">
+            <input type="submit" class="fluid ui green button" value="Assign">
+        </div>
     </div>
-
-
-
-
-
-
-
-
-
 </form>
 
 @section Scripts {
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-
-    
 }

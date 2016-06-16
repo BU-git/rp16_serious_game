@@ -108,3 +108,35 @@
 .avatar-wide {
     width: 100%;
 }
+
+/* Remove the colored rectangle on the map */
+
+svg > g > g > path {
+    display: none;
+}
+
+svg > g > g > rect {
+    display: none;
+}
+
+svg > g > g > g > text {
+    display: none;
+}
+
+#geochart-colors {
+    margin-left: -1.5%;
+    width: 101%;
+}
+
+#circularButton {
+    position: fixed;
+    right: 70px;
+    bottom: 40px;
+    z-index: 100
+}
+
+#toTasks {
+    position: fixed;
+    right: 55px;
+    bottom: 40px;
+}
