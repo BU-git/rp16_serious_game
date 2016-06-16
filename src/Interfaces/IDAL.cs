@@ -140,6 +140,7 @@ namespace Interfaces
         Task<Appointment_User> ValidateAppointment(DateTime start, DateTime end, IEnumerable<string> users);
         Task<UserGroup> GetUserGroupByName(string familyName);
         Task<List<Comment>> GetTaskComments(int taskId);
+        Task<Comment> GetComment(int id);
         Task AddComment(Comment comment, int taskId);
     }
 }

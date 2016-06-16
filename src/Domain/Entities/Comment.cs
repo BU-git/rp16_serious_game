@@ -10,6 +10,7 @@ namespace Domain.Entities
         public ApplicationUser Author { get; set; }
         public string Text { get; set; }
         public DateTime EditDate { get; set; }
+        public Media Image { get; set; }
 
         public Comment Parent { get; set; }
         public Task_Comment Task_Comment { get; set; }
