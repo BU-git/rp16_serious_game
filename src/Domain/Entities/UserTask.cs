@@ -6,6 +6,7 @@ namespace Domain.Entities
     public class UserTask
     {
         public int Id { get; set; }
+        public string Name { get; set; }
         public string UserId { get; set; }
         public int TaskId { get; set; }
         public Status Status { get; set; }

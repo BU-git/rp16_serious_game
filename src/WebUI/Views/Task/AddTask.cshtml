@@ -8,116 +8,240 @@
 
 <div class="ui container fluid" style="margin-top: 30px">
     <div class="ui center aligned grid">
-        
+
         <div class="eleven wide doubling stackable column">
             <h1 class="header bottom attached">Assign task to user</h1>
             <table id="TaskUserSelection" class="ui single line table">
 
                 <tbody>
-                <tr>
+                    <tr>
 
-                    <td>
+                        <td>
 
-                        <div class="header">
-                            <h3>
-                                <i class="user icon"></i>
-                                User
-                            </h3>
-                        </div>
-                        Select user whom you whant to assign new task
-                    </td>
-                    <td>
-                        <div id="UsersList" class="ui fluid selection dropdown">
-                            <input id="userId" type="hidden" name="user">
-                            <i class="dropdown icon"></i>
-                            <div class="default text">Select Friend</div>
-                            <div class="menu">
-                                @foreach (var user in Model.Users)
-                                {
-                                    <div class="item" data-value="@user.Id">
-                                        @user.Name @user.LastName
-                                    </div>
-                                }
+                            <div class="header">
+                                <h3>
+                                    <i class="user icon"></i>
+                                    User
+                                </h3>
+                            </div>
+                            Select user whom you whant to assign new task
+                        </td>
+                        <td>
+                            <div id="UsersList" class="ui fluid selection dropdown">
+                                <input id="userId" type="hidden" name="user">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Select Friend</div>
+                                <div class="menu">
+                                    @foreach (var user in Model.Users)
+                                    {
+                                        <div class="item" data-value="@user.Id">
+                                            @user.Name @user.LastName
+                                        </div>
+                                    }
+
+                                </div>
 
                             </div>
+                        </td>
+                    </tr>
+                    <tr>
 
-                        </div>
-                    </td>
-                </tr>
-                <tr>
+                        <td>
+                            <div class="header">
 
-                    <td>
-                        <div class="header">
-
-                            <h3><i class="list layout icon"></i>Task
-                            </h3>
-
-                        </div>
-                        Select Task that you want to assign
-                    </td>
-                    <td>
-                        <div id="TaskList" class="ui fluid selection dropdown">
-                            <input id="taskId" type="hidden" name="task">
-                            <i class="dropdown icon"></i>
-                            <div class="default text">Select Task</div>
-                            <div class="menu">
-                                @foreach (var task in Model.Tasks)
-                                {
-                                    <div class="item" data-value="@task.Id">
-                                        @task.Name
-                                    </div>
-                                }
-
+                                <h3>
+                                    <i class="list layout icon"></i>Task
+                                </h3>
 
                             </div>
-                        </div>
-                    </td>
-                </tr>
+                            Select Task that you want to assign
+                        </td>
+                        <td>
+                            <div id="TaskList" class="ui fluid selection dropdown">
+                                <input id="taskId" type="hidden" name="task">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Select Task</div>
+                                <div class="menu">
+                                    @foreach (var task in Model.Tasks)
+                                    {
+                                        <div class="item" data-value="@task.Id">
+                                            @task.Name
+                                        </div>
+                                    }
+
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <div class="header">
+
+                                <h3>
+                                    <i class="world icon"></i>Region
+                                </h3>
+
+                            </div>
+                            Select Region of the task
+                        </td>
+                        <td>
+                            <div id="TRegionList" class="ui fluid selection dropdown">
+                                <input id="region" type="hidden" name="region">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Select Region</div>
+                                <div class="menu">
+
+                                    <div class="item" data-value="NorthAmerica">
+                                        Northern America
+                                    </div>
+                                    <div class="item" data-value="SouthAmerica">
+                                        Southern America
+                                    </div>
+                                    <div class="item" data-value="Africa">
+                                        Africa
+                                    </div>
+                                    <div class="item" data-value="Europe">
+                                        Europe
+                                    </div>
+                                    <div class="item" data-value="Australia">
+                                        Australia
+                                    </div>
+                                    <div class="item" data-value="NorthAsia">
+                                        Northern Asia
+                                    </div>
+                                    <div class="item" data-value="NearEast">
+                                        Near East
+                                    </div>
+
+                                    <div class="item" data-value="SouthAsia">
+                                        Southern Asia
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td>
+                            <div class="header">
+
+                                <h3>
+                                    <i class="location arrow icon"></i>Country
+                                </h3>
+
+                            </div>
+                            Select Country
+                        </td>
+                        <td>
+                            <div id="CountryList" class="ui fluid selection dropdown">
+                                <input id="country" type="hidden" name="country">
+                                <i class="dropdown icon"></i>
+                                <div class="default text">Select Task</div>
+                                <div class="menu" id="countryitems">
+
+
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
-    <br/>
+    <br />
     <div id="ViewTask">
     </div>
 </div>
 
 @section Scripts{
-    <script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>        
+        var today = new Date();
         function SetUpPickers() {
             var $j = jQuery.noConflict();
-            $j("#expireDt").datepicker({
-                "setDate": new Date()
+            $j('#ExpireDt').calendar({
+                ampm: false,
+                minDate: new Date(today.getFullYear(), today.getMonth(), today.getDate())
             });
         };
+        $('#TRegionList').change(function () {
+            var $j = jQuery.noConflict();
+            var userId = $j('#userId').val();
+            var region = $j('#region').val();
+            var stateId = $j('#country').val();
+            $j.ajax({
+                url: '/Task/GetCountries?region=' + region + '&userId=' + userId,
+                type: "GET",
+                dataType: "JSON",
+                success: function (countries) {
+                    $j("#countryitems").html(""); // clear before appending new list
+                    $j.each(countries, function (i, country) {
+                        $j("#countryitems").append(
+                             $j('<div class=\"item\" >' + country + '</div>').val(country).html(country));
+                        $j('#CountryList.ui.fluid.selection.dropdown')
+                            .dropdown();
+                    });
+                }
+            });
+        });
+
+        $('#UsersList').change(function () {
+            var $j = jQuery.noConflict();
+            var userId = $j('#userId').val();
+            var region = $j('#region').val();
+            var stateId = $j('#country').val();
+            if (!isEmpty(userId) && !isEmpty(region)) {
+                $j.ajax({
+                    url: '/Task/GetCountries?region=' + region + '&userId=' + userId,
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (countries) {
+                        $j("#countryitems").html(""); // clear before appending new list
+                        $j.each(countries, function (i, country) {
+                            $j("#countryitems").append(
+                                 $j('<div class=\"item\" >' + country + '</div>').val(country).html(country));
+                            $j('#CountryList.ui.fluid.selection.dropdown')
+                                .dropdown();
+                        });
+                    }
+                });
+            }
+           
+        });
+
+
+
 
         $('#TaskUserSelection').change(function () {
             var $j = jQuery.noConflict();
             var taskId = $j('#taskId').val();
             var userId = $j('#userId').val();
-            if (!isEmpty(taskId) && !isEmpty(userId)) {
-                $j.get('/Task/RenderTask?id=' + taskId + '&userId=' + userId, function (data) {
+            var region = $j('#region').val();
+            var country = $j('#country').val();
+            if (!isEmpty(taskId) && !isEmpty(userId) && !isEmpty(region) && !isEmpty(country)) {
+                $j.get('/Task/RenderTask?id=' + taskId + '&userId=' + userId + '&region=' + region + '&country=' + country, function (data) {
 
                     $j('#ViewTask').html(data);
                     $j('#ViewTask').fadeIn('fast');
                     SetUpPickers();
                 });
             }
-
-
         });
-
-
         $('#UsersList.ui.fluid.selection.dropdown')
             .dropdown();
         $('#TaskList.ui.fluid.selection.dropdown')
             .dropdown();
-
-
+        $('#TRegionList.ui.fluid.selection.dropdown')
+            .dropdown();
+        $('#CountryList.ui.fluid.selection.dropdown')
+           .dropdown();
         function isEmpty(str) {
             return (!str || 0 === str.length);
         }
-
-
     </script>
 }

@@ -71,6 +71,7 @@ namespace WebUI
             services.AddTransient<IMailManager, EmailManager>();
             services.AddTransient<IRestClient, RestClient>();
             services.AddTransient<IZipWorker, ZipWorker>();
+            services.AddTransient<ICountryListProvider, RESTCountryListProvider>();
 
             // Infrastructure
             services.AddTransient<IViewComposer, RazorViewComposer>();

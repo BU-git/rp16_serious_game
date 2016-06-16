@@ -11,6 +11,11 @@ using Microsoft.AspNet.Identity;
 using System.Security.Claims;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNet.Http;
+using WebUI.Services.Abstract;
+using WebUI.Services.Concrete;
+using Region = Domain.Entities.Region;
+using Microsoft.Extensions.PlatformAbstractions;
+using System.IO;
 
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -22,11 +27,16 @@ namespace WebUI.Controllers
     {
         private readonly IDAL _dal;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IApplicationEnvironment _appEnvironment;
+        private readonly ICountryListProvider _countryProvider;
 
-        public TaskController(IDAL dal, UserManager<ApplicationUser> userManager)
+
+        public TaskController(IDAL dal, UserManager<ApplicationUser> userManager, ICountryListProvider  countryProvider, IApplicationEnvironment appEnvironment)
         {
             _dal = dal;
             _userManager = userManager;
+            _appEnvironment = appEnvironment;
+            _countryProvider = countryProvider;
         }
 
         [HttpGet]
@@ -126,6 +136,34 @@ namespace WebUI.Controllers
             return View(taskModel);
         }
 
+        public async Task<FileResult> GetImage(int id)
+        {
+            var imagePath = (await _dal.GetComment(id)).Image.MainPath;
+            string path = Path.Combine(_appEnvironment.ApplicationBasePath, imagePath);
+            byte[] mas = System.IO.File.ReadAllBytes(path);
+            string file_type = "application/octet-stream";
+            string file_name = Path.GetFileName(imagePath);
+            return File(mas, file_type, file_name);
+        }
+
+        public string GetImagePath(int commentId)
+        {
+            string src;
+            var imagePath = _dal.GetComment(commentId).Result.Image.MainPath;
+
+            if (Path.GetExtension(imagePath).ToLower() == ".jpg")
+            {
+                string path = Path.Combine(_appEnvironment.ApplicationBasePath, imagePath);
+                byte[] mas = System.IO.File.ReadAllBytes(path);
+
+                src = "data:image/jpeg;base64," + Convert.ToBase64String(mas);
+            }
+            else
+                src = $"/Task/GetImage/{commentId}";
+
+            return src;
+        }
+
         public List<CommentViewModel> CommentsToModel(List<Comment> comments)
         {
             return comments?.Select(c =>
@@ -136,13 +174,16 @@ namespace WebUI.Controllers
                     Author = c.Author.Name,
                     Text = c.Text,
                     Date = c.EditDate.ToString("dd.MM.yy HH:mm"),
+                    ImagePath = c.Image == null ? "" : GetImagePath(c.Id),
                     Children = CommentsToModel(c.Replies) ?? new List<CommentViewModel>()
                 }).ToList();
         }
 
         public async Task<List<CommentViewModel>> GetTaskComments(int taskId)
         {
-            var comments = (await _dal.GetTaskComments(taskId)).Where(c => c.ParentId == null).ToList();//get root level comments
+            var comments = (await _dal.GetTaskComments(taskId))
+                .Where(c => c.ParentId == null) //get root level comments
+                .ToList();
 
             return CommentsToModel(comments);
         }
@@ -155,39 +196,48 @@ namespace WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddComment(CommentViewModel commentModel, int id)
         {
-
+            var imageFolder = "Upload";
             var file = Request.Form.Files.GetFile("Image");
+            Media commentImage = null;
 
-            if (file != null)
+            if (file != null && file.ContentDisposition != null)
             {
-                string UploadDestination = $"upload/";
-                string Filename = "";
+                //parse uploaded file
+                var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+                string Filename = parsedContentDisposition.FileName.Trim('"');
+                string relativePath = Path.Combine(imageFolder, Filename);
+                string uploadPath = Path.Combine(_appEnvironment.ApplicationBasePath, relativePath);
 
-                if (file.ContentDisposition != null)
+                //check for folder existence
+                string dirPath = Path.Combine(_appEnvironment.ApplicationBasePath, imageFolder);
+                if (!Directory.Exists(dirPath))
+                    Directory.CreateDirectory(dirPath);
+
+                //check for duplicated filename
+                int n = 1;
+                while (System.IO.File.Exists(uploadPath))
                 {
-                    //parse uploaded file
-                    var parsedContentDisposition = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
-                    Filename = parsedContentDisposition.FileName.Trim('"');
-                    string uploadPath = UploadDestination + Filename;
-
-                    //save the file to upload destination
-                    file.SaveAs(uploadPath);
+                    string newFilename = Path.GetFileNameWithoutExtension(Filename) + $"({n})" + Path.GetExtension(Filename);
+                    relativePath = Path.Combine(imageFolder, newFilename);
+                    uploadPath = Path.Combine(_appEnvironment.ApplicationBasePath, relativePath);
+                    n++;
                 }
 
-                string Photo = Filename;
+                //save the file to upload destination
+                file.SaveAs(uploadPath);
 
-                if (Photo != "")
-                {
-                    Photo = Url.Content($"~/upload/{Photo}");
-                }
+                commentImage = new Media { Type = Domain.Entities.Type.Image, MainPath = relativePath };
             }
+
             var comment = new Comment
             {
                 ParentId = commentModel.ParentId,
                 Author = await _dal.GetUserById(HttpContext.User.GetUserId()),
                 Text = commentModel.Text,
-                EditDate = DateTime.Now
+                EditDate = DateTime.Now,
+                Image = commentImage
             };
+
             await _dal.AddComment(comment, id);
             return Content("Success :)");
         }
@@ -252,13 +302,85 @@ namespace WebUI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> RenderTask(int id, string userId)
+        public async Task<ActionResult> RenderTask(int id, string userId, string region, string country)
         {
             var appTask = _dal.FindTaskbyId(id);
             var user = await _dal.GetUserById(userId);
-            TaskViewModel task = new TaskViewModel(appTask) { UserId = user.Id, UserName = user.UserName };
+            var _region = (Region)Enum.Parse(typeof(Region), region.Replace(" ",""), false);
+
+            TaskViewModel task = new TaskViewModel(appTask) { UserId = user.Id, UserName = user.UserName, Region = _region ,Country = country };
             return PartialView("_NewTask", task);
         }
+
+
+        [HttpGet]
+        public async Task<JsonResult> GetCountries(string userId, string region)
+        {
+            List<string> subRegions = new List<string>();
+            List<string> countries = new List<string>();
+
+            switch (region)
+            {
+                case "NorthAmerica":
+                    subRegions.Add("Northern America");
+                    subRegions.Add("Caribbean");
+                    subRegions.Add("Central America");
+                    break;
+                case "SouthAmerica":
+                    subRegions.Add("South America");
+                    break;
+                case "Africa":
+                    subRegions.Add("Northern Africa");
+                    subRegions.Add("Western Africa");
+                    subRegions.Add("Middle Africa");
+                    subRegions.Add("Eastern Africa");
+                    subRegions.Add("Southern Africa");
+                    break;
+                case "Europe":
+                    subRegions.Add("Northern Europe");
+                    subRegions.Add("Western Europe");
+                    subRegions.Add("Southern Europe");
+                    
+                    break;
+                case "Australia":
+                    subRegions.Add("Australia and New Zealand");
+                    subRegions.Add("Melanesia");
+                    subRegions.Add("Micronesia");
+                    subRegions.Add("Polynesia");
+                    break;
+                case "NorthAsia":
+                    subRegions.Add("Eastern Europe");
+                    break;
+                case "NearEast":
+                    subRegions.Add("Central Asia");
+                    subRegions.Add("Eastern Asia");
+                    subRegions.Add("South-Eastern Asia");
+                    break;
+                case "SouthAsia":
+                    subRegions.Add("Southern Asia");
+                    subRegions.Add("Western Asia");
+                    break;
+                default:
+                    subRegions.Add("Western Europe");
+                    break;
+            }
+
+            foreach ( var subregion in subRegions)
+            {
+                var _countries = await _countryProvider.GetCountries(subregion);
+                countries.AddRange(_countries);
+            }
+            var user = await _dal.GetUserById(userId);
+            var usedCountries = _dal.GetUserTasksCountries(user);
+
+
+            countries = countries.Except(usedCountries, StringComparer.OrdinalIgnoreCase).ToList();
+        
+
+
+            return Json(countries);
+        }
+        
 
         [HttpPost]
         public async Task<IActionResult> EditTask(string text, int coins, string command, int userTaskId)
@@ -284,17 +406,21 @@ namespace WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AsignTask(string userId, int appTaskId, string expireDt, string text, int coins)
+        public async Task<IActionResult> AsignTask(string name,string userId, int appTaskId, string expireDt, string text, int coins, string region,string country)
         {
             DateTime expire = DateTime.Parse(expireDt);
+            var _region = (Region) Enum.Parse(typeof (Region), region, false);
             UserTask task = new UserTask()
             {
+                Name =name,
                 Coins = coins,
                 Status = Status.Open,
                 TaskId = appTaskId,
                 Text = text,
                 UserId = userId,
-                ExpireDt = expire
+                ExpireDt = expire,
+                Region = _region,
+                Country = country
             };
             await _dal.AssignTaskAsync(task);
             return RedirectToAction("TaskList");

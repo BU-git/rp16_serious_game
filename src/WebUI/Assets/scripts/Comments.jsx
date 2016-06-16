@@ -1,4 +1,4 @@
-﻿var CommentBox = React.createClass({
+var CommentBox = React.createClass({
     loadCommentsFromServer: function () {
         var xhr = new XMLHttpRequest();
         xhr.open('get', this.props.url, true);
@@ -69,6 +69,9 @@ var Comment = React.createClass({
                   </div>
                   <div className="text">
                       {this.props.comment.Text}
+                      <div>
+                          {this.props.comment.ImagePath ? <a href={this.props.comment.ImagePath}>Attached Image</a> : null}
+                      </div>
                   </div>
                   <div className="actions">
                     <a className="reply" onClick={this.handleClick}>Reply</a>
@@ -92,6 +95,7 @@ var CommentForm = React.createClass({
         }
         this.props.onCommentSubmit({ ParentId: parentId, Text: text, Image: image });
         this.refs.text.value = '';
+        this.refs.image.value = '';
         this.props.hideForm();
         return;
     },

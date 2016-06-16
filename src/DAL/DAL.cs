@@ -418,6 +418,15 @@ namespace DAL
             return userTasks;
         }
 
+        public List<string> GetUserTasksCountries(ApplicationUser user)
+        {
+            List<UserTask> tasks = GetUserTasks(user);
+            List<string> countries = tasks.Select(x => x.Country).Where(x=>!string.IsNullOrEmpty(x)).Distinct().ToList();
+            countries = countries.Select(x => x.ToLower()).Distinct().ToList();
+
+            return countries;
+        }
+
         public List<UserTask> GetUserGroupTasks(UserGroup group)
         {
             var users = _context.Users.SelectMany(x => x.ApplicationUser_UserGroups.Where(e => e.UserGroupId == group.UserGroupId).Select(s => s.ApplicationUser)).Distinct();
@@ -610,11 +619,19 @@ namespace DAL
 
         public async Task<List<Comment>> GetTaskComments(int taskId)
         {
-            return await _context.Comments.Include(c => c.Task_Comment).Include(c => c.Author).Where(c => c.Task_Comment.TaskId == taskId).ToListAsync();
+            return await _context.Comments.Include(c => c.Task_Comment).Include(c => c.Author).Include(c => c.Image).Where(c => c.Task_Comment.TaskId == taskId).ToListAsync();
+        }
+
+        public async Task<Comment> GetComment(int id)
+        {
+            return await _context.Comments.Include(c => c.Image).FirstAsync(c => c.Id == id);
         }
 
         public async Task AddComment(Comment comment, int taskId)
         {
+            if (comment.Image != null)
+                _context.Medias.Add(comment.Image);
+
             _context.Comments.Add(comment);
 
             var taskComment = new Task_Comment()

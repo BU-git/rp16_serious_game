@@ -16,29 +16,35 @@
                 </div>
             </div>
         }
-        <div class="ui top attached tabular menu three buttons">
-            <a asp-action="EditPersonalInformation" class="item button">Personal information</a>
-            @if (Model.HasPassword)
-            {
-                <a asp-controller="Manage" asp-action="ChangePassword" class="item button">Password</a>
-            }
-            else
-            {
-                <a asp-controller="Manage" asp-action="SetPassword" class="item button">Create password</a>
-            }
-            <a asp-action="ChangeAvatar" class="item button">Avatar</a>
-        </div>
-        @*<div class="ui two buttons">
-                <div class="button">
-                    <a asp-action="EditPersonalInformation" class="ui button">Edit personal information</a>
-                </div>
-                <div class="button">
-
-                </div>
-                <div class="field eight wide">
-                    <a asp-action="ChangeAvatar" class="ui button">Change Avatar</a>
-                </div>
-            </div>*@
+        @if (User.IsInRole("Participant"))
+        {
+            <div class="ui top attached tabular menu three buttons">
+                <a asp-action="EditPersonalInformation" class="ui fluid basic button">Personal information</a>
+                @if (Model.HasPassword)
+                {
+                    <a asp-controller="Manage" asp-action="ChangePassword" class="ui fluid basic button">Password</a>
+                }
+                else
+                {
+                    <a asp-controller="Manage" asp-action="SetPassword" class="ui fluid basic button">Create password</a>
+                }
+                <a asp-action="ChangeAvatar" class="ui fluid basic button">Avatar</a>
+            </div>
+        }
+        else
+        {
+            <div class="ui top attached tabular menu two buttons">
+                <a asp-action="EditPersonalInformation" class="ui fluid basic button">Personal information</a>
+                @if (Model.HasPassword)
+                {
+                    <a asp-controller="Manage" asp-action="ChangePassword" class="ui fluid basic button">Password</a>
+                }
+                else
+                {
+                    <a asp-controller="Manage" asp-action="SetPassword" class="ui fluid basic button">Create password</a>
+                }
+            </div>
+        }
     </div>
 </div>
 

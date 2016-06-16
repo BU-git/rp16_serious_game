@@ -100,6 +100,7 @@ namespace Interfaces
         Task<int> UpdateAvatarPath(Avatar avatar, string path);
         List<UserTask> GetUserGroupTasks(UserGroup group);
         List<UserGroup> GetUsersUserGroups(string userId);
+        List<string> GetUserTasksCountries(ApplicationUser user);
         List<ApplicationUser> GetUserGroupUsers(UserGroup group);
         Task<IdentityResult> UpdateUserAvailableAvatars(Avatar avatar, ApplicationUser appUser);
         Task<List<Avatar>> FindNotAvailableAvatars(ApplicationUser appUser);
@@ -140,6 +141,7 @@ namespace Interfaces
         Task<Appointment_User> ValidateAppointment(DateTime start, DateTime end, IEnumerable<string> users);
         Task<UserGroup> GetUserGroupByName(string familyName);
         Task<List<Comment>> GetTaskComments(int taskId);
+        Task<Comment> GetComment(int id);
         Task AddComment(Comment comment, int taskId);
     }
 }

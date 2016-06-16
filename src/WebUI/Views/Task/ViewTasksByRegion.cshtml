@@ -96,7 +96,7 @@
                         size = "large";
                     }
 
-                    using (Html.BeginForm("ViewUserTask", "Task", new { taskId = item.TaskId }, FormMethod.Post, new { @class = color + " card" }))
+                    using (Html.BeginForm("ViewUserTask", "Task", new { taskId = item.Id }, FormMethod.Post, new { @class = color + " card" }))
                     {
 
 
@@ -106,7 +106,7 @@
                                 <a class="floating ui yellow circular label">@Html.DisplayFor(m => item.Coins)</a>
                             </span>
                             <div class="header">
-                                @Html.DisplayFor(m => item.ApplicationTask.Name)
+                                @Html.DisplayFor(m => item.Name)
                             </div>
                             @if (isCoach)
                             {

@@ -7,8 +7,8 @@
 <div class="ui text container">
     <div class="ui top attached tabular menu three buttons">
         <a asp-action="EditPersonalInformation" class="item button">Personal information</a>
-        <a asp-controller="Manage" asp-action="ChangePassword" class="item button">Password</a>
-        <a asp-action="ChangeAvatar" class="item active button">Avatar</a>
+        <a asp-controller="Manage" asp-action="ChangePassword" class="ui fluid basic button">Password</a>
+        <a asp-action="ChangeAvatar" class="ui fluid active button">Avatar</a>
     </div>
     <form class="ui form segment bottom attached" id="userForm">
         <div class="ui grid">
@@ -17,14 +17,14 @@
                     @foreach (var avatar in Model)
                     {
                         <li id=@avatar.AvatarId>
-                            <img src=@avatar.Media.MainPath alt="Avatar ID: @avatar.AvatarId" class="img-centered"/>
+                            <img src=@avatar.Media.MainPath alt="Avatar ID: @avatar.AvatarId" class="img-centered" />
                         </li>
                     }
                 </ul>
             </div>
             <div class="row">
                 <div class="column">
-                    <input type="button" value="Choose avatar" class="ui button blue fluid" id="submitUser"/>
+                    <input type="button" value="Choose avatar" class="ui button blue fluid" id="submitUser" />
                 </div>
             </div>
         </div>
