@@ -1,4 +1,5 @@
-﻿@model AccountViewModel
+﻿@using System.Security.Claims
+@model AccountViewModel
 
 <h3>Sidebar</h3>
 <div class="ui secondary vertical pointing menu large">
@@ -6,24 +7,22 @@
         @if (User.IsInRole("Participant"))
         {
             <div class="image">
-                <avatar class="avatar-wide" user-id="@Model.UserId" alt="avatar"/>
+                <avatar class="avatar-wide" user-id="@Context.User.GetUserId()" alt="avatar" />
             </div>
         }
         <div class="content">
             <a class="header" href="@Url.Action("TaskList", "Task")">@Model.Name @Model.LastName</a>
-            <div class="description">
-                Description
-            </div>
-            <div class="meta">
-            </div>
         </div>
-        <div class="extra content">
-            <a>
-                <i class="user icon"></i>
-                22 Friends
-            </a>
-        </div>
-        <div class="ui bottom attached indincating progress" id="percent" style="width: 20vw">
+        @if (User.IsInRole("Participant"))
+        {
+            <div class="extra content">
+                <a href="@Url.Action("AvatarList", "Marketplace")">
+                    <i class="database icon"></i>
+                    @Model.Coins Coins
+                </a>
+            </div>
+        }
+        <div class="ui bottom attached indincating progress" id="percent" style="width: 20%">
             <div class="bar"></div>
         </div>
     </div>
@@ -32,7 +31,7 @@
         Home
     </a>
     @if (User.IsInRole("Coach"))
-    {
+            {
         <a class="item" href="@Url.Action("UserStatistics", "Task")">
             <i class="large bar chart icon"></i>
             Users' statistics
@@ -46,12 +45,12 @@
         <i class="large options icon"></i>
         Profile settings
     </a>
+    @if (User.IsInRole("Participant"))
+            {
+        <a class="item" href="@Url.Action("AvatarList", "Marketplace")">
+            <i class="large photo icon"></i>
+            Select new avatars
+        </a>
+    }
     <div class="ui divider"></div>
 </div>
-
-<script>
-    $('#percent')
-        .progress({
-            percent: 100
-        });
-</script>

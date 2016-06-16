@@ -191,13 +191,13 @@ namespace WebUI.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> SidebarMenu()
         {
             var user = await GetCurrentUserAsync();
             var userVm = new AccountViewModel(user);
 
-            return View("_SidebarMenu", userVm);
+            return PartialView("_SidebarMenu", userVm);
         }
 
         private async Task<ApplicationUser> GetCurrentUserAsync()

@@ -37,7 +37,6 @@
             {
                 <a asp-controller="Registration" asp-action="StepOne" class="item">Register family</a>
             }
-            <a asp-controller="Appointments" asp-action="Index" class="item">Appointments</a>
         </div>
         <div class="right menu">
             @await Html.PartialAsync("_LoginPartial")
@@ -79,21 +78,22 @@
         <script src="~/lib/bxslider/jquery.bxslider.min.js" asp-append-version="true"></script>
     </environment>
     @RenderSection("scripts", required: false)
-<script>
+    <script>
+        $.get("@Url.Action("SidebarMenu", "Account")",
+            function (data) {
+                jQuery("#sidebar").html(data);
+            });
 
-    $.post({
-    
-    });
-
-    function postSuccess(data) {
-        
-    }
-
-    jQuery(document).ready(function ($) {
-        $(".close.icon").click(function () {
-            $(this).parent().transition();
+        jQuery(document).ready(function ($) {
+            $(".close.icon").click(function () {
+                $(this).parent().transition();
+            });
         });
-    });
-</script>
+
+        jQuery('#percent')
+            .progress({
+                percent: 100
+            });
+    </script>
 </body>
 </html>
