@@ -288,7 +288,10 @@ namespace WebUI.Controllers
             {
                 var u = _dal.GetUserGroupUsers(group);
                 if (u.Count > 0)
-                    users.AddRange(u);
+                {
+                    users.AddRange(u.Where(x=>x.Id!= coachId));
+                }
+                   
             }
 
 
