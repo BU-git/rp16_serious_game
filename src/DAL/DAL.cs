@@ -450,6 +450,15 @@ namespace DAL
             return userGroups;
         }
 
+        public UserGroup GetUsersUserGroupByUsername(string username)
+        {
+            var userGroup = _context.UserGroups.FirstOrDefault(
+                g => g.ApplicationUser_UserGroups
+                    .Any(ug => ug.ApplicationUser.UserName == username));
+
+            return userGroup;
+        }
+
         public List<ApplicationUser> GetUserGroupUsers(UserGroup group)
         {
             var users =

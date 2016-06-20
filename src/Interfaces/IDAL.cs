@@ -100,6 +100,7 @@ namespace Interfaces
         Task<int> UpdateAvatarPath(Avatar avatar, string path);
         List<UserTask> GetUserGroupTasks(UserGroup group);
         List<UserGroup> GetUsersUserGroups(string userId);
+        UserGroup GetUsersUserGroupByUsername(string username);
         List<string> GetUserTasksCountries(ApplicationUser user);
         List<ApplicationUser> GetUserGroupUsers(UserGroup group);
         Task<IdentityResult> UpdateUserAvailableAvatars(Avatar avatar, ApplicationUser appUser);

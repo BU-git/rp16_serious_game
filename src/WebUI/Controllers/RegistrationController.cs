@@ -45,11 +45,6 @@ namespace WebUI.Controllers
             {
                 return View(regVm);
             }
-            if (!User.IsInRole("Coach"))
-            {
-                TempData["warn"] = "Access denied.";
-                return RedirectToAction("TaskList", "Task");
-            }
 
             var randomPass = _cryptoServices.GenerateRandomPassword();
 
@@ -59,26 +54,34 @@ namespace WebUI.Controllers
                 Email = regVm.HeadEmail,
                 UserName = regVm.HeadEmail
             };
-            await _dal.CreateParticipant(user, randomPass);
 
             var group = new UserGroup
             {
                 GroupName = regVm.FamilyName,
                 Type = regVm.FamilyType
             };
-            await _dal.CreateUserGroup(group);
-            await _dal.AddUserToGroup(user, group);
 
-            var userGroup = await _dal.GetUserGroupByName(regVm.FamilyName);
             var registrationMessage = new RegistrationMessage
             {
                 Password = randomPass,
                 Name = regVm.FamilyName,
-                Login = regVm.HeadEmail,
-                LinkUrl = $"{Url.Action("StepTwo")}/{userGroup.UserGroupId}"
+                Login = regVm.HeadEmail
             };
 
-            await _mailManager.SendRegistrationMailAsync(registrationMessage, regVm.HeadEmail);
+            try
+            {
+                await _dal.CreateParticipant(user, randomPass);
+                await _dal.CreateUserGroup(group);
+                await _dal.AddUserToGroup(user, group);
+
+                var userGroup = _dal.GetUsersUserGroupByUsername(user.UserName);
+                registrationMessage.LinkUrl = $"/Registration/Step/2/{userGroup.UserGroupId}";
+                await _mailManager.SendRegistrationMailAsync(registrationMessage, regVm.HeadEmail);
+            }
+            catch (Exception exc)
+            {
+                TempData["error"] = exc.Message;
+            }
 
             return View(new MainFamilyData());
         }
@@ -179,7 +182,7 @@ namespace WebUI.Controllers
                         Login = u.Email,
                         Name = u.Name,
                         Password = randomPass,
-                        LinkUrl = $"{Url.Action("StepThree")}"
+                        LinkUrl = $"/Registration/Step/3"
                     };
                     await _mailManager.SendRegistrationMailAsync(registrationMessage, u.Email);
                 }
