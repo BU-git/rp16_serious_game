@@ -42,14 +42,7 @@
             @await Html.PartialAsync("_LoginPartial")
         </div>
     </div>
-            @if (User.IsInRole("Participant"))
-            {
-                <a class="item" href="@Url.Action("AvatarList", "Marketplace")">
-                <i class="large photo icon"></i>
-                Select new avatars
-                </a>
-            }
-
+           
     <div id="sidebar">
 
     </div>

@@ -14,32 +14,12 @@
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-<style>
-    svg > g > g > path {
-        display: none;
-    }
-
-    svg > g > g > rect {
-        display: none;
-    }
-
-    svg > g > g > g > text {
-        display: none;
-    }
-
-    #toTasks {
-        position: fixed;
-        right: 55px;
-        bottom: 40px;
-    }
-</style>
-
 <div class="ui segments" id="mapDiv">
 
     @if (!isCoach)
     {
         <!--Google chart-->
-        <div id="geochart-colors"></div>
+        <div id="geochart-regions"></div>
 
         @*<a class="ui icon button large" id="toTasks" href="#tasks">
             <i class="dropdown icon"></i>
@@ -193,7 +173,7 @@
                 }
             };
 
-            var chart = new google.visualization.GeoChart(document.getElementById('geochart-colors'));
+            var chart = new google.visualization.GeoChart(document.getElementById('geochart-regions'));
             chart.draw(data, options);
             google.visualization.events.addListener(chart, 'regionClick', mapClick);
 
