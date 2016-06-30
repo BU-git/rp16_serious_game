@@ -291,7 +291,6 @@ namespace WebUI.Controllers
                 {
                     users.AddRange(u.Where(x=>x.Id!= coachId));
                 }
-                   
             }
 
 
@@ -343,7 +342,6 @@ namespace WebUI.Controllers
                     subRegions.Add("Northern Europe");
                     subRegions.Add("Western Europe");
                     subRegions.Add("Southern Europe");
-                    
                     break;
                 case "Australia":
                     subRegions.Add("Australia and New Zealand");
@@ -375,15 +373,9 @@ namespace WebUI.Controllers
             }
             var user = await _dal.GetUserById(userId);
             var usedCountries = _dal.GetUserTasksCountries(user);
-
-
             countries = countries.Except(usedCountries, StringComparer.OrdinalIgnoreCase).ToList();
-        
-
-
             return Json(countries);
         }
-        
 
         [HttpPost]
         public async Task<IActionResult> EditTask(string text, int coins, string command, int userTaskId)
@@ -391,7 +383,7 @@ namespace WebUI.Controllers
             UserTask usertask = _dal.FindUserTaskById(userTaskId);
             usertask.Text = text;
             usertask.Coins = coins;
-            var user = await GetCurrentUserAsync();
+            var user = usertask.User;
             if (command.Contains("Resent"))
             {
                 usertask.ResolutionDate = null;
@@ -468,7 +460,7 @@ namespace WebUI.Controllers
                     List<DailyStatistics> monthlyReport = new List<DailyStatistics>();
 
                     var dailyStats = (from task in stats.Tasks
-                                      where task.ResolutionDate > DateTime.Now.AddDays(-DateTime.Now.Day) //Get statistics from the beggining of the month
+                                      where task.ResolutionDate > DateTime.Now.AddDays(-DateTime.Now.Day) //Get statistics from the beginning of the month
                                       group task by task.ResolutionDate?.Day
                         into tasksByDays
                                       select new DailyStatistics(tasksByDays.Count(), tasksByDays.Key, DateTime.Now.Month)).ToList();
@@ -506,7 +498,7 @@ namespace WebUI.Controllers
 
         //[ActionName("ViewTask")]
         //public IActionResult ViewTask(TaskViewModel task)
-        //{            
+        //{
         //    return View(task);
         //}
 

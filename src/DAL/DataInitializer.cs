@@ -104,7 +104,7 @@ namespace DAL
                 var firstCoach = new ApplicationUser()
                 {
                     UserName = "FirstCoach@coach.com",
-                    Name = "Mentor1",
+                    Name = "Jan von Engeland",
                     Email = "FirstCoach@coach.com"
                 };
                 await _userManager.CreateAsync(firstCoach, "User2016!");
@@ -117,7 +117,7 @@ namespace DAL
                 var secondCoach = new ApplicationUser()
                 {
                     UserName = "SecondCoach@coach.com",
-                    Name = "Mentor2",
+                    Name = "Harmen Niemejer",
                     Email = "SecondCoach@coach.com"
                 };
                 await _userManager.CreateAsync(secondCoach, "User2016!");
@@ -131,7 +131,7 @@ namespace DAL
                 var participant = new ApplicationUser()
                 {
                     UserName = "FirstParticipant@participant.com",
-                    Name = "Participant1",
+                    Name = "John Doe",
                     Email = "FirstParticipant@participant.com"
                 };
                 await _userManager.CreateAsync(participant, "User2016!");
@@ -146,7 +146,7 @@ namespace DAL
                 var secondParticipant = new ApplicationUser()
                 {
                     UserName = "SecondParticipant@participant.com",
-                    Name = "Participant2",
+                    Name = "Eva Simmons",
                     Email = "SecondParticipant@participant.com"
                 };
                 await _userManager.CreateAsync(secondParticipant, "User2016!");
@@ -216,33 +216,33 @@ namespace DAL
                 var task1 = new ApplicationTask()
                 {
                     Coins = 1,
-                    Name = "First-Task",
+                    Name = "Read your favorite book",
                     Recurency = new DateTime(2016, 3, 4),
-                    Text = "Please complete first task in order to start participation in program"
+                    Text = "Please read your favorite book to keep your brain fit!"
                 };
 
                 var task2 = new ApplicationTask()
                 {
                     Coins = 10,
-                    Name = "Second-Task",
+                    Name = "Play with your parents",
                     Recurency = new DateTime(2016, 3, 4),
-                    Text = "Please complete Second task in order to continue participation in program"
+                    Text = "Suggest your parents to play a game!"
                 };
 
                 var task3 = new ApplicationTask()
                 {
                     Coins = 40,
-                    Name = "Third-Task",
+                    Name = "Cook some food for your family",
                     Recurency = new DateTime(2016, 3, 4),
-                    Text = "Please complete Third task in order to further participate in program"
+                    Text = "Cooking something new and delicious is always awesome!"
                 };
 
                 var task4 = new ApplicationTask()
                 {
                     Coins = 100,
-                    Name = "Fourth-Task",
+                    Name = "Walk 100 meters",
                     Recurency = new DateTime(2016, 3, 4),
-                    Text = "Please complete Third task in order to further participate in program"
+                    Text = "Try to go the park and walk there - take your time!"
                 };
 
                 _context.Tasks.Add(task1);
@@ -255,10 +255,10 @@ namespace DAL
 
             if (!_context.UserTasks.Any())
             {
-                var firstTask = _context.Tasks.FirstOrDefault(x => x.Name == "First-Task");
-                var secondTask = _context.Tasks.FirstOrDefault(x => x.Name == "Second-Task");
-                var thirdTask = _context.Tasks.FirstOrDefault(x => x.Name == "Third-Task");
-                var fourthTask = _context.Tasks.FirstOrDefault(x => x.Name == "Fourth-Task");
+                var firstTask = _context.Tasks.FirstOrDefault(x => x.Name == "Read your favorite book");
+                var secondTask = _context.Tasks.FirstOrDefault(x => x.Name == "Play with your parents");
+                var thirdTask = _context.Tasks.FirstOrDefault(x => x.Name == "Cook some food for your family");
+                var fourthTask = _context.Tasks.FirstOrDefault(x => x.Name == "Walk 100 meters");
 
                 var user = await _dal.GetUserByEmail("FirstParticipant@participant.com");
 
@@ -494,5 +494,3 @@ namespace DAL
     }
 
 }
-
-
